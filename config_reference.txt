@@ -1,0 +1,72 @@
+# CONFIG_REFERENCE (TSP-GNN)
+
+[generate]
+out_root          : str   | base folder for synthetic dataset (train/val/test)
+n_list            : [int] | list of N (number of nodes) to generate (>=3)
+per_size_train    : int   | number of graphs per N for train
+per_size_val      : int   | number of graphs per N for val
+per_size_test     : int   | number of graphs per N for test
+elkai_frac        : float | fraction in [0,1] of graphs solved by elkai (else NN+2opt)
+seed              : int   | RNG seed for reproducibility
+# Optional extension:
+# split_portions  : [float,float,float] | instead of per_size_* counts, use portions for train/val/test
+
+[tsplib]
+raw_root          : str   | folder containing downloaded .tsp/.opt.tour files
+out_root          : str   | processed .npz output folder
+download          : bool  | auto-download missing instances
+names             : [str] | list of TSPLIB instance names; e.g., ["berlin52", "eil76"]
+
+[train]
+exp_id            : str   | experiment label (used in filenames/logs)
+train_root        : str   | root of training .npz (e.g., runs/data/synthetic/train)
+val_root          : str   | root of validation .npz
+epochs            : int   | training epochs
+batch_size        : int   | graphs per batch (edges are concatenated per batch)
+lr                : float | learning rate
+seed              : int   | RNG seed
+model_name        : str   | "edge_mlp" or "edge_mlp_deep" (or any registered)
+hidden            : int?  | hidden layer width (override model default)
+dropout           : float?| dropout rate (override model default)
+use_angle_feats   : bool  | if false -> drop angle feature (input dim = 9)
+candidate_train   : str   | "complete" | "knn" | "knn_plus_gt"
+candidate_val     : str   | same as above for validation set
+k                 : int   | k for kNN candidates (if used)
+num_workers       : int   | DataLoader workers (0 on Windows to avoid spawn issues)
+
+[eval]
+model_path        : str   | checkpoint .pt path to evaluate
+data_root         : str   | folder with TSPLIB .npz
+model_name        : str   | prefer this architecture when building from ckpt (optional)
+candidate         : str   | ignored (evaluation uses complete graph)
+k                 : int   | k for kNN if you ever enable sparse eval
+device            : str   | "cpu" or "cuda"
+limit             : int   | evaluate only first N files (0 = all)
+save_json         : str?  | where to store results json (null = don’t save)
+run_twoopt        : bool  | run 2-opt after greedy decode
+force_no_angle    : bool  | set true if model was trained without angle feature
+seed              : int   | rng seed for reproducibility
+
+[visualize]
+mode              : str   | "dataset" or "predict"
+npz_dir           : str   | folder with .npz to visualize
+model             : str   | checkpoint .pt (used in predict mode)
+model_name        : str   | architecture hint for loading ckpt
+candidate         : str   | ignored; viz draws complete graph background
+k                 : int   | (unused)
+device            : str   | "cpu" or "cuda"
+out_dir           : str   | where to write .png files
+figsize           : [w,h] | inches
+dpi               : int   | dots per inch
+no_angle          : bool  | set true if model trained without angle feature
+glob              : str   | filename pattern, e.g. "*.npz"
+limit             : int   | max number of files to render (0 = all)
+
+[qa]
+root              : str   | folder with .npz to check
+check_gt          : bool  | validates GT is a Hamiltonian cycle (permutation 0..n-1)
+coverage          : bool  | fraction of GT edges present in candidate graph
+candidate         : str   | "complete" | "knn" | "knn_plus_gt"
+k                 : int   | k for kNN coverage
+lengths           : bool  | verifies stored normalized length matches recomputed
+csv               : str?  | optional CSV report path

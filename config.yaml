@@ -1,6 +1,6 @@
 generate:
   out_root: runs/data/synthetic
-  n_list: [100]
+  n_list: [20, 30, 40, 50, 75, 100]
   per_size_train: 10000
   per_size_val: 2000
   per_size_test: 200
