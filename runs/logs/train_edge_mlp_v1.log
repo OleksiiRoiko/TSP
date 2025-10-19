@@ -1,0 +1,94 @@
+2025-10-18 23:08:02,134 INFO - Device: cuda
+2025-10-18 23:10:15,102 INFO - Device: cuda
+2025-10-18 23:10:15,113 INFO - Train graphs: 400 | Val graphs: 80
+2025-10-18 23:10:15,255 INFO - Model: edge_mlp_deep | Params: {'in_dim': 10, 'hidden': 128, 'dropout': 0.1}
+2025-10-18 23:10:20,340 INFO - Epoch 01/5 | Train 0.0609 | Val 0.0416
+2025-10-18 23:10:20,362 INFO -   ✓ SAVED
+2025-10-18 23:10:23,522 INFO - Epoch 02/5 | Train 0.0376 | Val 0.0316
+2025-10-18 23:10:23,524 INFO -   ✓ SAVED
+2025-10-18 23:10:27,425 INFO - Epoch 03/5 | Train 0.0347 | Val 0.0319
+2025-10-18 23:10:31,463 INFO - Epoch 04/5 | Train 0.0340 | Val 0.0308
+2025-10-18 23:10:31,466 INFO -   ✓ SAVED
+2025-10-18 23:10:35,482 INFO - Epoch 05/5 | Train 0.0333 | Val 0.0313
+2025-10-18 23:10:35,485 INFO - Best Val 0.030780 @ epoch 4
+Saved: runs\models\edge_mlp_v1_best.pt
+2025-10-18 23:14:49,173 INFO - Device: cuda
+2025-10-18 23:14:49,182 INFO - Train graphs: 400 | Val graphs: 80
+2025-10-18 23:14:49,273 INFO - Model: edge_mlp_deep | Params: {'in_dim': 10, 'hidden': 256, 'dropout': 0.1}
+2025-10-18 23:14:53,430 INFO - Epoch 01/5 | Train 0.0503 | Val 0.0315
+2025-10-18 23:14:53,436 INFO -   ✓ SAVED
+2025-10-18 23:14:56,728 INFO - Epoch 02/5 | Train 0.0345 | Val 0.0313
+2025-10-18 23:14:56,731 INFO -   ✓ SAVED
+2025-10-18 23:15:00,619 INFO - Epoch 03/5 | Train 0.0332 | Val 0.0303
+2025-10-18 23:15:00,622 INFO -   ✓ SAVED
+2025-10-18 23:15:04,681 INFO - Epoch 04/5 | Train 0.0330 | Val 0.0309
+2025-10-18 23:15:07,868 INFO - Epoch 05/5 | Train 0.0324 | Val 0.0301
+2025-10-18 23:15:07,871 INFO -   ✓ SAVED
+2025-10-18 23:15:07,871 INFO - Best Val 0.030058 @ epoch 5
+Saved: runs\models\edge_mlp_v1_best.pt
+2025-10-19 00:29:26,112 INFO - Device: cuda
+2025-10-19 00:29:26,122 INFO - Train graphs: 400 | Val graphs: 80
+2025-10-19 00:29:26,207 INFO - Model: edge_mlp_deep | Params: {'in_dim': 10, 'hidden': 256, 'dropout': 0.1}
+2025-10-19 00:29:30,565 INFO - Epoch 01/20 | Train 0.0503 | Val 0.0315
+2025-10-19 00:29:30,588 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:29:33,934 INFO - Epoch 02/20 | Train 0.0345 | Val 0.0313
+2025-10-19 00:29:33,946 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:29:37,848 INFO - Epoch 03/20 | Train 0.0332 | Val 0.0303
+2025-10-19 00:29:37,860 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:29:41,858 INFO - Epoch 04/20 | Train 0.0330 | Val 0.0309
+2025-10-19 00:29:45,906 INFO - Epoch 05/20 | Train 0.0324 | Val 0.0301
+2025-10-19 00:29:45,920 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:29:49,932 INFO - Epoch 06/20 | Train 0.0322 | Val 0.0298
+2025-10-19 00:29:49,945 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:29:55,224 INFO - Epoch 07/20 | Train 0.0320 | Val 0.0299
+2025-10-19 00:29:59,883 INFO - Epoch 08/20 | Train 0.0319 | Val 0.0297
+2025-10-19 00:29:59,900 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:30:03,484 INFO - Epoch 09/20 | Train 0.0317 | Val 0.0293
+2025-10-19 00:30:03,496 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:30:07,262 INFO - Epoch 10/20 | Train 0.0315 | Val 0.0294
+2025-10-19 00:30:11,248 INFO - Epoch 11/20 | Train 0.0315 | Val 0.0301
+2025-10-19 00:30:15,333 INFO - Epoch 12/20 | Train 0.0316 | Val 0.0295
+2025-10-19 00:30:20,543 INFO - Epoch 13/20 | Train 0.0316 | Val 0.0302
+2025-10-19 00:30:26,121 INFO - Epoch 14/20 | Train 0.0314 | Val 0.0297
+2025-10-19 00:30:30,425 INFO - Epoch 15/20 | Train 0.0312 | Val 0.0291
+2025-10-19 00:30:30,438 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:30:34,401 INFO - Epoch 16/20 | Train 0.0314 | Val 0.0302
+2025-10-19 00:30:38,355 INFO - Epoch 17/20 | Train 0.0314 | Val 0.0291
+2025-10-19 00:30:42,774 INFO - Epoch 18/20 | Train 0.0310 | Val 0.0293
+2025-10-19 00:30:48,008 INFO - Epoch 19/20 | Train 0.0312 | Val 0.0294
+2025-10-19 00:30:52,506 INFO - Epoch 20/20 | Train 0.0312 | Val 0.0293
+2025-10-19 00:30:52,506 INFO - Best Val 0.029111 @ epoch 15
+Saved: runs\models\edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-002927_best.pt
+2025-10-19 00:31:48,805 INFO - Device: cuda
+2025-10-19 00:31:48,815 INFO - Train graphs: 400 | Val graphs: 80
+2025-10-19 00:31:48,902 INFO - Model: edge_mlp_deep | Params: {'in_dim': 10, 'hidden': 256, 'dropout': 0.1}
+2025-10-19 00:31:54,049 INFO - Epoch 01/20 | Train 0.0503 | Val 0.0315
+2025-10-19 00:31:54,069 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:31:57,940 INFO - Epoch 02/20 | Train 0.0345 | Val 0.0313
+2025-10-19 00:31:57,952 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:01,435 INFO - Epoch 03/20 | Train 0.0332 | Val 0.0303
+2025-10-19 00:32:01,448 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:04,816 INFO - Epoch 04/20 | Train 0.0330 | Val 0.0309
+2025-10-19 00:32:08,408 INFO - Epoch 05/20 | Train 0.0324 | Val 0.0301
+2025-10-19 00:32:08,420 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:11,796 INFO - Epoch 06/20 | Train 0.0322 | Val 0.0298
+2025-10-19 00:32:11,811 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:15,401 INFO - Epoch 07/20 | Train 0.0320 | Val 0.0299
+2025-10-19 00:32:19,848 INFO - Epoch 08/20 | Train 0.0319 | Val 0.0297
+2025-10-19 00:32:19,861 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:23,827 INFO - Epoch 09/20 | Train 0.0317 | Val 0.0293
+2025-10-19 00:32:23,839 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:27,538 INFO - Epoch 10/20 | Train 0.0315 | Val 0.0294
+2025-10-19 00:32:31,168 INFO - Epoch 11/20 | Train 0.0315 | Val 0.0301
+2025-10-19 00:32:35,072 INFO - Epoch 12/20 | Train 0.0316 | Val 0.0295
+2025-10-19 00:32:38,637 INFO - Epoch 13/20 | Train 0.0316 | Val 0.0302
+2025-10-19 00:32:42,082 INFO - Epoch 14/20 | Train 0.0314 | Val 0.0297
+2025-10-19 00:32:45,831 INFO - Epoch 15/20 | Train 0.0312 | Val 0.0291
+2025-10-19 00:32:45,843 INFO -   ✓ SAVED → edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt (and updated edge_mlp_v1_latest.pt)
+2025-10-19 00:32:49,915 INFO - Epoch 16/20 | Train 0.0314 | Val 0.0302
+2025-10-19 00:32:53,998 INFO - Epoch 17/20 | Train 0.0314 | Val 0.0291
+2025-10-19 00:32:58,446 INFO - Epoch 18/20 | Train 0.0310 | Val 0.0293
+2025-10-19 00:33:02,839 INFO - Epoch 19/20 | Train 0.0312 | Val 0.0294
+2025-10-19 00:33:07,151 INFO - Epoch 20/20 | Train 0.0312 | Val 0.0293
+2025-10-19 00:33:07,151 INFO - Best Val 0.029111 @ epoch 15
+Saved: runs\models\edge_mlp_v1_edge_mlp_deep_in10_h256_bs16_lr0.001_ep20_seed0_20251019-003149_best.pt

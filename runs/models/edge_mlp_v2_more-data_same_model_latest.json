@@ -1,0 +1,15 @@
+{
+  "exp_id": "edge_mlp_v2_more-data_same_model",
+  "model": "edge_mlp",
+  "in_dim": 10,
+  "hidden": 128,
+  "dropout": 0.1,
+  "depth": 5,
+  "batch_size": 16,
+  "lr": 0.001,
+  "epochs": 10,
+  "seed": 0,
+  "val_bce": 0.019403,
+  "saved_at": "20251019-153057",
+  "path": "runs\\models\\edge_mlp_v2_more-data_same_model_edge_mlp_in10_h128_d5_bs16_lr0.001_ep10_seed0_20251019-153057_best.pt"
+}

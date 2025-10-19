@@ -1,0 +1,84 @@
+2025-10-18 22:47:12,281 INFO - [gen] N=20 split=train count=100
+2025-10-18 22:47:13,612 INFO -   ✓ wrote 100 files to runs\data\synthetic\train\N20
+
+2025-10-18 22:47:13,613 INFO - [gen] N=20 split=val count=20
+2025-10-18 22:47:13,868 INFO -   ✓ wrote 20 files to runs\data\synthetic\val\N20
+
+2025-10-18 22:47:13,869 INFO - [gen] N=20 split=test count=20
+2025-10-18 22:47:14,093 INFO -   ✓ wrote 20 files to runs\data\synthetic\test\N20
+
+2025-10-18 22:47:14,094 INFO - [gen] N=30 split=train count=100
+2025-10-18 22:47:17,787 INFO -   ✓ wrote 100 files to runs\data\synthetic\train\N30
+
+2025-10-18 22:47:17,787 INFO - [gen] N=30 split=val count=20
+2025-10-18 22:47:18,596 INFO -   ✓ wrote 20 files to runs\data\synthetic\val\N30
+
+2025-10-18 22:47:18,596 INFO - [gen] N=30 split=test count=20
+2025-10-18 22:47:19,213 INFO -   ✓ wrote 20 files to runs\data\synthetic\test\N30
+
+2025-10-18 22:47:19,214 INFO - [gen] N=40 split=train count=100
+2025-10-18 22:47:27,275 INFO -   ✓ wrote 100 files to runs\data\synthetic\train\N40
+
+2025-10-18 22:47:27,275 INFO - [gen] N=40 split=val count=20
+2025-10-18 22:47:28,790 INFO -   ✓ wrote 20 files to runs\data\synthetic\val\N40
+
+2025-10-18 22:47:28,791 INFO - [gen] N=40 split=test count=20
+2025-10-18 22:47:30,497 INFO -   ✓ wrote 20 files to runs\data\synthetic\test\N40
+
+2025-10-18 22:47:30,497 INFO - [gen] N=50 split=train count=100
+2025-10-18 22:47:46,522 INFO -   ✓ wrote 100 files to runs\data\synthetic\train\N50
+
+2025-10-18 22:47:46,523 INFO - [gen] N=50 split=val count=20
+2025-10-18 22:47:50,049 INFO -   ✓ wrote 20 files to runs\data\synthetic\val\N50
+
+2025-10-18 22:47:50,050 INFO - [gen] N=50 split=test count=20
+2025-10-18 22:47:53,410 INFO -   ✓ wrote 20 files to runs\data\synthetic\test\N50
+
+2025-10-19 00:48:08,581 INFO - [gen] N=20 split=train count=10000
+2025-10-19 00:50:44,416 INFO -   ✓ wrote 10000 files to runs\data\synthetic\train\N20
+
+2025-10-19 00:50:44,418 INFO - [gen] N=20 split=val count=2000
+2025-10-19 00:51:15,041 INFO -   ✓ wrote 2000 files to runs\data\synthetic\val\N20
+
+2025-10-19 00:51:15,042 INFO - [gen] N=20 split=test count=200
+2025-10-19 00:51:18,238 INFO -   ✓ wrote 200 files to runs\data\synthetic\test\N20
+
+2025-10-19 00:51:18,238 INFO - [gen] N=30 split=train count=10000
+2025-10-19 00:58:33,213 INFO -   ✓ wrote 10000 files to runs\data\synthetic\train\N30
+
+2025-10-19 00:58:33,213 INFO - [gen] N=30 split=val count=2000
+2025-10-19 00:59:59,037 INFO -   ✓ wrote 2000 files to runs\data\synthetic\val\N30
+
+2025-10-19 00:59:59,038 INFO - [gen] N=30 split=test count=200
+2025-10-19 01:00:07,616 INFO -   ✓ wrote 200 files to runs\data\synthetic\test\N30
+
+2025-10-19 01:00:07,617 INFO - [gen] N=40 split=train count=10000
+2025-10-19 01:15:54,778 INFO -   ✓ wrote 10000 files to runs\data\synthetic\train\N40
+
+2025-10-19 01:15:54,778 INFO - [gen] N=40 split=val count=2000
+2025-10-19 01:19:04,092 INFO -   ✓ wrote 2000 files to runs\data\synthetic\val\N40
+
+2025-10-19 01:19:04,093 INFO - [gen] N=40 split=test count=200
+2025-10-19 01:19:23,309 INFO -   ✓ wrote 200 files to runs\data\synthetic\test\N40
+
+2025-10-19 01:19:23,310 INFO - [gen] N=50 split=train count=10000
+2025-10-19 01:48:02,524 INFO -   ✓ wrote 10000 files to runs\data\synthetic\train\N50
+
+2025-10-19 01:48:02,525 INFO - [gen] N=50 split=val count=2000
+2025-10-19 01:53:48,589 INFO -   ✓ wrote 2000 files to runs\data\synthetic\val\N50
+
+2025-10-19 01:53:48,590 INFO - [gen] N=50 split=test count=200
+2025-10-19 01:54:22,635 INFO -   ✓ wrote 200 files to runs\data\synthetic\test\N50
+
+2025-10-19 01:54:22,635 INFO - [gen] N=75 split=train count=10000
+2025-10-19 03:27:56,670 INFO -   ✓ wrote 10000 files to runs\data\synthetic\train\N75
+
+2025-10-19 03:27:56,672 INFO - [gen] N=75 split=val count=2000
+2025-10-19 03:52:37,955 INFO -   ✓ wrote 2000 files to runs\data\synthetic\val\N75
+
+2025-10-19 03:52:37,956 INFO - [gen] N=75 split=test count=200
+2025-10-19 03:55:15,730 INFO -   ✓ wrote 200 files to runs\data\synthetic\test\N75
+
+2025-10-19 03:55:15,731 INFO - [gen] N=100 split=train count=10000
+2025-10-19 09:41:54,111 INFO - [gen] N=100 split=train count=10000 workers=4
+2025-10-19 09:50:31,775 INFO - [gen] N=100 split=train count=10000 workers=4
