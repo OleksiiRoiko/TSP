@@ -1,0 +1,9 @@
+numpy>=1.24
+torch>=2.1
+tqdm
+matplotlib
+tsplib95
+pydantic>=2
+pyyaml
+scipy
+$env:PYTHONPATH = "$PWD/src"
