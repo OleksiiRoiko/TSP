@@ -70,3 +70,6 @@ candidate         : str   | "complete" | "knn" | "knn_plus_gt"
 k                 : int   | k for kNN coverage
 lengths           : bool  | verifies stored normalized length matches recomputed
 csv               : str?  | optional CSV report path
+
+
+$env:PYTHONPATH = "$PWD/src"    
