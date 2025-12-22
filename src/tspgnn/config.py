@@ -43,7 +43,6 @@ class TrainCfg(BaseModel):
     model_name: str = "edge_mlp_deep"   # from registry
     hidden: Optional[int] = 256
     dropout: Optional[float] = 0.1
-    feature_dim: int = 10               # any int; features are padded/truncated
     depth: int = 3   # NEW: number of hidden layers
 
 
@@ -53,7 +52,6 @@ class EvalCfg(BaseModel):
     device: str = "cpu"
     save_json: Optional[str] = "runs/evals/eval.json"
     run_twoopt: bool = True
-    feature_dim: Optional[int] = None   # None → infer from checkpoint; else any int
     seed: int = 0
 
 
@@ -64,7 +62,6 @@ class VisualizeCfg(BaseModel):
     out_dir: str = "runs/figs/tsplib"
     figsize: List[float] = [11.0, 5.5]
     dpi: int = 150
-    feature_dim: Optional[int] = None   # None → infer from checkpoint
     device: str = "cpu"
     limit: int = 0
 
@@ -73,7 +70,6 @@ class QACfg(BaseModel):
     root: str = "runs/data/tsplib/processed"
     check_gt: bool = True
     coverage: bool = True
-    k: int = 20                         # k used for QA coverage only
     lengths: bool = True
     csv: Optional[str] = "runs/qa_report.csv"
 

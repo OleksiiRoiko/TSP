@@ -1,16 +1,9 @@
-2025-10-18 22:50:52,445 INFO - QA on 4 files
-2025-10-18 22:50:52,499 INFO - [check_gt] OK
-2025-10-18 22:50:52,516 INFO - [coverage] mean=1.0000 min=1.0000 max=1.0000
-2025-10-18 22:50:52,522 INFO - [lengths] OK
-2025-10-18 22:51:25,010 INFO - QA on 4 files
-2025-10-18 22:51:25,017 INFO - [check_gt] OK
-2025-10-18 22:51:25,027 INFO - [coverage] mean=0.9686 min=0.9400 max=1.0000
-2025-10-18 22:51:25,035 INFO - [lengths] OK
-2025-10-19 16:34:52,433 INFO - QA on 4 files
-2025-10-19 16:34:52,444 INFO - [check_gt] OK
-2025-10-19 16:34:52,468 INFO - [coverage] mean=1.0000 min=1.0000 max=1.0000
-2025-10-19 16:34:52,494 INFO - [lengths] OK
-2025-10-19 16:35:15,677 INFO - QA on 4 files
-2025-10-19 16:35:15,684 INFO - [check_gt] OK
-2025-10-19 16:35:15,695 INFO - [coverage] mean=0.9686 min=0.9400 max=1.0000
-2025-10-19 16:35:15,704 INFO - [lengths] OK
+2025-11-23 17:38:20,594 INFO - QA on 4 files
+2025-11-23 17:38:20,649 INFO - [check_gt] OK
+2025-11-23 17:38:20,664 INFO - [coverage] mean=0.9686 min=0.9400 max=1.0000
+2025-11-23 17:38:20,672 INFO - [lengths] OK
+2025-11-23 17:57:13,823 INFO - QA on 4 files
+2025-11-23 17:57:13,845 INFO - [check_gt] OK
+2025-11-23 17:57:13,846 INFO - [coverage] mean=1.0000 min=1.0000 max=1.0000
+2025-11-23 17:57:13,846 INFO - [lengths] OK
+2025-11-23 17:57:13,852 INFO - [csv] wrote runs\qa_report.csv

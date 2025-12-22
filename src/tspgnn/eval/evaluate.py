@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from ..config import EvalCfg, QACfg
 from ..utils.io import load_npz
-from ..utils.geom import complete_edges, edge_features, knn_edges
+from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import tour_edges_undirected, greedy_cycle_from_edges, two_opt, tour_length, verify_tour, tour_length_tsplib
 from ..models.registry import build_model_from_state, load_weights_flex
 
@@ -21,10 +21,8 @@ def run(cfg: EvalCfg, logger):
 
     # Build model from checkpoint (auto infer), optionally override input dim
     state = torch.load(mp, map_location="cpu")
-    overrides = {}
-    if cfg.feature_dim is not None:
-        overrides["in_dim"] = int(cfg.feature_dim)
-    model, mparams = build_model_from_state(state, prefer_name=None, overrides=overrides or None)
+    # Infer input dim from checkpoint; fixed features are 10D when training from this repo
+    model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
     logger.info(f"Eval model params: {mparams}")
     load_weights_flex(model, state, logger=logger)
 
@@ -86,7 +84,7 @@ def run(cfg: EvalCfg, logger):
         p.parent.mkdir(parents=True, exist_ok=True)
         with open(p, "w", encoding="utf-8") as fh:
             json.dump(results, fh, indent=2)
-        logger.info(f"✓ saved {p}")
+        logger.info(f"saved {p}")
 
 
 # -----------------------------
@@ -101,42 +99,61 @@ def run_qa(cfg: QACfg, logger):
         return
     logger.info(f"QA on {len(files)} files")
 
-    if cfg.check_gt:
-        bad = []
-        for f in files:
-            d = load_npz(f)
-            n = int(d["coords"].shape[0])
-            t = d.get("label_tour", None)
-            if not verify_tour(t, n):
-                bad.append(f.name)
-        logger.info("[check_gt] OK" if not bad else f"[check_gt] invalid: {len(bad)}")
+    rows = []
+    covs = []
+    gt_bad = []
+    len_bad = []
 
-    if cfg.coverage:
-        covs = []
-        for f in files:
-            d = load_npz(f)
-            C = d["coords"].astype(np.float32)
-            t = d.get("label_tour", None)
-            if t is None:
-                continue
-            # QA coverage uses kNN by design (diagnostic)
-            E = knn_edges(C, int(cfg.k))
-            gt = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in tour_edges_undirected(t))
-            cand = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in E)
-            covs.append(len(gt & cand) / len(gt))
-        if covs:
-            logger.info(f"[coverage] mean={np.mean(covs):.4f} min={np.min(covs):.4f} max={np.max(covs):.4f}")
+    for f in files:
+        d = load_npz(f)
+        C = d["coords"].astype(np.float32)
+        t = d.get("label_tour", None)
+        n = int(C.shape[0])
 
-    if cfg.lengths:
-        bad = []
-        for f in files:
-            d = load_npz(f)
-            C = d["coords"].astype(np.float32)
-            t = d.get("label_tour", None)
-            if t is None:
-                continue
+        gt_ok = verify_tour(t, n) if t is not None else False
+        cov = None
+        lengths_ok = True
+
+        if cfg.coverage and gt_ok:
+            # Use complete graph for QA to expect coverage==1 under full candidates
+            E = complete_edges(n)
+            gt_edges = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in tour_edges_undirected(t))
+            cand_edges = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in E)
+            cov = len(gt_edges & cand_edges) / len(gt_edges) if gt_edges else float("nan")
+            covs.append(cov)
+
+        if cfg.lengths and gt_ok:
             Ls = float(d.get("label_len_norm", -1.0))
             Lc = float(tour_length(C, t))
-            if abs(Ls - Lc) > 1e-6:
-                bad.append(f.name)
-        logger.info("[lengths] OK" if not bad else f"[lengths] mismatch: {len(bad)}")
+            lengths_ok = abs(Ls - Lc) <= 1e-6
+            if not lengths_ok:
+                len_bad.append(f.name)
+
+        if cfg.check_gt and not gt_ok:
+            gt_bad.append(f.name)
+
+        rows.append({
+            "instance": f.name,
+            "n": n,
+            "gt_valid": gt_ok,
+            "coverage": cov,
+            "lengths_ok": lengths_ok,
+        })
+
+    if cfg.check_gt:
+        logger.info("[check_gt] OK" if not gt_bad else f"[check_gt] invalid: {len(gt_bad)}")
+    if cfg.coverage and covs:
+        logger.info(f"[coverage] mean={np.mean(covs):.4f} min={np.min(covs):.4f} max={np.max(covs):.4f}")
+    if cfg.lengths:
+        logger.info("[lengths] OK" if not len_bad else f"[lengths] mismatch: {len(len_bad)}")
+
+    if cfg.csv:
+        p = Path(cfg.csv)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        import csv as _csv
+        with p.open("w", newline="", encoding="utf-8") as fh:
+            writer = _csv.DictWriter(fh, fieldnames=["instance", "n", "gt_valid", "coverage", "lengths_ok"])
+            writer.writeheader()
+            for r in rows:
+                writer.writerow(r)
+        logger.info(f"[csv] wrote {p}")

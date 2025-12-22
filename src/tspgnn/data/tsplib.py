@@ -73,4 +73,4 @@ def run(cfg: TsplibCfg, logger):
                  source=np.array("tsplib"),
                  scale_min=minv.astype(np.float32),
                  scale_span=span.astype(np.float32))
-        logger.info(f"✓ processed {nm}")
+        logger.info(f"processed {nm}")

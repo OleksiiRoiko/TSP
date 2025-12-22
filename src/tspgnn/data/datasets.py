@@ -6,7 +6,7 @@ import torch
 from torch.utils.data import Dataset
 
 from ..utils.io import load_npz
-from ..utils.geom import complete_edges, knn_edges, edge_features, union_edges_unique
+from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import tour_edges_undirected
 
 
@@ -21,26 +21,22 @@ def _hash_key(*parts: str) -> str:
 class NPZTSPDataset(Dataset):
     """
     Loads *.npz TSP graphs recursively.
-    Builds candidate graph, edge features (vectorized), and labels.
+    Builds complete-graph edge features (vectorized) and labels.
     Optional on-disk caching of features/labels to avoid recomputation.
     """
     def __init__(
         self,
         root: str,
-        candidate_mode: str = "complete",
-        k: int = 20,
         feature_dim: int = 10,
         cache_dir: str | None = "runs/cache/features",  # None disables cache
     ):
         self.root = Path(root)
         self.files = sorted(p for p in self.root.rglob("*.npz") if p.is_file())
-        self.candidate_mode = candidate_mode
-        self.k = int(k)
         self.feature_dim = int(feature_dim)
 
         self.cache_dir = None if cache_dir is None else Path(cache_dir)
         if self.cache_dir is not None:
-            (self.cache_dir / str(self.feature_dim) / self.candidate_mode).mkdir(parents=True, exist_ok=True)
+            (self.cache_dir / str(self.feature_dim) / "complete").mkdir(parents=True, exist_ok=True)
 
         if len(self.files) == 0:
             raise FileNotFoundError(f"No .npz files found under '{self.root}'.")
@@ -51,8 +47,8 @@ class NPZTSPDataset(Dataset):
     # --------- caching helpers ----------
     def _cache_paths_for(self, npz_path: Path) -> tuple[Path, Path]:
         # Make a stable key from path + basic params
-        key = _hash_key(str(npz_path.resolve()), f"fd={self.feature_dim}", f"cand={self.candidate_mode}", f"k={self.k}")
-        base = (self.cache_dir / str(self.feature_dim) / self.candidate_mode) / key
+        key = _hash_key(str(npz_path.resolve()), f"fd={self.feature_dim}", "cand=complete")
+        base = (self.cache_dir / str(self.feature_dim) / "complete") / key
         return base.with_suffix(".npz"), base.with_suffix(".json")
 
     def _try_load_cache(self, npz_path: Path):
@@ -97,14 +93,8 @@ class NPZTSPDataset(Dataset):
         T = T.astype(np.int64) if T is not None else None
         n = C.shape[0]
 
-        if self.candidate_mode == "complete":
-            E = complete_edges(n)
-        elif self.candidate_mode == "knn":
-            E = knn_edges(C, self.k)
-        elif self.candidate_mode == "knn_plus_gt" and T is not None:
-            E = union_edges_unique(knn_edges(C, self.k), tour_edges_undirected(T))
-        else:
-            E = knn_edges(C, self.k)
+        # Always use the complete graph
+        E = complete_edges(n)
 
         X = edge_features(C, E, feature_dim=self.feature_dim)
 

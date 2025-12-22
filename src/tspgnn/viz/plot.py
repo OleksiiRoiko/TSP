@@ -63,10 +63,8 @@ def run(cfg: VisualizeCfg, logger):
 
     # mode == "predict"
     state = torch.load(cfg.model, map_location="cpu")
-    overrides = {}
-    if cfg.feature_dim is not None:
-        overrides["in_dim"] = int(cfg.feature_dim)
-    model, mparams = build_model_from_state(state, prefer_name=None, overrides=overrides or None)
+    # Infer input dim from checkpoint; training uses 10D features
+    model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
     logger.info(f"Viz model params: {mparams}")
     load_weights_flex(model, state, logger=logger)
 

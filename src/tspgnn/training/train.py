@@ -30,7 +30,7 @@ def _maybe_prime_cache(ds: NPZTSPDataset, desc: str):
     cache_root = getattr(ds, "cache_dir", None)
     if cache_root is None:
         return
-    bucket = cache_root / str(ds.feature_dim) / ds.candidate_mode
+    bucket = cache_root / str(ds.feature_dim) / "complete"
     bucket.mkdir(parents=True, exist_ok=True)
     cached = list(bucket.glob("*.npz"))
     if len(cached) >= len(ds):
@@ -51,9 +51,9 @@ def run(cfg: TrainCfg, logger):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"Device: {device}")
 
-    # ---- datasets (complete graph, feature_dim from cfg) ----
-    tr_ds = NPZTSPDataset(str(train_root), candidate_mode="complete", k=0, feature_dim=int(cfg.feature_dim))
-    va_ds = NPZTSPDataset(str(val_root),   candidate_mode="complete", k=0, feature_dim=int(cfg.feature_dim))
+    # ---- datasets (complete graph, fixed 10-dim features) ----
+    tr_ds = NPZTSPDataset(str(train_root), feature_dim=10)
+    va_ds = NPZTSPDataset(str(val_root),   feature_dim=10)
 
     # optional: make the first-time compute visible
     _maybe_prime_cache(tr_ds, "train")
@@ -78,7 +78,7 @@ def run(cfg: TrainCfg, logger):
     logger.info(f"Train graphs: {len(tr_ds)} | Val graphs: {len(va_ds)} | workers: {num_workers}")
 
     # ---- model ----
-    overrides = {"in_dim": int(cfg.feature_dim)}
+    overrides = {"in_dim": 10}
     if cfg.hidden is not None:  overrides["hidden"]  = int(cfg.hidden)
     if cfg.dropout is not None: overrides["dropout"] = float(cfg.dropout)
     if hasattr(cfg, "depth") and cfg.depth is not None:  # depth from config.yaml
@@ -160,6 +160,6 @@ def run(cfg: TrainCfg, logger):
             }, indent=2), encoding="utf-8")
             shutil.copy2(ckpt, latest)
             latest_meta.write_text(meta.read_text(encoding="utf-8"), encoding="utf-8")
-            tqdm.write(f"  ✓ SAVED → {ckpt.name} (and updated {latest.name})")
+            tqdm.write(f"  SAVED -> {ckpt.name} (and updated {latest.name})")
 
     logger.info(f"Best Val {best:.6f} @ epoch {best_ep}\nSaved: {ckpt}")

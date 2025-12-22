@@ -100,4 +100,4 @@ def run(cfg: GenerateCfg, logger):
                         )
                         bar.update(1)
 
-            logger.info(f"  ✓ wrote {count} files to {out_dir}\n")
+            logger.info(f"  wrote {count} files to {out_dir}\n")
