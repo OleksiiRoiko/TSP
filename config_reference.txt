@@ -1,4 +1,5 @@
 # CONFIG_REFERENCE (TSP-GNN)
+# Updated to match current config.py implementation
 
 [generate]
 out_root          : str   | base folder for synthetic dataset (train/val/test)
@@ -52,7 +53,7 @@ root              : str   | folder with .npz to check
 check_gt          : bool  | validates GT is a Hamiltonian cycle (permutation 0..n-1)
 coverage          : bool  | fraction of GT edges present in candidate graph
 lengths           : bool  | verifies stored normalized length matches recomputed
-csv               : str?  | optional CSV report path
+csv               : str?  | optional CSV report path (null = don't save)
 
 
 $env:PYTHONPATH = "$PWD/src"
