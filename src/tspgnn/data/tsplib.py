@@ -1,5 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
+import importlib
+from typing import Iterable, Tuple, cast
 import numpy as np
 import tsplib95
 from ..config import TsplibCfg
@@ -23,7 +25,10 @@ def _parse_opt_tour(path: Path):
 
 def _elkai(coords: np.ndarray):
     try:
-        import elkai
+        elkai = importlib.import_module("elkai")
+    except Exception:
+        return None
+    try:
         dist = np.sqrt(((coords[:,None,:]-coords[None,:,:])**2).sum(-1))
         mat = (dist*10_000).astype(int)
         return np.array(elkai.solve_int_matrix(mat.tolist()), dtype=np.int64)
@@ -46,9 +51,16 @@ def run(cfg: TsplibCfg, logger):
         if not getattr(problem, "node_coords", None):
             logger.error(f"skip {nm}: missing node_coords")
             continue
-        xs,ys=[],[]
-        for _,(x,y) in sorted(problem.node_coords.items()):
-            xs.append(float(x)); ys.append(float(y))
+        coords_map = problem.node_coords
+        xs, ys = [], []
+        raw_items = getattr(coords_map, "items", None)
+        if callable(raw_items):
+            items = cast(Iterable[tuple[int, tuple[float, float]]], raw_items())
+        else:
+            items = cast(Iterable[tuple[int, tuple[float, float]]], coords_map)
+        for _, (x, y) in sorted(items, key=lambda kv: kv[0]):
+            xs.append(float(x))
+            ys.append(float(y))
         coords_orig = np.stack([np.array(xs), np.array(ys)], axis=1).astype(np.float32)
         minv = coords_orig.min(axis=0); span = np.maximum(coords_orig.max(axis=0)-minv, 1e-9)
         coords = ((coords_orig-minv)/span).astype(np.float32)

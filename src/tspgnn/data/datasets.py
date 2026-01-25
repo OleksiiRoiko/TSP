@@ -47,6 +47,8 @@ class NPZTSPDataset(Dataset):
     # --------- caching helpers ----------
     def _cache_paths_for(self, npz_path: Path) -> tuple[Path, Path]:
         # Make a stable key from path + basic params
+        if self.cache_dir is None:
+            raise RuntimeError("cache_dir is None; caching is disabled")
         key = _hash_key(str(npz_path.resolve()), f"fd={self.feature_dim}", "cand=complete")
         base = (self.cache_dir / str(self.feature_dim) / "complete") / key
         return base.with_suffix(".npz"), base.with_suffix(".json")

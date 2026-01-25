@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+import importlib
 import numpy as np
 from ..config import GenerateCfg
 from ..utils.io import save_npz
@@ -20,7 +21,10 @@ def _make_one(args):
 
 def _elkai_tour(coords: np.ndarray):
     try:
-        import elkai
+        elkai = importlib.import_module("elkai")
+    except Exception:
+        return None
+    try:
         dist = np.sqrt(((coords[:,None,:]-coords[None,:,:])**2).sum(-1))
         mat = (dist*10_000).astype(int)
         return np.array(elkai.solve_int_matrix(mat.tolist()), dtype=np.int64)
