@@ -6,4 +6,4 @@ tsplib95
 pydantic>=2
 pyyaml
 scipy
-$env:PYTHONPATH = "$PWD/src"
+# For local dev: $env:PYTHONPATH = "$PWD/src"

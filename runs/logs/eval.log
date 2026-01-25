@@ -1,8 +1,0 @@
-2025-11-23 18:34:55,411 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3}
-2025-11-23 18:34:55,412 INFO - Loading 8/8 tensors (filtered by name+shape).
-2025-11-23 18:34:55,413 INFO - Evaluating 4 instances...
-2025-11-23 18:34:56,851 INFO - saved runs\evals\tsplib_eval_edge_mlp_v1_edge_mlp_in10_h128_d3_bs8_lr0.001_ep20_seed0_20251123-125836_best.json
-2025-11-23 18:35:42,060 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 5}
-2025-11-23 18:35:42,061 INFO - Loading 12/12 tensors (filtered by name+shape).
-2025-11-23 18:35:42,064 INFO - Evaluating 4 instances...
-2025-11-23 18:35:43,406 INFO - saved runs\evals\tsplib_eval_edge_mlp_v1_edge_mlp_in10_h256_d5_bs8_lr0.001_ep20_seed0_20251123-132928_best.json

@@ -1,5 +1,0 @@
-instance    , n  , gt_valid, coverage, lengths_ok
-berlin52.npz,  52, True    ,      1.0, True
-eil76.npz   ,  76, True    ,      1.0, True
-kroA100.npz , 100, True    ,      1.0, True
-pr76.npz    ,  76, True    ,      1.0, True

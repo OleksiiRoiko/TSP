@@ -47,7 +47,7 @@ class TrainCfg(BaseModel):
 
 
 class EvalCfg(BaseModel):
-    model_path: str = "runs/models/edge_mlp_v1_best.pt"
+    model_path: str = "runs/models/edge_mlp_v1_latest.pt"
     data_root: str = "runs/data/tsplib/processed"
     device: str = "cpu"
     save_json: Optional[str] = "runs/evals/eval.json"
@@ -58,7 +58,7 @@ class EvalCfg(BaseModel):
 class VisualizeCfg(BaseModel):
     mode: str = "predict"               # "dataset" or "predict"
     npz_dir: str = "runs/data/tsplib/processed"
-    model: str = "runs/models/edge_mlp_v1_best.pt"  # only used in predict mode
+    model: str = "runs/models/edge_mlp_v1_latest.pt"  # only used in predict mode
     out_dir: str = "runs/figs/tsplib"
     figsize: List[float] = [11.0, 5.5]
     dpi: int = 150

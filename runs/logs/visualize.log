@@ -1,4 +1,0 @@
-2025-11-23 18:39:47,410 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 5}
-2025-11-23 18:39:47,410 INFO - Loading 12/12 tensors (filtered by name+shape).
-2025-11-23 18:40:27,670 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3}
-2025-11-23 18:40:27,671 INFO - Loading 8/8 tensors (filtered by name+shape).

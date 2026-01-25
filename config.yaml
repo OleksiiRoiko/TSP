@@ -27,18 +27,18 @@ train:
   depth: 2                      # hidden layers (shallow). For deep, change model/depth.
 
 eval:
-  model_path: runs/models/edge_mlp_v1_edge_mlp_in10_h256_d5_bs8_lr0.001_ep20_seed0_20251123-132928_best.pt
+  model_path: runs/models/edge_mlp_v1_latest.pt
   data_root: runs/data/tsplib/processed
   device: cpu
-  save_json: runs/evals/tsplib_eval_edge_mlp_v1_edge_mlp_in10_h256_d5_bs8_lr0.001_ep20_seed0_20251123-132928_best.json
+  save_json: runs/evals/tsplib_eval_edge_mlp_v1_latest.json
   run_twoopt: true
   seed: 0
 
 visualize:
   mode: predict                      # "dataset" or "predict"
   npz_dir: runs/data/tsplib/processed
-  model: runs/models/edge_mlp_v1_edge_mlp_in10_h128_d3_bs8_lr0.001_ep20_seed0_20251123-125836_best.pt  # only used in mode=predict
-  out_dir: runs/figs/tsplib_edge_mlp_v1_edge_mlp_in10_h128_d3_bs8_lr0.001_ep20_seed0_20251123-125836_best
+  model: runs/models/edge_mlp_v1_latest.pt  # only used in mode=predict
+  out_dir: runs/figs/tsplib_edge_mlp_v1_latest
   figsize: [11.0, 5.5]
   dpi: 150
   limit: 0                           # 0 = all

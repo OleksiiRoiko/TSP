@@ -56,4 +56,4 @@ lengths           : bool  | verifies stored normalized length matches recomputed
 csv               : str?  | optional CSV report path (null = don't save)
 
 
-$env:PYTHONPATH = "$PWD/src"
+# Dev tip (PowerShell): $env:PYTHONPATH = "$PWD/src"

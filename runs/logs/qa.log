@@ -1,9 +1,0 @@
-2025-11-23 17:38:20,594 INFO - QA on 4 files
-2025-11-23 17:38:20,649 INFO - [check_gt] OK
-2025-11-23 17:38:20,664 INFO - [coverage] mean=0.9686 min=0.9400 max=1.0000
-2025-11-23 17:38:20,672 INFO - [lengths] OK
-2025-11-23 17:57:13,823 INFO - QA on 4 files
-2025-11-23 17:57:13,845 INFO - [check_gt] OK
-2025-11-23 17:57:13,846 INFO - [coverage] mean=1.0000 min=1.0000 max=1.0000
-2025-11-23 17:57:13,846 INFO - [lengths] OK
-2025-11-23 17:57:13,852 INFO - [csv] wrote runs\qa_report.csv

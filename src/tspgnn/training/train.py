@@ -92,6 +92,7 @@ def run(cfg: TrainCfg, logger):
     opt = torch.optim.Adam(model.parameters(), lr=float(cfg.lr))
     use_amp = (device.type == "cuda")
     scaler = torch.amp.GradScaler('cuda') if use_amp else None
+    autocast_device = "cuda" if use_amp else "cpu"
 
     best = float("inf")
     best_ep = 0
@@ -118,7 +119,7 @@ def run(cfg: TrainCfg, logger):
                 x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
                 opt.zero_grad(set_to_none=True)
-                with torch.amp.autocast(device_type='cuda', enabled=use_amp):
+                with torch.amp.autocast(device_type=autocast_device, enabled=use_amp):
                     logits = model(x)
                     loss = _bce_balanced(logits, y)
                 if use_amp:
@@ -138,7 +139,7 @@ def run(cfg: TrainCfg, logger):
             for b in va:
                 x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
-                with torch.amp.autocast(device_type='cuda', enabled=use_amp):
+                with torch.amp.autocast(device_type=autocast_device, enabled=use_amp):
                     logits = model(x)
                     loss = _bce_balanced(logits, y)
                 vtot += float(loss.item()) * y.numel(); vcnt += y.numel()
