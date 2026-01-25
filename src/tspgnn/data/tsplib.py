@@ -5,7 +5,6 @@ import tsplib95
 from ..config import TsplibCfg
 from ..utils.io import save_npz, download_tsplib_file
 from ..utils.tour import tour_length
-from ..logging_setup import setup_logger
 
 def _parse_opt_tour(path: Path):
     if not path.exists(): return None
@@ -16,7 +15,10 @@ def _parse_opt_tour(path: Path):
         if s.startswith("-1") or s.upper().startswith("EOF"): break
         if in_sec and s:
             for tok in s.split():
-                if tok.isdigit(): seq.append(int(tok)-1)
+                if tok.isdigit():
+                    val = int(tok)
+                    if val > 0:
+                        seq.append(val - 1)
     return seq if seq else None
 
 def _elkai(coords: np.ndarray):
@@ -41,8 +43,11 @@ def run(cfg: TsplibCfg, logger):
         if not tsp.exists():
             logger.warning(f"skip {nm}: missing {tsp}"); continue
         problem = tsplib95.load(str(tsp))
+        if not getattr(problem, "node_coords", None):
+            logger.error(f"skip {nm}: missing node_coords")
+            continue
         xs,ys=[],[]
-        for _,(x,y) in problem.node_coords.items():
+        for _,(x,y) in sorted(problem.node_coords.items()):
             xs.append(float(x)); ys.append(float(y))
         coords_orig = np.stack([np.array(xs), np.array(ys)], axis=1).astype(np.float32)
         minv = coords_orig.min(axis=0); span = np.maximum(coords_orig.max(axis=0)-minv, 1e-9)

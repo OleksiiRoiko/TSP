@@ -1,8 +1,10 @@
 from __future__ import annotations
 from pathlib import Path
 import time, json, shutil, os
+from typing import Any
 import numpy as np
 import torch
+from torch.cuda.amp import GradScaler, autocast
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -78,7 +80,7 @@ def run(cfg: TrainCfg, logger):
     logger.info(f"Train graphs: {len(tr_ds)} | Val graphs: {len(va_ds)} | workers: {num_workers}")
 
     # ---- model ----
-    overrides = {"in_dim": 10}
+    overrides: dict[str, Any] = {"in_dim": 10}
     if cfg.hidden is not None:  overrides["hidden"]  = int(cfg.hidden)
     if cfg.dropout is not None: overrides["dropout"] = float(cfg.dropout)
     if hasattr(cfg, "depth") and cfg.depth is not None:  # depth from config.yaml
@@ -91,8 +93,7 @@ def run(cfg: TrainCfg, logger):
     # ---- optim + AMP (new API) ----
     opt = torch.optim.Adam(model.parameters(), lr=float(cfg.lr))
     use_amp = (device.type == "cuda")
-    scaler = torch.amp.GradScaler('cuda') if use_amp else None
-    autocast_device = "cuda" if use_amp else "cpu"
+    scaler = GradScaler(enabled=use_amp)
 
     best = float("inf")
     best_ep = 0
@@ -119,16 +120,12 @@ def run(cfg: TrainCfg, logger):
                 x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
                 opt.zero_grad(set_to_none=True)
-                with torch.amp.autocast(device_type=autocast_device, enabled=use_amp):
+                with autocast(enabled=use_amp):
                     logits = model(x)
                     loss = _bce_balanced(logits, y)
-                if use_amp:
-                    scaler.scale(loss).backward()
-                    scaler.step(opt)
-                    scaler.update()
-                else:
-                    loss.backward()
-                    opt.step()
+                scaler.scale(loss).backward()
+                scaler.step(opt)
+                scaler.update()
                 tot += float(loss.item()) * y.numel(); cnt += y.numel()
                 pbar.update(1)
         train_loss = tot / max(cnt, 1)
@@ -139,7 +136,7 @@ def run(cfg: TrainCfg, logger):
             for b in va:
                 x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
-                with torch.amp.autocast(device_type=autocast_device, enabled=use_amp):
+                with autocast(enabled=use_amp):
                     logits = model(x)
                     loss = _bce_balanced(logits, y)
                 vtot += float(loss.item()) * y.numel(); vcnt += y.numel()

@@ -19,6 +19,9 @@ def run(cfg: EvalCfg, logger):
     if not mp.exists() or not dr.exists():
         raise FileNotFoundError("eval: model_path or data_root invalid")
 
+    torch.manual_seed(int(cfg.seed))
+    np.random.seed(int(cfg.seed))
+
     # Build model from checkpoint (auto infer), optionally override input dim
     state = torch.load(mp, map_location="cpu")
     # Infer input dim from checkpoint; fixed features are 10D when training from this repo
@@ -108,13 +111,14 @@ def run_qa(cfg: QACfg, logger):
         d = load_npz(f)
         C = d["coords"].astype(np.float32)
         t = d.get("label_tour", None)
+        t = t.astype(np.int64) if t is not None else None
         n = int(C.shape[0])
 
         gt_ok = verify_tour(t, n) if t is not None else False
         cov = None
         lengths_ok = True
 
-        if cfg.coverage and gt_ok:
+        if cfg.coverage and gt_ok and t is not None:
             # Use complete graph for QA to expect coverage==1 under full candidates
             E = complete_edges(n)
             gt_edges = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in tour_edges_undirected(t))
@@ -122,7 +126,7 @@ def run_qa(cfg: QACfg, logger):
             cov = len(gt_edges & cand_edges) / len(gt_edges) if gt_edges else float("nan")
             covs.append(cov)
 
-        if cfg.lengths and gt_ok:
+        if cfg.lengths and gt_ok and t is not None:
             Ls = float(d.get("label_len_norm", -1.0))
             Lc = float(tour_length(C, t))
             lengths_ok = abs(Ls - Lc) <= 1e-6
