@@ -12,9 +12,37 @@ from ..utils.tour import tour_edges_undirected, greedy_cycle_from_edges, two_opt
 from ..models.registry import build_model_from_state, load_weights_flex
 
 
+def _resolve_model_path(p: Path) -> Path:
+    if p.is_dir():
+        candidate = p / "latest.json"
+        if candidate.exists():
+            p = candidate
+        else:
+            runs = sorted([d for d in p.iterdir() if d.is_dir()])
+            if runs:
+                best = runs[-1] / "best.pt"
+                if best.exists():
+                    return best
+    if p.suffix.lower() == ".json" and p.exists():
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and "path" in data:
+                return Path(str(data["path"]))
+        except Exception:
+            pass
+    if not p.exists() and p.name == "latest.json":
+        exp_root = p.parent
+        if exp_root.exists():
+            runs = sorted([d for d in exp_root.iterdir() if d.is_dir()])
+            if runs:
+                best = runs[-1] / "best.pt"
+                if best.exists():
+                    return best
+    return p
+
 
 def run(cfg: EvalCfg, logger):
-    mp = Path(cfg.model_path)
+    mp = _resolve_model_path(Path(cfg.model_path))
     dr = Path(cfg.data_root)
     if not mp.exists() or not dr.exists():
         raise FileNotFoundError("eval: model_path or data_root invalid")
@@ -32,7 +60,7 @@ def run(cfg: EvalCfg, logger):
     dev = torch.device(cfg.device if cfg.device == "cpu" or torch.cuda.is_available() else "cpu")
     model.to(dev).eval()
 
-    files = sorted(dr.glob("*.npz"))
+    files = sorted(dr.rglob("*.npz"))
     if not files:
         raise FileNotFoundError("eval: no .npz files")
     logger.info(f"Evaluating {len(files)} instances...")
@@ -96,7 +124,7 @@ def run(cfg: EvalCfg, logger):
 
 def run_qa(cfg: QACfg, logger):
     root = Path(cfg.root)
-    files = sorted(root.glob("*.npz"))
+    files = sorted(root.rglob("*.npz"))
     if not files:
         logger.error("qa: no .npz files")
         return
@@ -106,17 +134,60 @@ def run_qa(cfg: QACfg, logger):
     covs = []
     gt_bad = []
     len_bad = []
+    len_tsplib_bad = []
+    missing_key_files = []
+    dist_counts: dict[str, int] = {}
+    size_counts: dict[int, int] = {}
+    source_counts: dict[str, int] = {}
+
+    def _as_str(v) -> str | None:
+        if v is None:
+            return None
+        try:
+            if hasattr(v, "shape") and v.shape == ():
+                return str(v.item())
+        except Exception:
+            pass
+        try:
+            return str(v)
+        except Exception:
+            return None
 
     for f in files:
         d = load_npz(f)
+        missing = [k for k in ("coords", "n") if k not in d]
+        if missing:
+            missing_key_files.append(f.name)
+            rows.append({
+                "instance": f.name,
+                "n": -1,
+                "gt_valid": False,
+                "coverage": None,
+                "lengths_ok": False,
+                "len_tsplib_ok": None,
+                "distribution": None,
+                "source": None,
+                "missing_keys": ",".join(missing),
+            })
+            continue
+
         C = d["coords"].astype(np.float32)
         t = d.get("label_tour", None)
         t = t.astype(np.int64) if t is not None else None
-        n = int(C.shape[0])
+        n = int(d.get("n", C.shape[0]))
+
+        dist = _as_str(d.get("distribution", None))
+        src = _as_str(d.get("source", None))
+        if dist:
+            dist_counts[dist] = dist_counts.get(dist, 0) + 1
+        if src:
+            source_counts[src] = source_counts.get(src, 0) + 1
+        size_counts[n] = size_counts.get(n, 0) + 1
 
         gt_ok = verify_tour(t, n) if t is not None else False
         cov = None
         lengths_ok = True
+        len_tsplib_ok = None
 
         if cfg.coverage and gt_ok and t is not None:
             # Use complete graph for QA to expect coverage==1 under full candidates
@@ -133,6 +204,15 @@ def run_qa(cfg: QACfg, logger):
             if not lengths_ok:
                 len_bad.append(f.name)
 
+            coords_orig = d.get("coords_orig", None)
+            metric = d.get("metric", None)
+            if "label_len_tsplib" in d and coords_orig is not None and metric is not None:
+                Lt = float(d.get("label_len_tsplib", -1.0))
+                Lc_t = float(tour_length_tsplib(coords_orig, t, str(metric)))
+                len_tsplib_ok = abs(Lt - Lc_t) <= 1e-6
+                if not len_tsplib_ok:
+                    len_tsplib_bad.append(f.name)
+
         if cfg.check_gt and not gt_ok:
             gt_bad.append(f.name)
 
@@ -142,6 +222,10 @@ def run_qa(cfg: QACfg, logger):
             "gt_valid": gt_ok,
             "coverage": cov,
             "lengths_ok": lengths_ok,
+            "len_tsplib_ok": len_tsplib_ok,
+            "distribution": dist,
+            "source": src,
+            "missing_keys": "",
         })
 
     if cfg.check_gt:
@@ -150,13 +234,37 @@ def run_qa(cfg: QACfg, logger):
         logger.info(f"[coverage] mean={np.mean(covs):.4f} min={np.min(covs):.4f} max={np.max(covs):.4f}")
     if cfg.lengths:
         logger.info("[lengths] OK" if not len_bad else f"[lengths] mismatch: {len(len_bad)}")
+        if len_tsplib_bad:
+            logger.info(f"[lengths_tsplib] mismatch: {len(len_tsplib_bad)}")
+    if missing_key_files:
+        logger.info(f"[missing_keys] {len(missing_key_files)} files missing required fields")
+
+    if dist_counts:
+        logger.info(f"[distributions] {dict(sorted(dist_counts.items()))}")
+    if size_counts:
+        logger.info(f"[sizes] {dict(sorted(size_counts.items()))}")
+    if source_counts:
+        logger.info(f"[sources] {dict(sorted(source_counts.items()))}")
 
     if cfg.csv:
         p = Path(cfg.csv)
         p.parent.mkdir(parents=True, exist_ok=True)
         import csv as _csv
         with p.open("w", newline="", encoding="utf-8") as fh:
-            writer = _csv.DictWriter(fh, fieldnames=["instance", "n", "gt_valid", "coverage", "lengths_ok"])
+            writer = _csv.DictWriter(
+                fh,
+                fieldnames=[
+                    "instance",
+                    "n",
+                    "gt_valid",
+                    "coverage",
+                    "lengths_ok",
+                    "len_tsplib_ok",
+                    "distribution",
+                    "source",
+                    "missing_keys",
+                ],
+            )
             writer.writeheader()
             for r in rows:
                 writer.writerow(r)

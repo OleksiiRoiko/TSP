@@ -1,0 +1,8 @@
+base: ../config.yaml
+
+train:
+  exp_id: exp_edge_mlp_h256_d2
+  model_name: edge_mlp
+  hidden: 256
+  dropout: 0.0
+  depth: 2

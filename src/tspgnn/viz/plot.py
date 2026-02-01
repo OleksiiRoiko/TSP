@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+import json
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
@@ -10,6 +11,35 @@ from ..utils.io import load_npz
 from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import greedy_cycle_from_edges, two_opt
 from ..models.registry import build_model_from_state, load_weights_flex
+
+
+def _resolve_model_path(p: Path) -> Path:
+    if p.is_dir():
+        candidate = p / "latest.json"
+        if candidate.exists():
+            p = candidate
+        else:
+            runs = sorted([d for d in p.iterdir() if d.is_dir()])
+            if runs:
+                best = runs[-1] / "best.pt"
+                if best.exists():
+                    return best
+    if p.suffix.lower() == ".json" and p.exists():
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and "path" in data:
+                return Path(str(data["path"]))
+        except Exception:
+            pass
+    if not p.exists() and p.name == "latest.json":
+        exp_root = p.parent
+        if exp_root.exists():
+            runs = sorted([d for d in exp_root.iterdir() if d.is_dir()])
+            if runs:
+                best = runs[-1] / "best.pt"
+                if best.exists():
+                    return best
+    return p
 
 
 def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
@@ -34,7 +64,7 @@ def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
 
 
 def run(cfg: VisualizeCfg, logger):
-    files = sorted(Path(cfg.npz_dir).glob("*.npz"))
+    files = sorted(Path(cfg.npz_dir).rglob("*.npz"))
     if cfg.limit > 0:
         files = files[: cfg.limit]
     if not files:
@@ -62,7 +92,8 @@ def run(cfg: VisualizeCfg, logger):
         return
 
     # mode == "predict"
-    state = torch.load(cfg.model, map_location="cpu")
+    mp = _resolve_model_path(Path(cfg.model))
+    state = torch.load(mp, map_location="cpu")
     # Infer input dim from checkpoint; training uses 10D features
     model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
     logger.info(f"Viz model params: {mparams}")

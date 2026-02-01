@@ -26,18 +26,25 @@ def download_tsplib_file(name: str, raw_dir: Path, kind: str) -> Path | None:
     assert kind in ("tsp","opt.tour")
     dst = raw_dir / f"{name}.{kind}"
     if dst.exists(): return dst
-    base_h="https://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/"
-    base_h_http="http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/"
-    base_zib="http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/"
-    urls=[f"{base_h}{name}.{kind}", f"{base_h}{name}.{kind}.gz",
-          f"{base_h_http}{name}.{kind}", f"{base_h_http}{name}.{kind}.gz",
-          f"{base_zib}{name}.{kind}", f"{base_zib}{name}.{kind}.gz"]
+    base_rice = "https://softlib.rice.edu/pub/tsplib/tsp/"
+    base_h = "https://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/"
+    base_h_http = "http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/"
+    base_zib = "http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/"
+    base_github = "https://raw.githubusercontent.com/mastqe/tsplib/master/"
+    mirrors = [base_rice, base_h, base_h_http, base_zib]
+    urls = [f"{b}{name}.{kind}" for b in mirrors] + [f"{b}{name}.{kind}.gz" for b in mirrors]
+    if kind == "tsp":
+        urls.append(f"{base_github}{name}.{kind}")
     for u in urls:
         data = urlretrieve(u)
         if data is None: continue
         try:
-            text = gzip.GzipFile(fileobj=io.BytesIO(data)).read() if u.endswith(".gz") else data
-            dst.write_bytes(text)
+            if data[:2] == b"\x1f\x8b":
+                data = gzip.GzipFile(fileobj=io.BytesIO(data)).read()
+            head = data[:64].lstrip().lower()
+            if head.startswith(b"<!doctype") or head.startswith(b"<html"):
+                continue
+            dst.write_bytes(data)
             return dst
         except Exception:
             continue

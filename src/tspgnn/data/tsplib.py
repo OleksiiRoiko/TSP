@@ -1,17 +1,32 @@
 from __future__ import annotations
 from pathlib import Path
+import gzip
 import importlib
 from typing import Iterable, Tuple, cast
 import numpy as np
 import tsplib95
+from tsplib95.loaders import parse as _tsplib_parse
 from ..config import TsplibCfg
 from ..utils.io import save_npz, download_tsplib_file
 from ..utils.tour import tour_length
 
+def _read_text_maybe_gzip(path: Path) -> str:
+    data = path.read_bytes()
+    if data[:2] == b"\x1f\x8b":
+        try:
+            data = gzip.decompress(data)
+        except Exception:
+            pass
+    try:
+        return data.decode("utf-8")
+    except UnicodeDecodeError:
+        return data.decode("latin-1")
+
+
 def _parse_opt_tour(path: Path):
     if not path.exists(): return None
     seq=[]; in_sec=False
-    for line in path.read_text("utf-8","ignore").splitlines():
+    for line in _read_text_maybe_gzip(path).splitlines():
         s=line.strip()
         if s.upper().startswith("TOUR_SECTION"): in_sec=True; continue
         if s.startswith("-1") or s.upper().startswith("EOF"): break
@@ -47,7 +62,8 @@ def run(cfg: TsplibCfg, logger):
         tsp = raw_dir / f"{nm}.tsp"
         if not tsp.exists():
             logger.warning(f"skip {nm}: missing {tsp}"); continue
-        problem = tsplib95.load(str(tsp))
+        text = _read_text_maybe_gzip(tsp)
+        problem = _tsplib_parse(text)
         if not getattr(problem, "node_coords", None):
             logger.error(f"skip {nm}: missing node_coords")
             continue

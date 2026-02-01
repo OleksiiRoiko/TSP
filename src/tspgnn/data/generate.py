@@ -45,6 +45,14 @@ def _sample(rng: np.random.Generator, n: int, kind: str):
         centers=rng.random((4,2)); assign=rng.integers(0,4,size=n)
         pts=centers[assign] + 0.08*rng.standard_normal((n,2))
         return np.clip(pts,0,1).astype(np.float32)
+    if kind=="ring":
+        # Points around a ring with small radial noise
+        angles = rng.random(size=n) * (2.0 * np.pi)
+        r = 0.35 + 0.03 * rng.standard_normal(size=n)
+        x = 0.5 + r * np.cos(angles)
+        y = 0.5 + r * np.sin(angles)
+        pts = np.stack([x, y], axis=1)
+        return np.clip(pts, 0.0, 1.0).astype(np.float32)
     if kind=="grid_jitter":
         g=int(np.sqrt(n))
         xs,ys=np.meshgrid(np.linspace(0.05,0.95,g), np.linspace(0.05,0.95,g))
@@ -58,8 +66,13 @@ def _sample(rng: np.random.Generator, n: int, kind: str):
 def run(cfg: GenerateCfg, logger):
     rng = np.random.default_rng(int(cfg.seed))
     root = Path(cfg.out_root)
-    dists = ["uniform", "clustered", "grid_jitter"]
-    probs = np.array([0.7, 0.2, 0.1], dtype=np.float64); probs /= probs.sum()
+    dists = list(cfg.dist_names)
+    probs = np.array(cfg.dist_probs, dtype=np.float64)
+    if len(dists) != len(probs):
+        raise ValueError("dist_names and dist_probs must have the same length")
+    if probs.sum() <= 0:
+        raise ValueError("dist_probs must sum to a positive value")
+    probs /= probs.sum()
 
     # sensible default for Windows too
     workers = max(1, min(4, (os.cpu_count() or 1) // 2))

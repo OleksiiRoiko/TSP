@@ -1,6 +1,9 @@
 # CONFIG_REFERENCE (TSP-GNN)
 # Updated to match current config.py implementation
 
+# You can set `base: path/to/base.yaml` to load a base config and override only the fields you need.
+# You can use `{exp_id}` in string fields; it will be replaced with train.exp_id.
+
 [generate]
 out_root          : str   | base folder for synthetic dataset (train/val/test)
 n_list            : [int] | list of N (number of nodes) to generate (>=3)
@@ -8,6 +11,8 @@ per_size_train    : int   | number of graphs per N for train
 per_size_val      : int   | number of graphs per N for val
 per_size_test     : int   | number of graphs per N for test
 elkai_frac        : float | fraction in [0,1] of graphs solved by elkai (else NN+2opt)
+dist_names        : [str] | list of distribution names (e.g., ["uniform","clustered","ring","grid_jitter"])
+dist_probs        : [float] | sampling probs aligned to dist_names (normalized internally)
 seed              : int   | RNG seed for reproducibility
 
 [tsplib]
@@ -31,7 +36,7 @@ depth             : int   | number of hidden layers in the edge MLP
 # Note: training uses complete graphs (no sparse candidates).
 
 [eval]
-model_path        : str   | checkpoint .pt path to evaluate
+model_path        : str   | checkpoint .pt path or a latest.json pointer
 data_root         : str   | folder with .npz to evaluate
 device            : str   | "cpu" or "cuda"
 save_json         : str?  | where to store results json (null = do not save)
@@ -41,7 +46,7 @@ seed              : int   | rng seed for reproducibility
 [visualize]
 mode              : str   | "dataset" or "predict"
 npz_dir           : str   | folder with .npz to visualize
-model             : str   | checkpoint .pt (used in predict mode)
+model             : str   | checkpoint .pt or latest.json pointer (predict mode)
 device            : str   | "cpu" or "cuda"
 out_dir           : str   | where to write .png files
 figsize           : [w,h] | inches
@@ -49,7 +54,7 @@ dpi               : int   | dots per inch
 limit             : int   | max number of files to render (0 = all)
 
 [qa]
-root              : str   | folder with .npz to check
+root              : str   | root folder to scan recursively for .npz to check
 check_gt          : bool  | validates GT is a Hamiltonian cycle (permutation 0..n-1)
 coverage          : bool  | fraction of GT edges present in candidate graph
 lengths           : bool  | verifies stored normalized length matches recomputed

@@ -17,9 +17,9 @@ def build_model(name: str, overrides: Dict[str, Any] | None = None) -> Tuple[tor
     Create a model by name, with sensible defaults, allowing overrides.
 
     Names (kept for backward compatibility):
-      - "edge_mlp"      → depth=2 hidden layers
-      - "edge_mlp_deep" → depth=3 hidden layers
-      - "deep"          → alias of edge_mlp_deep
+      - "edge_mlp"      -> depth=2 hidden layers
+      - "edge_mlp_deep" -> depth=3 hidden layers
+      - "deep"          -> alias of edge_mlp_deep
     """
     name = (name or "edge_mlp").lower()
     params: Dict[str, Any] = dict(in_dim=10, hidden=128, dropout=0.0, depth=2)
