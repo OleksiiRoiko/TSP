@@ -168,7 +168,9 @@ def run(cfg: EvalCfg, logger):
     dev = torch.device(cfg.device if cfg.device == "cpu" or torch.cuda.is_available() else "cpu")
     model.to(dev).eval()
 
-    roots = cfg.data_roots if cfg.data_roots else [cfg.data_root]
+    roots = cfg.data_roots
+    if not roots:
+        raise FileNotFoundError("eval: data_roots is empty")
     multi = len(roots) > 1
     run_dir = _infer_run_dir(model_path_cfg, mp)
 
@@ -206,7 +208,6 @@ def run_qa(cfg: QACfg, logger):
     logger.info(f"QA on {len(files)} files")
 
     rows = []
-    covs = []
     gt_bad = []
     len_bad = []
     len_tsplib_bad = []
@@ -237,7 +238,6 @@ def run_qa(cfg: QACfg, logger):
                 "instance": f.name,
                 "n": -1,
                 "gt_valid": False,
-                "coverage": None,
                 "lengths_ok": False,
                 "len_tsplib_ok": None,
                 "distribution": None,
@@ -260,17 +260,8 @@ def run_qa(cfg: QACfg, logger):
         size_counts[n] = size_counts.get(n, 0) + 1
 
         gt_ok = verify_tour(t, n) if t is not None else False
-        cov = None
         lengths_ok = True
         len_tsplib_ok = None
-
-        if cfg.coverage and gt_ok and t is not None:
-            # Use complete graph for QA to expect coverage==1 under full candidates
-            E = complete_edges(n)
-            gt_edges = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in tour_edges_undirected(t))
-            cand_edges = set((min(int(a), int(b)), max(int(a), int(b))) for a, b in E)
-            cov = len(gt_edges & cand_edges) / len(gt_edges) if gt_edges else float("nan")
-            covs.append(cov)
 
         if cfg.lengths and gt_ok and t is not None:
             Ls = float(d.get("label_len_norm", -1.0))
@@ -295,7 +286,6 @@ def run_qa(cfg: QACfg, logger):
             "instance": f.name,
             "n": n,
             "gt_valid": gt_ok,
-            "coverage": cov,
             "lengths_ok": lengths_ok,
             "len_tsplib_ok": len_tsplib_ok,
             "distribution": dist,
@@ -305,8 +295,6 @@ def run_qa(cfg: QACfg, logger):
 
     if cfg.check_gt:
         logger.info("[check_gt] OK" if not gt_bad else f"[check_gt] invalid: {len(gt_bad)}")
-    if cfg.coverage and covs:
-        logger.info(f"[coverage] mean={np.mean(covs):.4f} min={np.min(covs):.4f} max={np.max(covs):.4f}")
     if cfg.lengths:
         logger.info("[lengths] OK" if not len_bad else f"[lengths] mismatch: {len(len_bad)}")
         if len_tsplib_bad:
@@ -332,7 +320,6 @@ def run_qa(cfg: QACfg, logger):
                     "instance",
                     "n",
                     "gt_valid",
-                    "coverage",
                     "lengths_ok",
                     "len_tsplib_ok",
                     "distribution",

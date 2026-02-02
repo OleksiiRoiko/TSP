@@ -95,15 +95,12 @@ def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
 
 def run(cfg: VisualizeCfg, logger):
     def _iter_targets():
-        if cfg.targets:
-            for t in cfg.targets:
-                mode = (t.mode or cfg.mode).lower()
-                npz_dir = t.npz_dir
-                limit = cfg.limit if t.limit is None else int(t.limit)
-                out_dir = t.out_dir if t.out_dir is not None else cfg.out_dir
-                yield mode, npz_dir, limit, out_dir
-        else:
-            yield cfg.mode.lower(), cfg.npz_dir, cfg.limit, cfg.out_dir
+        for t in cfg.targets:
+            mode = (t.mode or "predict").lower()
+            npz_dir = t.npz_dir
+            limit = 0 if t.limit is None else int(t.limit)
+            out_dir = t.out_dir if t.out_dir is not None else cfg.out_dir
+            yield mode, npz_dir, limit, out_dir
 
     targets = list(_iter_targets())
     if not targets:

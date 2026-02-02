@@ -78,4 +78,4 @@ Eval/visualize outputs:
 
 Multi-dataset runs:
 - `eval.data_roots` evaluates multiple datasets in one command
-- `visualize.targets` renders multiple datasets in one command
+- `visualize.targets` renders multiple datasets in one command (required)

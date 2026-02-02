@@ -29,7 +29,6 @@ eval:
 
 # Visualize: all TSPLIB instances + 5 synthetic test instances
 visualize:
-  mode: predict
   model: runs/experiments/{exp_id}/latest.json
   targets:
     - npz_dir: runs/data/tsplib/processed

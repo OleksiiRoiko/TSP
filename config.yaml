@@ -20,6 +20,5 @@ tsplib:
 qa:
   root: runs/data
   check_gt: true
-  coverage: true
   lengths: true
   csv: runs/qa_report.csv

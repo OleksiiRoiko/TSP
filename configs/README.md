@@ -18,5 +18,5 @@ python -m tspgnn.cli --config configs/exp_edge_mlp_h128_d2.yaml train
 Notes:
 - You can use `{exp_id}` in string fields (auto-replaced by train.exp_id)
 - `eval.data_roots` lets you evaluate multiple datasets in a single run
-- `visualize.targets` lets you render multiple datasets in a single run
+- `visualize.targets` is required and lets you render multiple datasets in a single run
 - Since base config omits eval/visualize, include `eval.model_path` and `visualize.model`

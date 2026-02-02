@@ -39,28 +39,23 @@ depth             : int   | number of hidden layers in the edge MLP
 
 [eval]
 model_path        : str   | checkpoint .pt path or a latest.json pointer
-data_root         : str   | folder with .npz to evaluate
-data_roots        : [str]?| evaluate multiple datasets in one run (overrides data_root)
+data_roots        : [str] | evaluate multiple datasets in one run
 device            : str   | "cpu" or "cuda"
 save_json         : str?  | "auto" to store under run dir, or explicit path (null = do not save)
 run_twoopt        : bool  | run 2-opt after greedy decode
 seed              : int   | rng seed for reproducibility
 
 [visualize]
-mode              : str   | "dataset" or "predict"
-npz_dir           : str   | folder with .npz to visualize
-targets           : list? | list of {npz_dir, limit?, out_dir?, mode?} for multi-dataset runs
+targets           : list  | list of {npz_dir, limit?, out_dir?, mode?} for multi-dataset runs
 model             : str   | checkpoint .pt or latest.json pointer (predict mode)
 device            : str   | "cpu" or "cuda"
 out_dir           : str   | "auto" to store under run dir, or explicit path
 figsize           : [w,h] | inches
 dpi               : int   | dots per inch
-limit             : int   | max number of files to render (0 = all)
 
 [qa]
 root              : str   | root folder to scan recursively for .npz to check
 check_gt          : bool  | validates GT is a Hamiltonian cycle (permutation 0..n-1)
-coverage          : bool  | fraction of GT edges present in candidate graph
 lengths           : bool  | verifies stored normalized length matches recomputed
 csv               : str?  | optional CSV report path (null = don't save)
 

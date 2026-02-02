@@ -14,7 +14,6 @@ eval:
     - runs/data/synthetic/test
 
 visualize:
-  mode: predict
   model: runs/experiments/{exp_id}/latest.json
   targets:
     - npz_dir: runs/data/tsplib/processed
