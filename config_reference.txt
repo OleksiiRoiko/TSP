@@ -3,6 +3,8 @@
 
 # You can set `base: path/to/base.yaml` to load a base config and override only the fields you need.
 # You can use `{exp_id}` in string fields; it will be replaced with train.exp_id.
+# See configs/_template.yaml for a minimal per-experiment override template.
+# Note: sections can be omitted from a YAML file; defaults from config.py will apply.
 
 [generate]
 out_root          : str   | base folder for synthetic dataset (train/val/test)
@@ -38,17 +40,19 @@ depth             : int   | number of hidden layers in the edge MLP
 [eval]
 model_path        : str   | checkpoint .pt path or a latest.json pointer
 data_root         : str   | folder with .npz to evaluate
+data_roots        : [str]?| evaluate multiple datasets in one run (overrides data_root)
 device            : str   | "cpu" or "cuda"
-save_json         : str?  | where to store results json (null = do not save)
+save_json         : str?  | "auto" to store under run dir, or explicit path (null = do not save)
 run_twoopt        : bool  | run 2-opt after greedy decode
 seed              : int   | rng seed for reproducibility
 
 [visualize]
 mode              : str   | "dataset" or "predict"
 npz_dir           : str   | folder with .npz to visualize
+targets           : list? | list of {npz_dir, limit?, out_dir?, mode?} for multi-dataset runs
 model             : str   | checkpoint .pt or latest.json pointer (predict mode)
 device            : str   | "cpu" or "cuda"
-out_dir           : str   | where to write .png files
+out_dir           : str   | "auto" to store under run dir, or explicit path
 figsize           : [w,h] | inches
 dpi               : int   | dots per inch
 limit             : int   | max number of files to render (0 = all)

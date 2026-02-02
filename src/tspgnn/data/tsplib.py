@@ -2,9 +2,8 @@ from __future__ import annotations
 from pathlib import Path
 import gzip
 import importlib
-from typing import Iterable, Tuple, cast
+from typing import Iterable, cast
 import numpy as np
-import tsplib95
 from tsplib95.loaders import parse as _tsplib_parse
 from ..config import TsplibCfg
 from ..utils.io import save_npz, download_tsplib_file

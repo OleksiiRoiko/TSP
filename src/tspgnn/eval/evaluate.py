@@ -41,30 +41,43 @@ def _resolve_model_path(p: Path) -> Path:
     return p
 
 
-def run(cfg: EvalCfg, logger):
-    mp = _resolve_model_path(Path(cfg.model_path))
-    dr = Path(cfg.data_root)
-    if not mp.exists() or not dr.exists():
-        raise FileNotFoundError("eval: model_path or data_root invalid")
+def _infer_run_dir(model_path_cfg: Path, resolved_model: Path) -> Path | None:
+    if model_path_cfg.suffix.lower() == ".json" and model_path_cfg.exists():
+        try:
+            data = json.loads(model_path_cfg.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                if "run_dir" in data:
+                    return Path(str(data["run_dir"]))
+                if "path" in data:
+                    return Path(str(data["path"])).parent
+        except Exception:
+            pass
+    if model_path_cfg.is_dir():
+        lj = model_path_cfg / "latest.json"
+        if lj.exists():
+            return _infer_run_dir(lj, resolved_model)
+    if resolved_model.exists():
+        return resolved_model.parent
+    return None
 
-    torch.manual_seed(int(cfg.seed))
-    np.random.seed(int(cfg.seed))
 
-    # Build model from checkpoint (auto infer), optionally override input dim
-    state = torch.load(mp, map_location="cpu")
-    # Infer input dim from checkpoint; fixed features are 10D when training from this repo
-    model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
-    logger.info(f"Eval model params: {mparams}")
-    load_weights_flex(model, state, logger=logger)
+def _dataset_tag(data_root: Path) -> str:
+    s = str(data_root).lower()
+    name = data_root.name.lower()
+    if "tsplib" in s:
+        return "tsplib"
+    if "synthetic" in s and name in ("train", "val", "test"):
+        return f"synthetic_{name}"
+    return name or "data"
 
-    dev = torch.device(cfg.device if cfg.device == "cpu" or torch.cuda.is_available() else "cpu")
-    model.to(dev).eval()
 
-    files = sorted(dr.rglob("*.npz"))
-    if not files:
-        raise FileNotFoundError("eval: no .npz files")
-    logger.info(f"Evaluating {len(files)} instances...")
-
+def _eval_files(
+    files: list[Path],
+    model: torch.nn.Module,
+    dev: torch.device,
+    in_dim: int,
+    run_twoopt: bool,
+):
     results = []
     with torch.no_grad():
         for f in tqdm(files, ncols=100):
@@ -76,10 +89,10 @@ def run(cfg: EvalCfg, logger):
 
             # complete graph
             E = complete_edges(n)
-            F = edge_features(C, E, feature_dim=mparams["in_dim"])
+            F = edge_features(C, E, feature_dim=in_dim)
             logits = model(torch.from_numpy(F).float().to(dev)).cpu().numpy()
             pred = greedy_cycle_from_edges(n, E, logits)
-            if cfg.run_twoopt:
+            if run_twoopt:
                 pred = two_opt(C, pred, max_passes=20)
 
             # normalized lengths (always available)
@@ -109,13 +122,75 @@ def run(cfg: EvalCfg, logger):
                 "gt_len_tsplib": gt_len_tsplib,
                 "gap_pct": gap
             })
+    return results
 
-    if cfg.save_json:
-        p = Path(cfg.save_json)
+
+def _resolve_save_path(save_cfg: str | None, tag: str, run_dir: Path | None, multi: bool) -> Path | None:
+    if save_cfg is None:
+        return None
+    if isinstance(save_cfg, str) and save_cfg.lower() in ("", "none", "null"):
+        return None
+    if isinstance(save_cfg, str) and save_cfg.lower() == "auto":
+        if run_dir is not None:
+            out_dir = run_dir / "evals"
+            out_dir.mkdir(parents=True, exist_ok=True)
+            return out_dir / f"eval_{tag}.json"
+        p = Path("runs/evals") / f"eval_{tag}.json"
         p.parent.mkdir(parents=True, exist_ok=True)
-        with open(p, "w", encoding="utf-8") as fh:
-            json.dump(results, fh, indent=2)
-        logger.info(f"saved {p}")
+        return p
+
+    p = Path(str(save_cfg))
+    if "{dataset}" in str(save_cfg):
+        p = Path(str(save_cfg).replace("{dataset}", tag))
+    elif multi:
+        suffix = p.suffix or ".json"
+        p = p.with_name(f"{p.stem}_{tag}{suffix}")
+    p.parent.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def run(cfg: EvalCfg, logger):
+    model_path_cfg = Path(cfg.model_path)
+    mp = _resolve_model_path(model_path_cfg)
+    if not mp.exists():
+        raise FileNotFoundError("eval: model_path invalid")
+
+    torch.manual_seed(int(cfg.seed))
+    np.random.seed(int(cfg.seed))
+
+    # Build model from checkpoint (auto infer), optionally override input dim
+    state = torch.load(mp, map_location="cpu")
+    # Infer input dim from checkpoint; fixed features are 10D when training from this repo
+    model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
+    logger.info(f"Eval model params: {mparams}")
+    load_weights_flex(model, state, logger=logger)
+
+    dev = torch.device(cfg.device if cfg.device == "cpu" or torch.cuda.is_available() else "cpu")
+    model.to(dev).eval()
+
+    roots = cfg.data_roots if cfg.data_roots else [cfg.data_root]
+    multi = len(roots) > 1
+    run_dir = _infer_run_dir(model_path_cfg, mp)
+
+    for root in roots:
+        dr = Path(root)
+        if not dr.exists():
+            logger.error(f"eval: data_root invalid: {dr}")
+            continue
+        files = sorted(dr.rglob("*.npz"))
+        if not files:
+            logger.error(f"eval: no .npz files in {dr}")
+            continue
+        logger.info(f"Evaluating {len(files)} instances from {dr}...")
+
+        results = _eval_files(files, model, dev, mparams["in_dim"], cfg.run_twoopt)
+
+        tag = _dataset_tag(dr)
+        p = _resolve_save_path(cfg.save_json, tag, run_dir, multi)
+        if p is not None:
+            with open(p, "w", encoding="utf-8") as fh:
+                json.dump(results, fh, indent=2)
+            logger.info(f"saved {p}")
 
 
 # -----------------------------

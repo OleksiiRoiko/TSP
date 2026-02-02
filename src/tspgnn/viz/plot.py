@@ -42,6 +42,36 @@ def _resolve_model_path(p: Path) -> Path:
     return p
 
 
+def _infer_run_dir(model_path_cfg: Path, resolved_model: Path) -> Path | None:
+    if model_path_cfg.suffix.lower() == ".json" and model_path_cfg.exists():
+        try:
+            data = json.loads(model_path_cfg.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                if "run_dir" in data:
+                    return Path(str(data["run_dir"]))
+                if "path" in data:
+                    return Path(str(data["path"])).parent
+        except Exception:
+            pass
+    if model_path_cfg.is_dir():
+        lj = model_path_cfg / "latest.json"
+        if lj.exists():
+            return _infer_run_dir(lj, resolved_model)
+    if resolved_model.exists():
+        return resolved_model.parent
+    return None
+
+
+def _dataset_tag(data_root: Path) -> str:
+    s = str(data_root).lower()
+    name = data_root.name.lower()
+    if "tsplib" in s:
+        return "tsplib"
+    if "synthetic" in s and name in ("train", "val", "test"):
+        return f"synthetic_{name}"
+    return name or "data"
+
+
 def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
     fig, (axL, axR) = plt.subplots(1, 2, figsize=(float(figsize[0]), float(figsize[1])))
     for ax, title, T, color in [(axL, "Ground Truth", gt, "#1f77b4"), (axR, "Prediction", pred, "#d62728")]:
@@ -64,64 +94,96 @@ def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
 
 
 def run(cfg: VisualizeCfg, logger):
-    files = sorted(Path(cfg.npz_dir).rglob("*.npz"))
-    if cfg.limit > 0:
-        files = files[: cfg.limit]
-    if not files:
-        logger.error(f"no files in {cfg.npz_dir}")
+    def _iter_targets():
+        if cfg.targets:
+            for t in cfg.targets:
+                mode = (t.mode or cfg.mode).lower()
+                npz_dir = t.npz_dir
+                limit = cfg.limit if t.limit is None else int(t.limit)
+                out_dir = t.out_dir if t.out_dir is not None else cfg.out_dir
+                yield mode, npz_dir, limit, out_dir
+        else:
+            yield cfg.mode.lower(), cfg.npz_dir, cfg.limit, cfg.out_dir
+
+    targets = list(_iter_targets())
+    if not targets:
+        logger.error("no visualization targets configured")
         return
 
-    if cfg.mode.lower() == "dataset":
-        out_dir = Path(cfg.out_dir)
+    # Load model once if any target requires prediction
+    model = None
+    mparams = None
+    dev = None
+    model_path_cfg = None
+    mp = None
+    run_dir = None
+    if any(mode == "predict" for mode, _, _, _ in targets):
+        model_path_cfg = Path(cfg.model)
+        mp = _resolve_model_path(model_path_cfg)
+        state = torch.load(mp, map_location="cpu")
+        model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
+        logger.info(f"Viz model params: {mparams}")
+        load_weights_flex(model, state, logger=logger)
+        dev = torch.device("cpu" if cfg.device == "cpu" or not torch.cuda.is_available() else "cuda")
+        model.to(dev).eval()
+        run_dir = _infer_run_dir(model_path_cfg, mp)
+
+    for mode, npz_dir, limit, out_dir_cfg in targets:
+        files = sorted(Path(npz_dir).rglob("*.npz"))
+        if limit and limit > 0:
+            files = files[:limit]
+        if not files:
+            logger.error(f"no files in {npz_dir}")
+            continue
+
+        out_dir = Path(out_dir_cfg)
+        if str(out_dir_cfg).lower() == "auto":
+            tag = _dataset_tag(Path(npz_dir))
+            if mode == "predict" and run_dir is not None:
+                out_dir = run_dir / "figs" / tag
+            else:
+                out_dir = Path("runs/figs") / tag
         out_dir.mkdir(parents=True, exist_ok=True)
+
+        if mode == "dataset":
+            for f in tqdm(files, ncols=100):
+                d = load_npz(f)
+                C = d["coords"].astype(np.float32)
+                gt = d.get("label_tour", None)
+                fig, ax = plt.subplots(1, 1, figsize=(float(cfg.figsize[0]), float(cfg.figsize[1])))
+                ax.set_aspect("equal"); ax.set_xlim(-0.02, 1.02); ax.set_ylim(-0.02, 1.02); ax.axis("off")
+                ax.scatter(C[:, 0], C[:, 1], s=12, c="#202428")
+                if gt is not None:
+                    T = gt.astype(np.int64); n = T.shape[0]
+                    for i in range(n):
+                        a, b = int(T[i]), int(T[(i + 1) % n])
+                        ax.plot([C[a, 0], C[b, 0]], [C[a, 1], C[b, 1]], "-", lw=1.8, color="#1f77b4")
+                fig.savefig(out_dir / f"{f.stem}.png", dpi=int(cfg.dpi), bbox_inches="tight", pad_inches=0.02)
+                plt.close(fig)
+            logger.info(f"done (dataset mode) -> {out_dir}")
+            continue
+
+        # mode == "predict"
+        if model is None or mparams is None or dev is None:
+            logger.error("predict mode requested but model is not loaded")
+            continue
         for f in tqdm(files, ncols=100):
-            d = load_npz(f)
-            C = d["coords"].astype(np.float32)
-            gt = d.get("label_tour", None)
-            fig, ax = plt.subplots(1, 1, figsize=(float(cfg.figsize[0]), float(cfg.figsize[1])))
-            ax.set_aspect("equal"); ax.set_xlim(-0.02, 1.02); ax.set_ylim(-0.02, 1.02); ax.axis("off")
-            ax.scatter(C[:, 0], C[:, 1], s=12, c="#202428")
-            if gt is not None:
-                T = gt.astype(np.int64); n = T.shape[0]
-                for i in range(n):
-                    a, b = int(T[i]), int(T[(i + 1) % n])
-                    ax.plot([C[a, 0], C[b, 0]], [C[a, 1], C[b, 1]], "-", lw=1.8, color="#1f77b4")
-            fig.savefig(out_dir / f"{f.stem}.png", dpi=int(cfg.dpi), bbox_inches="tight", pad_inches=0.02)
-            plt.close(fig)
-        logger.info("done (dataset mode)")
-        return
+            try:
+                d = load_npz(f)
+                C = d["coords"].astype(np.float32)
+                gt = d.get("label_tour", None)
+                if gt is None:
+                    continue
+                gt = gt.astype(np.int64)
 
-    # mode == "predict"
-    mp = _resolve_model_path(Path(cfg.model))
-    state = torch.load(mp, map_location="cpu")
-    # Infer input dim from checkpoint; training uses 10D features
-    model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
-    logger.info(f"Viz model params: {mparams}")
-    load_weights_flex(model, state, logger=logger)
+                # always complete graph
+                Ebg = complete_edges(C.shape[0])
+                F = edge_features(C, Ebg, feature_dim=mparams["in_dim"])
+                with torch.no_grad():
+                    s = model(torch.from_numpy(F).float().to(dev)).cpu().numpy()
+                pred = greedy_cycle_from_edges(C.shape[0], Ebg, s)
+                pred = two_opt(C, pred, max_passes=20)
 
-    dev = torch.device("cpu" if cfg.device == "cpu" or not torch.cuda.is_available() else "cuda")
-    model.to(dev).eval()
-
-    out_dir = Path(cfg.out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    for f in tqdm(files, ncols=100):
-        try:
-            d = load_npz(f)
-            C = d["coords"].astype(np.float32)
-            gt = d.get("label_tour", None)
-            if gt is None:
-                continue
-            gt = gt.astype(np.int64)
-
-            # always complete graph
-            Ebg = complete_edges(C.shape[0])
-            F = edge_features(C, Ebg, feature_dim=mparams["in_dim"])
-            with torch.no_grad():
-                s = model(torch.from_numpy(F).float().to(dev)).cpu().numpy()
-            pred = greedy_cycle_from_edges(C.shape[0], Ebg, s)
-            pred = two_opt(C, pred, max_passes=20)
-
-            _render(C, gt, pred, Ebg, out_dir / f"{f.stem}.png", figsize=cfg.figsize, dpi=int(cfg.dpi))
-        except Exception as e:
-            logger.error(f"[{f.name}] {e}")
+                _render(C, gt, pred, Ebg, out_dir / f"{f.stem}.png", figsize=cfg.figsize, dpi=int(cfg.dpi))
+            except Exception as e:
+                logger.error(f"[{f.name}] {e}")

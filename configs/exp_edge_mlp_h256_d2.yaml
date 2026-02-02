@@ -6,3 +6,19 @@ train:
   hidden: 256
   dropout: 0.0
   depth: 2
+
+eval:
+  model_path: runs/experiments/{exp_id}/latest.json
+  data_roots:
+    - runs/data/tsplib/processed
+    - runs/data/synthetic/test
+
+visualize:
+  mode: predict
+  model: runs/experiments/{exp_id}/latest.json
+  targets:
+    - npz_dir: runs/data/tsplib/processed
+      limit: 0
+    - npz_dir: runs/data/synthetic/test
+      limit: 5
+  out_dir: auto

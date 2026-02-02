@@ -37,7 +37,8 @@ python -m tspgnn.cli visualize
 
 ## Configs
 
-`config.yaml` is the base config. Use small per-experiment overrides via `base:`.
+`config.yaml` is the base config for data/QA. Use small per-experiment overrides via `base:`
+for train/eval/visualize.
 
 Example:
 ```
@@ -54,6 +55,9 @@ Run:
 python -m tspgnn.cli --config configs/exp_edge_mlp_h128_d2.yaml train
 ```
 
+Template:
+- `configs/_template.yaml`
+
 ## Outputs
 
 All training outputs go under:
@@ -65,3 +69,13 @@ The latest run pointer is:
 ```
 runs/experiments/<exp_id>/latest.json
 ```
+
+Eval/visualize outputs:
+- If `eval.save_json: auto`, results are written under the run directory:
+  `runs/experiments/<exp_id>/<timestamp>/evals/eval_<dataset>.json`
+- If `visualize.out_dir: auto`, figures are written under:
+  `runs/experiments/<exp_id>/<timestamp>/figs/<dataset>/`
+
+Multi-dataset runs:
+- `eval.data_roots` evaluates multiple datasets in one command
+- `visualize.targets` renders multiple datasets in one command

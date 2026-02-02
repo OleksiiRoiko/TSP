@@ -57,21 +57,30 @@ class TrainCfg(BaseModel):
 class EvalCfg(BaseModel):
     model_path: str = "runs/experiments/edge_mlp_v1/latest.json"
     data_root: str = "runs/data/tsplib/processed"
+    data_roots: Optional[List[str]] = None
     device: str = "cpu"
-    save_json: Optional[str] = "runs/evals/tsplib_eval_edge_mlp_v1_latest.json"
+    save_json: Optional[str] = "auto"
     run_twoopt: bool = True
     seed: int = 0
+
+
+class VisualizeTargetCfg(BaseModel):
+    npz_dir: str
+    limit: Optional[int] = None
+    out_dir: Optional[str] = None
+    mode: Optional[str] = None
 
 
 class VisualizeCfg(BaseModel):
     mode: str = "predict"               # "dataset" or "predict"
     npz_dir: str = "runs/data/tsplib/processed"
     model: str = "runs/experiments/edge_mlp_v1/latest.json"  # only used in predict mode
-    out_dir: str = "runs/figs/tsplib_edge_mlp_v1_latest"
+    out_dir: str = "auto"
     figsize: List[float] = [11.0, 5.5]
     dpi: int = 150
     device: str = "cpu"
     limit: int = 0
+    targets: Optional[List[VisualizeTargetCfg]] = None
 
 
 class QACfg(BaseModel):

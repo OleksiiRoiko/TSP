@@ -1,16 +1,18 @@
 from __future__ import annotations
 from pathlib import Path
 import time, json, os, sys
-from typing import Any, Dict
+from contextlib import nullcontext
+from typing import Any, Dict, cast
 import numpy as np
 import torch
 try:
     # New API (PyTorch >= 2.0)
-    from torch.amp import GradScaler as _GradScaler, autocast as _autocast
-    _AMP_DEVICE_KW = True
+    from torch.amp.grad_scaler import GradScaler as _GradScaler
+    from torch.amp.autocast_mode import autocast as _autocast
+    _AMP_NEW = True
 except Exception:  # pragma: no cover - fallback for older torch
     from torch.cuda.amp import GradScaler as _GradScaler, autocast as _autocast
-    _AMP_DEVICE_KW = False
+    _AMP_NEW = False
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import yaml
@@ -112,10 +114,36 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     # ---- optim + AMP (new API) ----
     opt = torch.optim.Adam(model.parameters(), lr=float(cfg.lr))
     use_amp = (device.type == "cuda")
-    if _AMP_DEVICE_KW:
-        scaler = _GradScaler(device_type="cuda", enabled=use_amp)
-    else:
-        scaler = _GradScaler(enabled=use_amp)
+
+    _GradScalerAny = cast(Any, _GradScaler)
+    _autocastAny = cast(Any, _autocast)
+
+    def _amp_setup(device_type: str, enabled: bool):
+        if not enabled:
+            return _GradScalerAny(enabled=False), nullcontext
+
+        if _AMP_NEW:
+            # GradScaler may or may not accept device_type depending on torch build.
+            try:
+                scaler = _GradScalerAny(device_type=device_type, enabled=True)
+            except TypeError:
+                scaler = _GradScalerAny(enabled=True)
+
+            def _ctx():
+                # torch.amp.autocast usually requires device_type positional.
+                try:
+                    return _autocastAny(device_type, enabled=True)
+                except TypeError:
+                    return _autocastAny(enabled=True)
+        else:
+            scaler = _GradScalerAny(enabled=True)
+
+            def _ctx():
+                return _autocastAny(enabled=True)
+
+        return scaler, _ctx
+
+    scaler, _amp_ctx = _amp_setup(device.type, use_amp)
 
     best = float("inf")
     best_ep = 0
@@ -170,14 +198,9 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
                 x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
                 opt.zero_grad(set_to_none=True)
-                if _AMP_DEVICE_KW:
-                    with _autocast(device_type=device.type, enabled=use_amp):
-                        logits = model(x)
-                        loss = _bce_balanced(logits, y)
-                else:
-                    with _autocast(enabled=use_amp):
-                        logits = model(x)
-                        loss = _bce_balanced(logits, y)
+                with _amp_ctx():
+                    logits = model(x)
+                    loss = _bce_balanced(logits, y)
                 scaler.scale(loss).backward()
                 scaler.step(opt)
                 scaler.update()
@@ -193,14 +216,9 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
                     raise ValueError("validation data missing labels")
                 x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
-                if _AMP_DEVICE_KW:
-                    with _autocast(device_type=device.type, enabled=use_amp):
-                        logits = model(x)
-                        loss = _bce_balanced(logits, y)
-                else:
-                    with _autocast(enabled=use_amp):
-                        logits = model(x)
-                        loss = _bce_balanced(logits, y)
+                with _amp_ctx():
+                    logits = model(x)
+                    loss = _bce_balanced(logits, y)
                 vtot += float(loss.item()) * y.numel(); vcnt += y.numel()
                 pbar.update(1)
         val_loss = vtot / max(vcnt, 1)

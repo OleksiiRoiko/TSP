@@ -17,36 +17,6 @@ tsplib:
   download: true
   names: ["berlin52", "eil76", "pr76", "kroA100"]
 
-train:
-  exp_id: edge_mlp_v1
-  train_root: runs/data/synthetic/train
-  val_root: runs/data/synthetic/val
-  epochs: 30
-  batch_size: 32
-  lr: 0.001
-  seed: 0
-  model_name: edge_mlp          # shallow: 2 hidden layers (see registry)
-  hidden: 128                   # hidden width for edge_mlp
-  dropout: 0.0
-  depth: 2                      # hidden layers (shallow). For deep, change model/depth.
-
-eval:
-  model_path: runs/experiments/{exp_id}/latest.json
-  data_root: runs/data/tsplib/processed
-  device: cpu
-  save_json: runs/evals/tsplib_eval_{exp_id}_latest.json
-  run_twoopt: true
-  seed: 0
-
-visualize:
-  mode: predict                      # "dataset" or "predict"
-  npz_dir: runs/data/tsplib/processed
-  model: runs/experiments/{exp_id}/latest.json  # only used in mode=predict
-  out_dir: runs/figs/tsplib_{exp_id}_latest
-  figsize: [11.0, 5.5]
-  dpi: 150
-  limit: 0                           # 0 = all
-
 qa:
   root: runs/data
   check_gt: true

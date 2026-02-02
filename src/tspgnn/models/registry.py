@@ -32,10 +32,6 @@ def build_model(name: str, overrides: Dict[str, Any] | None = None) -> Tuple[tor
     return model, params
 
 
-def ensure_models_dir(path: str | Path = "runs/models") -> None:
-    Path(path).mkdir(parents=True, exist_ok=True)
-
-
 # -----------------------------
 # Inference from checkpoint
 # -----------------------------

@@ -1,18 +1,33 @@
 base: ../config.yaml
 
 train:
-  exp_id: exp_edge_mlp_h128_d2
+  # REQUIRED
+  exp_id: exp_name
+
+  # Model choice + hyper-params
   model_name: edge_mlp
   hidden: 128
-  dropout: 0.0
   depth: 2
+  dropout: 0.0
 
+  # Optional training overrides
+  # epochs: 30
+  # batch_size: 32
+  # lr: 0.001
+  # seed: 0
+
+  # Optional dataset overrides
+  # train_root: runs/data/synthetic/train
+  # val_root: runs/data/synthetic/val
+
+# Evaluate on both TSPLIB and synthetic test in one run
 eval:
   model_path: runs/experiments/{exp_id}/latest.json
   data_roots:
     - runs/data/tsplib/processed
     - runs/data/synthetic/test
 
+# Visualize: all TSPLIB instances + 5 synthetic test instances
 visualize:
   mode: predict
   model: runs/experiments/{exp_id}/latest.json
