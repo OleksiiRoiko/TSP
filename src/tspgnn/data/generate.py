@@ -74,8 +74,8 @@ def run(cfg: GenerateCfg, logger):
         raise ValueError("dist_probs must sum to a positive value")
     probs /= probs.sum()
 
-    # sensible default for Windows too
-    workers = max(1, min(4, (os.cpu_count() or 1) // 2))
+    # worker count: always use max cores
+    workers = max(1, (os.cpu_count() or 1))
 
     for n in cfg.n_list:
         for split, count in {
@@ -95,14 +95,34 @@ def run(cfg: GenerateCfg, logger):
                 use_elkai = bool(rng.random() < cfg.elkai_frac)
                 tasks.append((start_idx + i, n, int(cfg.seed), dist, use_elkai))
 
-            # run with a nice progress bar
-            with ProcessPoolExecutor(max_workers=workers) as ex:
-                futures = [ex.submit(_make_one, t) for t in tasks]
-                with tqdm(total=len(futures), ncols=100,
-                          desc=f"N={n} | {split}", leave=True) as bar:
-                    for fut in as_completed(futures):
-                        idx, coords, tour, L, dist = fut.result()
-                        # deterministic filename from idx (no glob scans)
+            # run with a nice progress bar (fallback to single process if needed)
+            try:
+                with ProcessPoolExecutor(max_workers=workers) as ex:
+                    futures = [ex.submit(_make_one, t) for t in tasks]
+                    with tqdm(total=len(futures), ncols=100,
+                              desc=f"N={n} | {split}", leave=True) as bar:
+                        for fut in as_completed(futures):
+                            idx, coords, tour, L, dist = fut.result()
+                            # deterministic filename from idx (no glob scans)
+                            save_npz(
+                                out_dir / f"syn_{idx:06d}.npz",
+                                id=np.array(f"syn_{idx:06d}"),
+                                n=np.int32(n),
+                                coords=coords,
+                                label_tour=tour,
+                                label_len_norm=L,
+                                distribution=np.array(dist),
+                                metric=np.array("EUC_2D"),
+                                source=np.array("synthetic"),
+                                seed=np.int32(cfg.seed),
+                            )
+                            bar.update(1)
+            except PermissionError:
+                # Some environments disallow multiprocessing; fall back to single-process.
+                with tqdm(total=len(tasks), ncols=100,
+                          desc=f"N={n} | {split} (single)", leave=True) as bar:
+                    for t in tasks:
+                        idx, coords, tour, L, dist = _make_one(t)
                         save_npz(
                             out_dir / f"syn_{idx:06d}.npz",
                             id=np.array(f"syn_{idx:06d}"),

@@ -14,6 +14,14 @@ train:
   # epochs: 30
   # batch_size: 32
   # lr: 0.001
+  # weight_decay: 0.0
+  # lr_scheduler: plateau   # none | plateau
+  # lr_factor: 0.5
+  # lr_patience: 5
+  # lr_min: 1.0e-6
+  # early_stop: true
+  # early_patience: 10
+  # early_min_delta: 0.0001
   # seed: 0
 
   # Optional dataset overrides

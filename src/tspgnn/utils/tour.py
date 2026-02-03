@@ -81,12 +81,12 @@ def _pair_iter(tour: np.ndarray):
         yield a, b
 
 def _len_euc_2d(coords: np.ndarray, tour: np.ndarray) -> int:
-    """TSPLIB EUC_2D: sum of rounded Euclidean distances (ints)."""
+    """TSPLIB EUC_2D: dij = int(sqrt(dx^2+dy^2) + 0.5)."""
     total = 0
     for a, b in _pair_iter(tour):
-        dx = coords[a,0] - coords[b,0]
-        dy = coords[a,1] - coords[b,1]
-        total += int(round(math.hypot(dx, dy)))
+        dx = coords[a, 0] - coords[b, 0]
+        dy = coords[a, 1] - coords[b, 1]
+        total += int(math.hypot(dx, dy) + 0.5)
     return total
 
 def _len_ceil_2d(coords: np.ndarray, tour: np.ndarray) -> int:
@@ -115,6 +115,28 @@ def _len_att(coords: np.ndarray, tour: np.ndarray) -> int:
         total += dij
     return total
 
+def _len_geo(coords: np.ndarray, tour: np.ndarray) -> int:
+    """
+    TSPLIB GEO: use spherical distances with coordinates in DDD.MM.
+    Formula from TSPLIB95.
+    """
+    def to_rad(x: float) -> float:
+        deg = int(x)
+        minute = x - deg
+        return math.pi * (deg + 5.0 * minute / 3.0) / 180.0
+
+    lat = np.array([to_rad(float(c[0])) for c in coords], dtype=np.float64)
+    lon = np.array([to_rad(float(c[1])) for c in coords], dtype=np.float64)
+    rrr = 6378.388
+    total = 0
+    for a, b in _pair_iter(tour):
+        q1 = math.cos(lon[a] - lon[b])
+        q2 = math.cos(lat[a] - lat[b])
+        q3 = math.cos(lat[a] + lat[b])
+        dij = int(rrr * math.acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0)
+        total += dij
+    return total
+
 def tour_length_tsplib(coords_orig: np.ndarray, tour: np.ndarray, metric: str) -> float:
     """
     TSPLIB-compliant length (integer-valued for common metrics).
@@ -129,6 +151,8 @@ def tour_length_tsplib(coords_orig: np.ndarray, tour: np.ndarray, metric: str) -
         return float(_len_ceil_2d(coords_orig, tour))
     if metric == "ATT":
         return float(_len_att(coords_orig, tour))
+    if metric == "GEO":
+        return float(_len_geo(coords_orig, tour))
     # Fallback: continuous Euclidean on original coords
     from .tour import tour_length as _norm_len  # avoid cycle if you placed above
     return float(_norm_len(coords_orig.astype(np.float32), tour))

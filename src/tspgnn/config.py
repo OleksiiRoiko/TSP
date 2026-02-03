@@ -47,6 +47,16 @@ class TrainCfg(BaseModel):
     epochs: int = 30
     batch_size: int = 32
     lr: float = 1e-3
+    weight_decay: float = 0.0
+    # Learning-rate scheduler (optional)
+    lr_scheduler: str = "none"  # "none" | "plateau"
+    lr_factor: float = 0.5
+    lr_patience: int = 5
+    lr_min: float = 1e-6
+    # Early stopping (optional)
+    early_stop: bool = False
+    early_patience: int = 10
+    early_min_delta: float = 0.0
     seed: int = 0
     model_name: str = "edge_mlp"   # from registry
     hidden: Optional[int] = 128

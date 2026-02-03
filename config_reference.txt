@@ -30,6 +30,14 @@ val_root          : str   | root of validation .npz
 epochs            : int   | training epochs
 batch_size        : int   | graphs per batch (edges are concatenated per batch)
 lr                : float | learning rate
+weight_decay      : float | L2 regularization for Adam
+lr_scheduler      : str   | "none" or "plateau" (ReduceLROnPlateau)
+lr_factor         : float | LR decay factor (plateau scheduler)
+lr_patience       : int   | epochs without improvement before LR decay
+lr_min            : float | minimum LR for scheduler
+early_stop        : bool  | enable early stopping on val loss
+early_patience    : int   | epochs without improvement before stopping
+early_min_delta   : float | minimum improvement to reset patience
 seed              : int   | RNG seed
 model_name        : str   | "edge_mlp" (shallow) or "edge_mlp_deep" (deeper)
 hidden            : int?  | hidden layer width (override model default)

@@ -3,6 +3,7 @@ from pathlib import Path
 import time, json, os, sys
 from contextlib import nullcontext
 from typing import Any, Dict, cast
+import csv
 import numpy as np
 import torch
 try:
@@ -24,8 +25,8 @@ from ..models.registry import build_model
 
 def _bce_balanced(logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
     """Class-balanced BCE to cope with negative/positive edge imbalance."""
-    pos = (targets == 1).float().sum().clamp(min=1.0)
-    neg = (targets == 0).float().sum().clamp(min=1.0)
+    pos = ((targets == 1).float().sum()).clamp(min=1.0)
+    neg = ((targets == 0).float().sum()).clamp(min=1.0)
     wp = neg / (pos + neg)
     wn = pos / (pos + neg)
     loss = torch.nn.functional.binary_cross_entropy_with_logits(logits, targets, reduction="none")
@@ -83,21 +84,40 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     _maybe_prime_cache(va_ds, "val")
 
     # ---- dataloaders (fast defaults) ----
-    num_workers = max(0, min(4, (os.cpu_count() or 1) - 1))
-    tr = DataLoader(
-        tr_ds, batch_size=int(cfg.batch_size), shuffle=True,
-        collate_fn=collate_edge_batches, num_workers=num_workers,
-        pin_memory=(device.type == "cuda"),
-        prefetch_factor=2 if num_workers > 0 else None,
-        persistent_workers=(num_workers > 0),
-    )
-    va = DataLoader(
-        va_ds, batch_size=int(cfg.batch_size), shuffle=False,
-        collate_fn=collate_edge_batches, num_workers=num_workers,
-        pin_memory=(device.type == "cuda"),
-        prefetch_factor=2 if num_workers > 0 else None,
-        persistent_workers=(num_workers > 0),
-    )
+    # use maximum available CPU workers, but fall back if multiprocessing is blocked
+    def _make_loaders(nw: int):
+        tr_loader = DataLoader(
+            tr_ds, batch_size=int(cfg.batch_size), shuffle=True,
+            collate_fn=collate_edge_batches, num_workers=nw,
+            pin_memory=(device.type == "cuda"),
+            prefetch_factor=2 if nw > 0 else None,
+            persistent_workers=(nw > 0),
+        )
+        va_loader = DataLoader(
+            va_ds, batch_size=int(cfg.batch_size), shuffle=False,
+            collate_fn=collate_edge_batches, num_workers=nw,
+            pin_memory=(device.type == "cuda"),
+            prefetch_factor=2 if nw > 0 else None,
+            persistent_workers=(nw > 0),
+        )
+        return tr_loader, va_loader
+
+    num_workers = max(0, (os.cpu_count() or 1))
+    tr, va = _make_loaders(num_workers)
+
+    def _iter_loader(kind: str):
+        nonlocal num_workers, tr, va
+        while True:
+            loader = tr if kind == "train" else va
+            try:
+                return iter(loader)
+            except PermissionError:
+                if num_workers == 0:
+                    raise
+                logger.warning("DataLoader multiprocessing blocked; falling back to num_workers=0")
+                num_workers = 0
+                tr, va = _make_loaders(num_workers)
+
     logger.info(f"Train graphs: {len(tr_ds)} | Val graphs: {len(va_ds)} | workers: {num_workers}")
 
     # ---- model ----
@@ -112,7 +132,24 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     logger.info(f"Model: {cfg.model_name} | Params: {mparams}")
 
     # ---- optim + AMP (new API) ----
-    opt = torch.optim.Adam(model.parameters(), lr=float(cfg.lr))
+    opt = torch.optim.Adam(
+        model.parameters(),
+        lr=float(cfg.lr),
+        weight_decay=float(getattr(cfg, "weight_decay", 0.0)),
+    )
+    sched_name = str(getattr(cfg, "lr_scheduler", "none") or "none").lower()
+    scheduler = None
+    if sched_name not in ("none", "", "null"):
+        if sched_name in ("plateau", "reduce_on_plateau", "rop"):
+            scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                opt,
+                mode="min",
+                factor=float(getattr(cfg, "lr_factor", 0.5)),
+                patience=int(getattr(cfg, "lr_patience", 5)),
+                min_lr=float(getattr(cfg, "lr_min", 1e-6)),
+            )
+        else:
+            raise ValueError(f"Unknown lr_scheduler: {sched_name}")
     use_amp = (device.type == "cuda")
 
     _GradScalerAny = cast(Any, _GradScaler)
@@ -147,6 +184,10 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
 
     best = float("inf")
     best_ep = 0
+    early_stop = bool(getattr(cfg, "early_stop", False))
+    early_patience = int(getattr(cfg, "early_patience", 10))
+    early_min_delta = float(getattr(cfg, "early_min_delta", 0.0))
+    no_improve = 0
     # run directory and artifacts
     stamp = time.strftime("%Y%m%d-%H%M%S")
     run_dir = Path("runs/experiments") / cfg.exp_id / stamp
@@ -154,6 +195,7 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     ckpt = run_dir / "best.pt"
     meta_run = run_dir / "meta.json"
     latest_ptr = Path("runs/experiments") / cfg.exp_id / "latest.json"
+    history_csv = run_dir / "train_history.csv"
 
     config_snapshot = run_dir / "config.yaml"
     if full_config:
@@ -171,6 +213,14 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         "depth": mparams.get("depth"),
         "batch_size": cfg.batch_size,
         "lr": cfg.lr,
+        "weight_decay": getattr(cfg, "weight_decay", 0.0),
+        "lr_scheduler": sched_name,
+        "lr_factor": getattr(cfg, "lr_factor", 0.5),
+        "lr_patience": getattr(cfg, "lr_patience", 5),
+        "lr_min": getattr(cfg, "lr_min", 1e-6),
+        "early_stop": early_stop,
+        "early_patience": early_patience,
+        "early_min_delta": early_min_delta,
         "epochs": cfg.epochs,
         "seed": cfg.seed,
         "train_root": str(train_root),
@@ -185,14 +235,21 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         "config_path": config_path,
         "config_snapshot": str(config_snapshot) if config_snapshot.exists() else None,
         "run_dir": str(run_dir),
+        "history_csv": str(history_csv),
     }
 
     # ---- epochs ----
+    # prepare history log
+    with history_csv.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["epoch", "train_loss", "val_loss", "lr", "seconds"])
+
     for ep in range(1, int(cfg.epochs) + 1):
+        ep_start = time.time()
         # TRAIN
         model.train(); tot = 0.0; cnt = 0
         with tqdm(total=len(tr), ncols=100, desc=f"epoch {ep:02d}/{cfg.epochs} [train]", leave=False) as pbar:
-            for b in tr:
+            for b in _iter_loader("train"):
                 if b["labels"] is None:
                     raise ValueError("training data missing labels")
                 x = b["edge_feats"].to(device, non_blocking=True)
@@ -211,7 +268,7 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         # VAL
         model.eval(); vtot = 0.0; vcnt = 0
         with torch.no_grad(), tqdm(total=len(va), ncols=100, desc=f"epoch {ep:02d}/{cfg.epochs} [val]  ", leave=False) as pbar:
-            for b in va:
+            for b in _iter_loader("val"):
                 if b["labels"] is None:
                     raise ValueError("validation data missing labels")
                 x = b["edge_feats"].to(device, non_blocking=True)
@@ -222,12 +279,29 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
                 vtot += float(loss.item()) * y.numel(); vcnt += y.numel()
                 pbar.update(1)
         val_loss = vtot / max(vcnt, 1)
+        ep_time = time.time() - ep_start
+
+        # scheduler step (after val)
+        cur_lr = float(opt.param_groups[0]["lr"])
+        if scheduler is not None:
+            prev_lr = cur_lr
+            scheduler.step(val_loss)
+            cur_lr = float(opt.param_groups[0]["lr"])
+            if cur_lr < prev_lr - 1e-12:
+                logger.info(f"LR reduced: {prev_lr:.2e} -> {cur_lr:.2e}")
+
+        # append history row
+        with history_csv.open("a", newline="", encoding="utf-8") as fh:
+            writer = csv.writer(fh)
+            writer.writerow([ep, round(train_loss, 6), round(val_loss, 6), f"{cur_lr:.6e}", round(ep_time, 3)])
 
         # summary line (outside bars)
-        tqdm.write(f"Epoch {ep:02d}/{cfg.epochs} | Train {train_loss:.4f} | Val {val_loss:.4f}")
+        tqdm.write(f"Epoch {ep:02d}/{cfg.epochs} | Train {train_loss:.4f} | Val {val_loss:.4f} | LR {cur_lr:.2e}")
 
-        if val_loss < best:
+        improved = val_loss < (best - early_min_delta)
+        if improved:
             best = val_loss; best_ep = ep
+            no_improve = 0
             torch.save(model.state_dict(), ckpt)
             payload = dict(meta_base)
             payload.update({
@@ -239,5 +313,11 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
             latest_ptr.parent.mkdir(parents=True, exist_ok=True)
             latest_ptr.write_text(json.dumps(payload, indent=2), encoding="utf-8")
             tqdm.write(f"  SAVED -> {ckpt} (and updated {latest_ptr.name})")
+        else:
+            no_improve += 1
+
+        if early_stop and no_improve >= early_patience:
+            logger.info(f"Early stop at epoch {ep} (no improvement for {no_improve} epochs).")
+            break
 
     logger.info(f"Best Val {best:.6f} @ epoch {best_ep}\nSaved: {ckpt}")

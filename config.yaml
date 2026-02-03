@@ -1,21 +1,22 @@
 generate:
   out_root: runs/data/synthetic
-  n_list: [20, 30, 40, 50]
+  n_list: [20, 30, 40, 50, 60, 70, 80, 90, 100]
   # Balanced default dataset size; increase per_size_train for stronger models.
-  per_size_train: 2000
-  per_size_val: 400
-  per_size_test: 400
+  per_size_train: 5000
+  per_size_val: 1000
+  per_size_test: 1000
   # Fraction of instances solved by elkai (if installed). Set 0 if not available.
   elkai_frac: 0.2
   dist_names: ["uniform", "clustered", "ring", "grid_jitter"]
-  dist_probs: [0.4, 0.2, 0.2, 0.2]
+  dist_probs: [0.3, 0.2, 0.2, 0.3]
   seed: 0
 
 tsplib:
   raw_root: runs/data/tsplib/raw
   out_root: runs/data/tsplib/processed
   download: true
-  names: ["berlin52", "eil76", "pr76", "kroA100"]
+  # Coordinate-based instances (GEO/ATT/EUC_2D) with optimal tours
+  names: ["ulysses16","ulysses22","att48","eil51","berlin52","st70","eil76","pr76","gr96","kroA100","kroC100","kroD100","rd100","lin105"]
 
 qa:
   root: runs/data
