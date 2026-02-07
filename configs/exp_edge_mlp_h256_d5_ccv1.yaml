@@ -1,0 +1,32 @@
+base: ../config.yaml
+
+train:
+  exp_id: exp_edge_mlp_h256_d5_ccv1
+  model_name: edge_mlp
+  hidden: 256
+  dropout: 0.1
+  depth: 5
+  lr_scheduler: plateau
+  lr_factor: 0.5
+  lr_patience: 5
+  lr_min: 1.0e-6
+  early_stop: true
+  early_patience: 5
+  early_min_delta: 0.0001
+  train_root: runs/data/synthetic_concorde_v1/train
+  val_root: runs/data/synthetic_concorde_v1/val
+
+eval:
+  model_path: runs/experiments/{exp_id}/latest.json
+  data_roots:
+    - runs/data/tsplib/processed
+    - runs/data/synthetic_concorde_v1/test
+
+visualize:
+  model: runs/experiments/{exp_id}/latest.json
+  targets:
+    - npz_dir: runs/data/tsplib/processed
+      limit: 0
+    - npz_dir: runs/data/synthetic_concorde_v1/test
+      limit: 5
+  out_dir: auto

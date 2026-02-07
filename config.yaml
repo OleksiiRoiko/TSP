@@ -1,12 +1,19 @@
 generate:
-  out_root: runs/data/synthetic
+  out_root: runs/data/synthetic_concorde_v1
   n_list: [20, 30, 40, 50, 60, 70, 80, 90, 100]
   # Balanced default dataset size; increase per_size_train for stronger models.
   per_size_train: 5000
   per_size_val: 1000
   per_size_test: 1000
-  # Fraction of instances solved by elkai (if installed). Set 0 if not available.
-  elkai_frac: 0.2
+  # Tour solver: auto | concorde | elkai | nn2opt
+  tour_solver: concorde
+  # Fraction of instances solved by elkai (auto only). Set 0 if not available.
+  elkai_frac: 0.0
+  # Concorde options (used when tour_solver=concorde)
+  concorde_cmd: concorde
+  concorde_scale: 10000
+  concorde_timeout_sec: 60
+  concorde_keep_tmp: false
   dist_names: ["uniform", "clustered", "ring", "grid_jitter"]
   dist_probs: [0.3, 0.2, 0.2, 0.3]
   seed: 0

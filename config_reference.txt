@@ -12,7 +12,12 @@ n_list            : [int] | list of N (number of nodes) to generate (>=3)
 per_size_train    : int   | number of graphs per N for train
 per_size_val      : int   | number of graphs per N for val
 per_size_test     : int   | number of graphs per N for test
+tour_solver       : str   | auto | concorde | elkai | nn2opt
 elkai_frac        : float | fraction in [0,1] of graphs solved by elkai (else NN+2opt)
+concorde_cmd      : str   | concorde binary name/path (only for tour_solver=concorde)
+concorde_scale    : int   | coordinate scale for TSPLIB EUC_2D (e.g., 10000)
+concorde_timeout_sec : int | per-instance timeout for concorde
+concorde_keep_tmp : bool  | keep temp concorde files under runs/tmp/concorde
 dist_names        : [str] | list of distribution names (e.g., ["uniform","clustered","ring","grid_jitter"])
 dist_probs        : [float] | sampling probs aligned to dist_names (normalized internally)
 seed              : int   | RNG seed for reproducibility
@@ -65,6 +70,8 @@ dpi               : int   | dots per inch
 root              : str   | root folder to scan recursively for .npz to check
 check_gt          : bool  | validates GT is a Hamiltonian cycle (permutation 0..n-1)
 lengths           : bool  | verifies stored normalized length matches recomputed
+require_label_source : str? | if set, enforce label_source for synthetic files (e.g., "concorde")
+check_concorde    : bool  | validate concorde-specific fields/lengths when label_source=concorde
 csv               : str?  | optional CSV report path (null = don't save)
 
 

@@ -15,7 +15,15 @@ class GenerateCfg(BaseModel):
     per_size_train: int = 2000
     per_size_val: int = 400
     per_size_test: int = 400
+    # Tour solver: "auto" (elkai if available, else NN+2opt),
+    # "concorde" (exact, requires concorde in PATH), "elkai", or "nn2opt".
+    tour_solver: str = "auto"
     elkai_frac: float = 0.2
+    # Concorde options (used when tour_solver="concorde")
+    concorde_cmd: str = "concorde"
+    concorde_scale: int = 10000
+    concorde_timeout_sec: int = 60
+    concorde_keep_tmp: bool = False
     dist_names: List[str] = ["uniform", "clustered", "ring", "grid_jitter"]
     dist_probs: List[float] = [0.4, 0.2, 0.2, 0.2]
     seed: int = 0
@@ -31,6 +39,19 @@ class GenerateCfg(BaseModel):
     def _probs_ok(cls, v: List[float]) -> List[float]:
         assert all(p >= 0 for p in v), "dist_probs must be non-negative"
         return v
+
+    @field_validator("tour_solver")
+    @classmethod
+    def _solver_ok(cls, v: str) -> str:
+        v = str(v).lower()
+        assert v in ("auto", "concorde", "elkai", "nn2opt"), "tour_solver must be auto|concorde|elkai|nn2opt"
+        return v
+
+    @field_validator("concorde_scale")
+    @classmethod
+    def _scale_ok(cls, v: int) -> int:
+        assert int(v) >= 1, "concorde_scale must be >= 1"
+        return int(v)
 
 
 class TsplibCfg(BaseModel):
@@ -93,6 +114,10 @@ class QACfg(BaseModel):
     root: str = "runs/data"
     check_gt: bool = True
     lengths: bool = True
+    # If set, enforce that synthetic files have this label_source (e.g., "concorde").
+    require_label_source: Optional[str] = None
+    # Validate concorde-specific fields/lengths when label_source == "concorde".
+    check_concorde: bool = True
     csv: Optional[str] = "runs/qa_report.csv"
 
 

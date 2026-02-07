@@ -211,10 +211,13 @@ def run_qa(cfg: QACfg, logger):
     gt_bad = []
     len_bad = []
     len_tsplib_bad = []
+    concorde_bad = []
+    require_bad = []
     missing_key_files = []
     dist_counts: dict[str, int] = {}
     size_counts: dict[int, int] = {}
     source_counts: dict[str, int] = {}
+    label_source_counts: dict[str, int] = {}
 
     def _as_str(v) -> str | None:
         if v is None:
@@ -253,15 +256,21 @@ def run_qa(cfg: QACfg, logger):
 
         dist = _as_str(d.get("distribution", None))
         src = _as_str(d.get("source", None))
+        label_src = _as_str(d.get("label_source", None))
         if dist:
             dist_counts[dist] = dist_counts.get(dist, 0) + 1
         if src:
             source_counts[src] = source_counts.get(src, 0) + 1
+        if label_src:
+            label_source_counts[label_src] = label_source_counts.get(label_src, 0) + 1
         size_counts[n] = size_counts.get(n, 0) + 1
 
         gt_ok = verify_tour(t, n) if t is not None else False
         lengths_ok = True
         len_tsplib_ok = None
+        concorde_ok = None
+        concorde_reason = ""
+        require_ok = None
 
         if cfg.lengths and gt_ok and t is not None:
             Ls = float(d.get("label_len_norm", -1.0))
@@ -279,6 +288,33 @@ def run_qa(cfg: QACfg, logger):
                 if not len_tsplib_ok:
                     len_tsplib_bad.append(f.name)
 
+        # Concorde-specific checks
+        if cfg.check_concorde and label_src == "concorde":
+            missing = []
+            if d.get("coords_orig", None) is None:
+                missing.append("coords_orig")
+            if d.get("metric", None) is None:
+                missing.append("metric")
+            if "label_len_tsplib" not in d:
+                missing.append("label_len_tsplib")
+            if missing:
+                concorde_ok = False
+                concorde_reason = "missing:" + ",".join(missing)
+                concorde_bad.append(f.name)
+            else:
+                concorde_ok = True if len_tsplib_ok is True else False
+                if concorde_ok is False:
+                    concorde_reason = "len_tsplib_mismatch"
+                    concorde_bad.append(f.name)
+
+        # Enforce label_source for synthetic data (optional)
+        if cfg.require_label_source:
+            req = str(cfg.require_label_source).lower()
+            if src == "synthetic":
+                require_ok = (label_src == req)
+                if not require_ok:
+                    require_bad.append(f.name)
+
         if cfg.check_gt and not gt_ok:
             gt_bad.append(f.name)
 
@@ -290,6 +326,10 @@ def run_qa(cfg: QACfg, logger):
             "len_tsplib_ok": len_tsplib_ok,
             "distribution": dist,
             "source": src,
+            "label_source": label_src,
+            "concorde_ok": concorde_ok,
+            "require_ok": require_ok,
+            "concorde_reason": concorde_reason,
             "missing_keys": "",
         })
 
@@ -299,6 +339,10 @@ def run_qa(cfg: QACfg, logger):
         logger.info("[lengths] OK" if not len_bad else f"[lengths] mismatch: {len(len_bad)}")
         if len_tsplib_bad:
             logger.info(f"[lengths_tsplib] mismatch: {len(len_tsplib_bad)}")
+    if cfg.check_concorde:
+        logger.info("[concorde] OK" if not concorde_bad else f"[concorde] issues: {len(concorde_bad)}")
+    if cfg.require_label_source:
+        logger.info("[label_source] OK" if not require_bad else f"[label_source] mismatch: {len(require_bad)}")
     if missing_key_files:
         logger.info(f"[missing_keys] {len(missing_key_files)} files missing required fields")
 
@@ -308,6 +352,8 @@ def run_qa(cfg: QACfg, logger):
         logger.info(f"[sizes] {dict(sorted(size_counts.items()))}")
     if source_counts:
         logger.info(f"[sources] {dict(sorted(source_counts.items()))}")
+    if label_source_counts:
+        logger.info(f"[label_sources] {dict(sorted(label_source_counts.items()))}")
 
     if cfg.csv:
         p = Path(cfg.csv)
@@ -324,6 +370,10 @@ def run_qa(cfg: QACfg, logger):
                     "len_tsplib_ok",
                     "distribution",
                     "source",
+                    "label_source",
+                    "concorde_ok",
+                    "require_ok",
+                    "concorde_reason",
                     "missing_keys",
                 ],
             )

@@ -8,5 +8,5 @@ tsplib95
 pydantic>=2
 pyyaml
 # Optional: elkai (used for optimal tours when .opt.tour is missing)
-# elkai
+elkai
 # For local dev: $env:PYTHONPATH = "$PWD/src"
