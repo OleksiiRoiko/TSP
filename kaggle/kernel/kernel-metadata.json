@@ -1,13 +1,14 @@
 {
   "id": "ggggggsdfggh/tsp-train-eval",
   "title": "tsp-train-eval",
-  "code_file": "runner.py",
+  "code_file": "script.py",
   "language": "python",
   "kernel_type": "script",
   "is_private": true,
   "enable_gpu": true,
   "enable_internet": true,
-  "dataset_sources": ["ggggggsdfggh/tsp-data"],
+  "dataset_sources": ["ggggggsdfggh/tsp-data-v2", "ggggggsdfggh/tsp-code"],
   "competition_sources": [],
-  "model_sources": []
+  "model_sources": [],
+  "run_on_push": true
 }

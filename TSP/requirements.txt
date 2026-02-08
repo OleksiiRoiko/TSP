@@ -1,0 +1,12 @@
+numpy>=1.24
+torch>=2.1
+# Python 3.13 + CUDA needs nightly wheels, for example:
+#   pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu121
+tqdm
+matplotlib
+tsplib95
+pydantic>=2
+pyyaml
+# Optional: elkai (used for optimal tours when .opt.tour is missing)
+elkai
+# For local dev: $env:PYTHONPATH = "$PWD/src"
