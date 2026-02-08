@@ -40,11 +40,16 @@ lr_scheduler      : str   | "none" or "plateau" (ReduceLROnPlateau)
 lr_factor         : float | LR decay factor (plateau scheduler)
 lr_patience       : int   | epochs without improvement before LR decay
 lr_min            : float | minimum LR for scheduler
+val_every         : int   | run validation every N epochs (always runs on final epoch)
 early_stop        : bool  | enable early stopping on val loss
 early_patience    : int   | epochs without improvement before stopping
 early_min_delta   : float | minimum improvement to reset patience
+tf32              : bool  | allow TensorFloat-32 math on CUDA
+fused_optimizer   : bool  | use AdamW(fused=True) on CUDA when supported
+compile_model     : bool  | enable torch.compile for the model
+compile_mode      : str   | torch.compile mode (e.g., reduce-overhead)
 seed              : int   | RNG seed
-model_name        : str   | "edge_mlp" (shallow) or "edge_mlp_deep" (deeper)
+model_name        : str   | "edge_mlp" | "edge_mlp_deep" | "edge_res_mlp"
 hidden            : int?  | hidden layer width (override model default)
 dropout           : float?| dropout rate (override model default)
 depth             : int   | number of hidden layers in the edge MLP

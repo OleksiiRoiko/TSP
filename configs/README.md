@@ -20,8 +20,15 @@ Notes:
 - `eval.data_roots` lets you evaluate multiple datasets in a single run
 - `visualize.targets` is required and lets you render multiple datasets in a single run
 - Since base config omits eval/visualize, include `eval.model_path` and `visualize.model`
+- Available model names: `edge_mlp`, `edge_mlp_deep`, `edge_res_mlp`
 
 Concorde dataset:
 - New configs with suffix `_ccv1` use `runs/data/synthetic_concorde_v1` for train/val/test.
 - Generate Concorde data with `config.yaml` (now points to `synthetic_concorde_v1`).
 - Use `configs/qa_concorde.yaml` to run strict QA on the Concorde dataset.
+
+New residual-MLP experiments:
+- `exp_edge_res_h128_d4.yaml`
+- `exp_edge_res_h256_d4.yaml`
+- `exp_edge_res_h128_d4_ccv1.yaml`
+- `exp_edge_res_h256_d4_ccv1.yaml`

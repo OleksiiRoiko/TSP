@@ -74,6 +74,16 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     np.random.seed(int(cfg.seed))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"Device: {device}")
+    if device.type == "cuda":
+        # Use fast Tensor Core math where possible (small numeric drift is expected).
+        if bool(getattr(cfg, "tf32", True)):
+            try:
+                torch.set_float32_matmul_precision("high")
+            except Exception:
+                pass
+            torch.backends.cuda.matmul.allow_tf32 = True
+            torch.backends.cudnn.allow_tf32 = True
+        torch.backends.cudnn.benchmark = True
 
     # ---- datasets (complete graph, fixed 10-dim features) ----
     tr_ds = NPZTSPDataset(str(train_root), feature_dim=10)
@@ -128,15 +138,45 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         overrides["depth"] = int(cfg.depth)
 
     model, mparams = build_model(cfg.model_name, overrides or None)
+    model = cast(torch.nn.Module, model)
     model.to(device)
+    if bool(getattr(cfg, "compile_model", False)):
+        try:
+            c_mode = str(getattr(cfg, "compile_mode", "reduce-overhead"))
+            compiled = torch.compile(model, mode=c_mode)
+            model = cast(torch.nn.Module, compiled)
+            logger.info(f"torch.compile enabled (mode={c_mode})")
+        except Exception as e:
+            logger.warning(f"torch.compile disabled due to error: {e}")
     logger.info(f"Model: {cfg.model_name} | Params: {mparams}")
 
     # ---- optim + AMP (new API) ----
-    opt = torch.optim.Adam(
-        model.parameters(),
-        lr=float(cfg.lr),
-        weight_decay=float(getattr(cfg, "weight_decay", 0.0)),
-    )
+    lr_value = float(cfg.lr)
+    wd_value = float(getattr(cfg, "weight_decay", 0.0))
+    use_fused_opt = bool(getattr(cfg, "fused_optimizer", True)) and (device.type == "cuda")
+    if use_fused_opt:
+        try:
+            opt = torch.optim.AdamW(
+                model.parameters(),
+                lr=lr_value,
+                weight_decay=wd_value,
+                fused=True,
+            )
+            logger.info("Optimizer: AdamW(fused=True)")
+        except Exception:
+            opt = torch.optim.AdamW(
+                model.parameters(),
+                lr=lr_value,
+                weight_decay=wd_value,
+            )
+            logger.info("Optimizer: AdamW(fused unsupported, using default)")
+    else:
+        opt = torch.optim.AdamW(
+            model.parameters(),
+            lr=lr_value,
+            weight_decay=wd_value,
+        )
+        logger.info("Optimizer: AdamW")
     sched_name = str(getattr(cfg, "lr_scheduler", "none") or "none").lower()
     scheduler = None
     if sched_name not in ("none", "", "null"):
@@ -184,6 +224,7 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
 
     best = float("inf")
     best_ep = 0
+    val_every = max(1, int(getattr(cfg, "val_every", 1)))
     early_stop = bool(getattr(cfg, "early_stop", False))
     early_patience = int(getattr(cfg, "early_patience", 10))
     early_min_delta = float(getattr(cfg, "early_min_delta", 0.0))
@@ -218,9 +259,14 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         "lr_factor": getattr(cfg, "lr_factor", 0.5),
         "lr_patience": getattr(cfg, "lr_patience", 5),
         "lr_min": getattr(cfg, "lr_min", 1e-6),
+        "val_every": val_every,
         "early_stop": early_stop,
         "early_patience": early_patience,
         "early_min_delta": early_min_delta,
+        "tf32": bool(getattr(cfg, "tf32", True)),
+        "fused_optimizer": bool(getattr(cfg, "fused_optimizer", True)),
+        "compile_model": bool(getattr(cfg, "compile_model", False)),
+        "compile_mode": str(getattr(cfg, "compile_mode", "reduce-overhead")),
         "epochs": cfg.epochs,
         "seed": cfg.seed,
         "train_root": str(train_root),
@@ -265,25 +311,27 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
                 pbar.update(1)
         train_loss = tot / max(cnt, 1)
 
-        # VAL
-        model.eval(); vtot = 0.0; vcnt = 0
-        with torch.no_grad(), tqdm(total=len(va), ncols=100, desc=f"epoch {ep:02d}/{cfg.epochs} [val]  ", leave=False) as pbar:
-            for b in _iter_loader("val"):
-                if b["labels"] is None:
-                    raise ValueError("validation data missing labels")
-                x = b["edge_feats"].to(device, non_blocking=True)
-                y = b["labels"].to(device, non_blocking=True)
-                with _amp_ctx():
-                    logits = model(x)
-                    loss = _bce_balanced(logits, y)
-                vtot += float(loss.item()) * y.numel(); vcnt += y.numel()
-                pbar.update(1)
-        val_loss = vtot / max(vcnt, 1)
+        do_val = (ep % val_every == 0) or (ep == int(cfg.epochs))
+        val_loss = float("nan")
+        if do_val:
+            model.eval(); vtot = 0.0; vcnt = 0
+            with torch.no_grad(), tqdm(total=len(va), ncols=100, desc=f"epoch {ep:02d}/{cfg.epochs} [val]  ", leave=False) as pbar:
+                for b in _iter_loader("val"):
+                    if b["labels"] is None:
+                        raise ValueError("validation data missing labels")
+                    x = b["edge_feats"].to(device, non_blocking=True)
+                    y = b["labels"].to(device, non_blocking=True)
+                    with _amp_ctx():
+                        logits = model(x)
+                        loss = _bce_balanced(logits, y)
+                    vtot += float(loss.item()) * y.numel(); vcnt += y.numel()
+                    pbar.update(1)
+            val_loss = vtot / max(vcnt, 1)
         ep_time = time.time() - ep_start
 
         # scheduler step (after val)
         cur_lr = float(opt.param_groups[0]["lr"])
-        if scheduler is not None:
+        if scheduler is not None and do_val:
             prev_lr = cur_lr
             scheduler.step(val_loss)
             cur_lr = float(opt.param_groups[0]["lr"])
@@ -293,31 +341,41 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         # append history row
         with history_csv.open("a", newline="", encoding="utf-8") as fh:
             writer = csv.writer(fh)
-            writer.writerow([ep, round(train_loss, 6), round(val_loss, 6), f"{cur_lr:.6e}", round(ep_time, 3)])
+            writer.writerow([
+                ep,
+                round(train_loss, 6),
+                "" if not do_val else round(val_loss, 6),
+                f"{cur_lr:.6e}",
+                round(ep_time, 3),
+            ])
 
         # summary line (outside bars)
-        tqdm.write(f"Epoch {ep:02d}/{cfg.epochs} | Train {train_loss:.4f} | Val {val_loss:.4f} | LR {cur_lr:.2e}")
-
-        improved = val_loss < (best - early_min_delta)
-        if improved:
-            best = val_loss; best_ep = ep
-            no_improve = 0
-            torch.save(model.state_dict(), ckpt)
-            payload = dict(meta_base)
-            payload.update({
-                "val_bce": round(float(val_loss), 6),
-                "saved_at": stamp,
-                "path": str(ckpt),
-            })
-            meta_run.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            latest_ptr.parent.mkdir(parents=True, exist_ok=True)
-            latest_ptr.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            tqdm.write(f"  SAVED -> {ckpt} (and updated {latest_ptr.name})")
+        if do_val:
+            tqdm.write(f"Epoch {ep:02d}/{cfg.epochs} | Train {train_loss:.4f} | Val {val_loss:.4f} | LR {cur_lr:.2e}")
         else:
-            no_improve += 1
+            tqdm.write(f"Epoch {ep:02d}/{cfg.epochs} | Train {train_loss:.4f} | Val skipped | LR {cur_lr:.2e}")
 
-        if early_stop and no_improve >= early_patience:
-            logger.info(f"Early stop at epoch {ep} (no improvement for {no_improve} epochs).")
-            break
+        if do_val:
+            improved = val_loss < (best - early_min_delta)
+            if improved:
+                best = val_loss; best_ep = ep
+                no_improve = 0
+                torch.save(model.state_dict(), ckpt)
+                payload = dict(meta_base)
+                payload.update({
+                    "val_bce": round(float(val_loss), 6),
+                    "saved_at": stamp,
+                    "path": str(ckpt),
+                })
+                meta_run.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                latest_ptr.parent.mkdir(parents=True, exist_ok=True)
+                latest_ptr.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                tqdm.write(f"  SAVED -> {ckpt} (and updated {latest_ptr.name})")
+            else:
+                no_improve += 1
+
+            if early_stop and no_improve >= early_patience:
+                logger.info(f"Early stop at epoch {ep} (no improvement for {no_improve} validation checks).")
+                break
 
     logger.info(f"Best Val {best:.6f} @ epoch {best_ep}\nSaved: {ckpt}")

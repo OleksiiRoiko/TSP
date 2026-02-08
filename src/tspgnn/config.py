@@ -58,7 +58,10 @@ class TsplibCfg(BaseModel):
     raw_root: str = "runs/data/tsplib/raw"
     out_root: str = "runs/data/tsplib/processed"
     download: bool = True
-    names: List[str] = ["berlin52", "eil76", "pr76", "kroA100"]
+    names: List[str] = [
+        "ulysses16", "ulysses22", "att48", "eil51", "berlin52", "st70",
+        "eil76", "pr76", "gr96", "kroA100", "kroC100", "kroD100", "rd100", "lin105",
+    ]
 
 
 class TrainCfg(BaseModel):
@@ -74,10 +77,17 @@ class TrainCfg(BaseModel):
     lr_factor: float = 0.5
     lr_patience: int = 5
     lr_min: float = 1e-6
+    # Run validation every N epochs (always runs on final epoch)
+    val_every: int = 1
     # Early stopping (optional)
     early_stop: bool = False
     early_patience: int = 10
     early_min_delta: float = 0.0
+    # Performance flags
+    tf32: bool = True
+    fused_optimizer: bool = True
+    compile_model: bool = False
+    compile_mode: str = "reduce-overhead"
     seed: int = 0
     model_name: str = "edge_mlp"   # from registry
     hidden: Optional[int] = 128

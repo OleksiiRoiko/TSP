@@ -5,7 +5,7 @@ train:
   exp_id: exp_name
 
   # Model choice + hyper-params
-  model_name: edge_mlp
+  model_name: edge_mlp  # edge_mlp | edge_mlp_deep | edge_res_mlp
   hidden: 128
   depth: 2
   dropout: 0.0
@@ -19,9 +19,14 @@ train:
   # lr_factor: 0.5
   # lr_patience: 5
   # lr_min: 1.0e-6
+  # val_every: 1
   # early_stop: true
   # early_patience: 10
   # early_min_delta: 0.0001
+  # tf32: true
+  # fused_optimizer: true
+  # compile_model: false
+  # compile_mode: reduce-overhead
   # seed: 0
 
   # Optional dataset overrides

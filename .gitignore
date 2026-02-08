@@ -9,3 +9,9 @@ venv/
 *.egg-info/
 dist/
 build/
+kaggle/data_dataset/data/
+kaggle/data_dataset/data.zip
+kaggle/kernel/output/
+kaggle/kernel/src/
+kaggle/kernel/configs/
+kaggle/kernel/project.zip

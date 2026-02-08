@@ -1,6 +1,5 @@
 from __future__ import annotations
 from pathlib import Path
-import json
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
@@ -10,66 +9,8 @@ from ..config import VisualizeCfg
 from ..utils.io import load_npz
 from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import greedy_cycle_from_edges, two_opt
+from ..utils.run_paths import resolve_model_path, infer_run_dir, dataset_tag
 from ..models.registry import build_model_from_state, load_weights_flex
-
-
-def _resolve_model_path(p: Path) -> Path:
-    if p.is_dir():
-        candidate = p / "latest.json"
-        if candidate.exists():
-            p = candidate
-        else:
-            runs = sorted([d for d in p.iterdir() if d.is_dir()])
-            if runs:
-                best = runs[-1] / "best.pt"
-                if best.exists():
-                    return best
-    if p.suffix.lower() == ".json" and p.exists():
-        try:
-            data = json.loads(p.read_text(encoding="utf-8"))
-            if isinstance(data, dict) and "path" in data:
-                return Path(str(data["path"]))
-        except Exception:
-            pass
-    if not p.exists() and p.name == "latest.json":
-        exp_root = p.parent
-        if exp_root.exists():
-            runs = sorted([d for d in exp_root.iterdir() if d.is_dir()])
-            if runs:
-                best = runs[-1] / "best.pt"
-                if best.exists():
-                    return best
-    return p
-
-
-def _infer_run_dir(model_path_cfg: Path, resolved_model: Path) -> Path | None:
-    if model_path_cfg.suffix.lower() == ".json" and model_path_cfg.exists():
-        try:
-            data = json.loads(model_path_cfg.read_text(encoding="utf-8"))
-            if isinstance(data, dict):
-                if "run_dir" in data:
-                    return Path(str(data["run_dir"]))
-                if "path" in data:
-                    return Path(str(data["path"])).parent
-        except Exception:
-            pass
-    if model_path_cfg.is_dir():
-        lj = model_path_cfg / "latest.json"
-        if lj.exists():
-            return _infer_run_dir(lj, resolved_model)
-    if resolved_model.exists():
-        return resolved_model.parent
-    return None
-
-
-def _dataset_tag(data_root: Path) -> str:
-    s = str(data_root).lower()
-    name = data_root.name.lower()
-    if "tsplib" in s:
-        return "tsplib"
-    if "synthetic" in s and name in ("train", "val", "test"):
-        return f"synthetic_{name}"
-    return name or "data"
 
 
 def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
@@ -116,14 +57,14 @@ def run(cfg: VisualizeCfg, logger):
     run_dir = None
     if any(mode == "predict" for mode, _, _, _ in targets):
         model_path_cfg = Path(cfg.model)
-        mp = _resolve_model_path(model_path_cfg)
+        mp = resolve_model_path(model_path_cfg)
         state = torch.load(mp, map_location="cpu")
         model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
         logger.info(f"Viz model params: {mparams}")
         load_weights_flex(model, state, logger=logger)
         dev = torch.device("cpu" if cfg.device == "cpu" or not torch.cuda.is_available() else "cuda")
         model.to(dev).eval()
-        run_dir = _infer_run_dir(model_path_cfg, mp)
+        run_dir = infer_run_dir(model_path_cfg, mp)
 
     for mode, npz_dir, limit, out_dir_cfg in targets:
         files = sorted(Path(npz_dir).rglob("*.npz"))
@@ -135,7 +76,7 @@ def run(cfg: VisualizeCfg, logger):
 
         out_dir = Path(out_dir_cfg)
         if str(out_dir_cfg).lower() == "auto":
-            tag = _dataset_tag(Path(npz_dir))
+            tag = dataset_tag(Path(npz_dir))
             if mode == "predict" and run_dir is not None:
                 out_dir = run_dir / "figs" / tag
             else:

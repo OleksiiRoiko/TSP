@@ -9,66 +9,8 @@ from ..config import EvalCfg, QACfg
 from ..utils.io import load_npz
 from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import tour_edges_undirected, greedy_cycle_from_edges, two_opt, tour_length, verify_tour, tour_length_tsplib
+from ..utils.run_paths import resolve_model_path, infer_run_dir, dataset_tag
 from ..models.registry import build_model_from_state, load_weights_flex
-
-
-def _resolve_model_path(p: Path) -> Path:
-    if p.is_dir():
-        candidate = p / "latest.json"
-        if candidate.exists():
-            p = candidate
-        else:
-            runs = sorted([d for d in p.iterdir() if d.is_dir()])
-            if runs:
-                best = runs[-1] / "best.pt"
-                if best.exists():
-                    return best
-    if p.suffix.lower() == ".json" and p.exists():
-        try:
-            data = json.loads(p.read_text(encoding="utf-8"))
-            if isinstance(data, dict) and "path" in data:
-                return Path(str(data["path"]))
-        except Exception:
-            pass
-    if not p.exists() and p.name == "latest.json":
-        exp_root = p.parent
-        if exp_root.exists():
-            runs = sorted([d for d in exp_root.iterdir() if d.is_dir()])
-            if runs:
-                best = runs[-1] / "best.pt"
-                if best.exists():
-                    return best
-    return p
-
-
-def _infer_run_dir(model_path_cfg: Path, resolved_model: Path) -> Path | None:
-    if model_path_cfg.suffix.lower() == ".json" and model_path_cfg.exists():
-        try:
-            data = json.loads(model_path_cfg.read_text(encoding="utf-8"))
-            if isinstance(data, dict):
-                if "run_dir" in data:
-                    return Path(str(data["run_dir"]))
-                if "path" in data:
-                    return Path(str(data["path"])).parent
-        except Exception:
-            pass
-    if model_path_cfg.is_dir():
-        lj = model_path_cfg / "latest.json"
-        if lj.exists():
-            return _infer_run_dir(lj, resolved_model)
-    if resolved_model.exists():
-        return resolved_model.parent
-    return None
-
-
-def _dataset_tag(data_root: Path) -> str:
-    s = str(data_root).lower()
-    name = data_root.name.lower()
-    if "tsplib" in s:
-        return "tsplib"
-    if "synthetic" in s and name in ("train", "val", "test"):
-        return f"synthetic_{name}"
-    return name or "data"
 
 
 def _eval_files(
@@ -151,7 +93,7 @@ def _resolve_save_path(save_cfg: str | None, tag: str, run_dir: Path | None, mul
 
 def run(cfg: EvalCfg, logger):
     model_path_cfg = Path(cfg.model_path)
-    mp = _resolve_model_path(model_path_cfg)
+    mp = resolve_model_path(model_path_cfg)
     if not mp.exists():
         raise FileNotFoundError("eval: model_path invalid")
 
@@ -172,7 +114,7 @@ def run(cfg: EvalCfg, logger):
     if not roots:
         raise FileNotFoundError("eval: data_roots is empty")
     multi = len(roots) > 1
-    run_dir = _infer_run_dir(model_path_cfg, mp)
+    run_dir = infer_run_dir(model_path_cfg, mp)
 
     for root in roots:
         dr = Path(root)
@@ -187,7 +129,7 @@ def run(cfg: EvalCfg, logger):
 
         results = _eval_files(files, model, dev, mparams["in_dim"], cfg.run_twoopt)
 
-        tag = _dataset_tag(dr)
+        tag = dataset_tag(dr)
         p = _resolve_save_path(cfg.save_json, tag, run_dir, multi)
         if p is not None:
             with open(p, "w", encoding="utf-8") as fh:
