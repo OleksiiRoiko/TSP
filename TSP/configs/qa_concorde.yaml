@@ -1,7 +1,0 @@
-base: ../config.yaml
-
-qa:
-  root: runs/data/synthetic_concorde_v1
-  require_label_source: concorde
-  check_concorde: true
-  csv: runs/qa_report_concorde.csv

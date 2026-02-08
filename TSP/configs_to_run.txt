@@ -1,4 +1,0 @@
-# One config per line, relative to this folder.
-# Example:
-configs/exp_edge_res_h256_d4.yaml
-configs/exp_edge_res_h256_d4_ccv1.yaml
