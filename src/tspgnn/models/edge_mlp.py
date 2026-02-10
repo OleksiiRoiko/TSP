@@ -4,6 +4,18 @@ import torch.nn as nn
 class EdgeMLPAny(nn.Module):
     def __init__(self, in_dim=10, hidden=128, dropout=0.0, depth=2):
         super().__init__()
+        in_dim = int(in_dim)
+        hidden = int(hidden)
+        depth = int(depth)
+        dropout = float(dropout)
+        if in_dim < 1:
+            raise ValueError("in_dim must be >= 1")
+        if hidden < 1:
+            raise ValueError("hidden must be >= 1")
+        if depth < 1:
+            raise ValueError("depth must be >= 1")
+        if dropout < 0.0 or dropout >= 1.0:
+            raise ValueError("dropout must be in [0.0, 1.0)")
         layers = []
         dims = [in_dim] + [hidden] * depth
         for i in range(len(dims)-1):

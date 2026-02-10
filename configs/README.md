@@ -1,11 +1,22 @@
 # Configs
 
-Use `config.yaml` as the base config for data/QA (generate/tsplib/qa). Per-experiment
-configs should override train/eval/visualize.
+This folder is now self-contained: use dedicated configs per task.
+Run commands with explicit config path, e.g. `python -m tspgnn.cli --config configs/<name>.yaml <cmd>`.
 
-Recommended pattern:
-- Base defaults (data, qa, eval/visualize paths) live in `config.yaml`
-- Each experiment file overrides only train parameters and, if needed, dataset roots
+Data generation / QA:
+- `generate_concorde.yaml` -> builds `runs/data/synthetic_concorde_v1`
+- `generate_synthetic.yaml` -> builds `runs/data/synthetic`
+- `tsplib.yaml` -> downloads/processes TSPLIB
+- `qa.yaml` -> QA over `runs/data`
+- `qa_concorde.yaml` -> strict QA for Concorde labels
+  - `qa.yaml` is a global integrity check and can include mixed label sources.
+    For strict optimality checks on Concorde dataset, use `qa_concorde.yaml`.
+
+Generation config split:
+- `generate_concorde.yaml` keeps `tour_solver: concorde` + `concorde_*` fields.
+- `generate_synthetic.yaml` uses non-Concorde mode (`tour_solver: auto`, `elkai_frac`) and omits `concorde_*`.
+- `generate_concorde.yaml` enables `concorde_require_optimal_proof: true` (fail-fast if Concorde output does not confirm optimality).
+  If strict mode is enabled, tune `concorde_timeout_sec` carefully (timeouts will fail the run).
 
 Template:
 - Copy `configs/_template.yaml` and set `train.exp_id` plus your model params
@@ -18,17 +29,32 @@ python -m tspgnn.cli --config configs/exp_edge_mlp_h128_d2.yaml train
 Notes:
 - You can use `{exp_id}` in string fields (auto-replaced by train.exp_id)
 - `eval.data_roots` lets you evaluate multiple datasets in a single run
+- `eval.save_pred_tour` controls whether per-instance tours are stored in eval JSON (default: false)
 - `visualize.targets` is required and lets you render multiple datasets in a single run
-- Since base config omits eval/visualize, include `eval.model_path` and `visualize.model`
-- Available model names: `edge_mlp`, `edge_mlp_deep`, `edge_res_mlp`
+- Available model names: `edge_mlp`, `edge_mlp_deep`, `edge_res_mlp`, `edge_transformer`
+- QA includes `qa.check_split_overlap` (enabled by default) to detect duplicate samples across train/val/test.
+- Active experiment set is reduced to 10 configs (5 synthetic + 5 concorde/ccv1) to avoid redundant runs.
+- Split:
+  - local (4): `configs/local_configs_to_run.txt`
+  - Kaggle (6): `kaggle/kernel/configs_to_run.txt`
+- Train defaults in active configs are intentionally simple:
+  `epochs: 10`, `val_every: 1`, `lr_scheduler: plateau`, `lr_patience: 2`,
+  `early_stop: true`, `early_patience: 2`.
 
 Concorde dataset:
 - New configs with suffix `_ccv1` use `runs/data/synthetic_concorde_v1` for train/val/test.
-- Generate Concorde data with `config.yaml` (now points to `synthetic_concorde_v1`).
+- Generate Concorde data with `configs/generate_concorde.yaml`.
 - Use `configs/qa_concorde.yaml` to run strict QA on the Concorde dataset.
 
-New residual-MLP experiments:
-- `exp_edge_res_h128_d4.yaml`
-- `exp_edge_res_h256_d4.yaml`
-- `exp_edge_res_h128_d4_ccv1.yaml`
-- `exp_edge_res_h256_d4_ccv1.yaml`
+Active experiments:
+- Synthetic (5):
+  `exp_edge_mlp_h128_d2.yaml`, `exp_edge_mlp_h256_d2.yaml`, `exp_edge_mlp_h256_d3.yaml`,
+  `exp_edge_res_h128_d4.yaml`, `exp_edge_res_h256_d4.yaml`
+- Concorde / ccv1 (5):
+  `exp_edge_mlp_h128_d2_ccv1.yaml`, `exp_edge_mlp_h256_d2_ccv1.yaml`,
+  `exp_edge_mlp_h256_d3_ccv1.yaml`, `exp_edge_res_h128_d4_ccv1.yaml`,
+  `exp_edge_res_h256_d4_ccv1.yaml`
+
+Optional graph-aware (ccv1):
+- `exp_edge_tf_h128_d3_ccv1.yaml`
+- `exp_edge_tf_h256_d4_ccv1.yaml`

@@ -46,10 +46,15 @@ class NPZTSPDataset(Dataset):
 
     # --------- caching helpers ----------
     def _cache_paths_for(self, npz_path: Path) -> tuple[Path, Path]:
-        # Make a stable key from path + basic params
+        # Include file stat so cache is invalidated if source file is replaced in-place.
         if self.cache_dir is None:
             raise RuntimeError("cache_dir is None; caching is disabled")
-        key = _hash_key(str(npz_path.resolve()), f"fd={self.feature_dim}", "cand=complete")
+        try:
+            st = npz_path.stat()
+            stamp = f"sz={int(st.st_size)}|mt={int(st.st_mtime_ns)}"
+        except OSError:
+            stamp = "nostat"
+        key = _hash_key(str(npz_path.resolve()), stamp, f"fd={self.feature_dim}", "cand=complete")
         base = (self.cache_dir / str(self.feature_dim) / "complete") / key
         return base.with_suffix(".npz"), base.with_suffix(".json")
 
@@ -62,17 +67,23 @@ class NPZTSPDataset(Dataset):
                 z = np.load(fx, allow_pickle=False)
                 X = z["X"]
                 y = z["y"] if "y" in z.files else None
-                return X, y
+                coords = z["coords"] if "coords" in z.files else None
+                return X, y, coords
             except Exception:
                 return None
         return None
 
-    def _save_cache(self, npz_path: Path, X: np.ndarray, y: np.ndarray | None):
+    def _save_cache(self, npz_path: Path, X: np.ndarray, y: np.ndarray | None, coords: np.ndarray):
         if self.cache_dir is None:
             return
         fx, meta = self._cache_paths_for(npz_path)
         fx.parent.mkdir(parents=True, exist_ok=True)
-        np.savez_compressed(fx, X=X.astype(np.float32), y=y if y is not None else np.array([]))
+        np.savez_compressed(
+            fx,
+            X=X.astype(np.float32),
+            y=y if y is not None else np.array([]),
+            coords=coords.astype(np.float32),
+        )
         meta.write_text(json.dumps({"source": str(npz_path)}), encoding="utf-8")
 
     # --------- main API ----------
@@ -82,10 +93,14 @@ class NPZTSPDataset(Dataset):
         # 1) try cache
         cached = self._try_load_cache(f)
         if cached is not None:
-            X, y = cached
+            X, y, coords = cached
+            if coords is None:
+                d = load_npz(f)
+                coords = d["coords"].astype(np.float32)
             return {
                 "edge_feats": torch.from_numpy(X).float(),
                 "labels": None if (y is None or y.size == 0) else torch.from_numpy(y.astype(np.float32)).float(),
+                "coords": torch.from_numpy(coords).float(),
             }
 
         # 2) compute fresh
@@ -106,17 +121,21 @@ class NPZTSPDataset(Dataset):
             y = np.array([1.0 if (min(a, b), max(a, b)) in gt else 0.0 for a, b in E], dtype=np.float32)
 
         # 3) cache for next epoch
-        self._save_cache(f, X, y)
+        self._save_cache(f, X, y, C)
 
         return {
             "edge_feats": torch.from_numpy(X).float(),
             "labels": None if y is None else torch.from_numpy(y).float(),
+            "coords": torch.from_numpy(C).float(),
         }
 
 
 def collate_edge_batches(batch):
-    feats = torch.cat([b["edge_feats"] for b in batch], dim=0)
+    feats_list = [b["edge_feats"] for b in batch]
+    feats = torch.cat(feats_list, dim=0)
     labels = None
     if batch[0]["labels"] is not None:
         labels = torch.cat([b["labels"] for b in batch], dim=0)
-    return {"edge_feats": feats, "labels": labels}
+    edge_counts = [int(x.shape[0]) for x in feats_list]
+    coords = [b["coords"] for b in batch]
+    return {"edge_feats": feats, "labels": labels, "edge_counts": edge_counts, "coords": coords}

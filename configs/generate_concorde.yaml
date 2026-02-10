@@ -1,0 +1,16 @@
+﻿generate:
+  out_root: runs/data/synthetic_concorde_v1
+  n_list: [20, 30, 40, 50, 60, 70, 80, 90, 100]
+  per_size_train: 5000
+  per_size_val: 1000
+  per_size_test: 1000
+  workers: 8
+  tour_solver: concorde
+  concorde_cmd: concorde
+  concorde_scale: 10000
+  concorde_timeout_sec: 60
+  concorde_keep_tmp: false
+  concorde_require_optimal_proof: true
+  dist_names: ["uniform", "clustered", "ring", "grid_jitter"]
+  dist_probs: [0.3, 0.2, 0.2, 0.3]
+  seed: 0

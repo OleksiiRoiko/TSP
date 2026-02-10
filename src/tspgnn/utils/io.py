@@ -23,15 +23,14 @@ def urlretrieve(url: str, timeout: int = 30) -> bytes | None:
         return None
 
 def download_tsplib_file(name: str, raw_dir: Path, kind: str) -> Path | None:
-    assert kind in ("tsp","opt.tour")
+    if kind not in ("tsp", "opt.tour"):
+        raise ValueError("kind must be one of: tsp, opt.tour")
     dst = raw_dir / f"{name}.{kind}"
     if dst.exists(): return dst
     base_rice = "https://softlib.rice.edu/pub/tsplib/tsp/"
     base_h = "https://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/"
-    base_h_http = "http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/"
-    base_zib = "http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/"
     base_github = "https://raw.githubusercontent.com/mastqe/tsplib/master/"
-    mirrors = [base_rice, base_h, base_h_http, base_zib]
+    mirrors = [base_rice, base_h]
     urls = [f"{b}{name}.{kind}" for b in mirrors] + [f"{b}{name}.{kind}.gz" for b in mirrors]
     if kind == "tsp":
         urls.append(f"{base_github}{name}.{kind}")

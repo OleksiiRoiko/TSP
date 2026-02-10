@@ -1,4 +1,8 @@
 # One config per line, relative to this folder.
-# Example:
+# Kaggle split: 6 heavier configs (4 lighter configs run locally).
+configs/exp_edge_mlp_h256_d2.yaml
+configs/exp_edge_mlp_h256_d3.yaml
 configs/exp_edge_res_h256_d4.yaml
+configs/exp_edge_mlp_h256_d2_ccv1.yaml
+configs/exp_edge_mlp_h256_d3_ccv1.yaml
 configs/exp_edge_res_h256_d4_ccv1.yaml

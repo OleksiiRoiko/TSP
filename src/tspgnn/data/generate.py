@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-import importlib
+import hashlib
 import numpy as np
 import os
 import re
@@ -11,33 +11,52 @@ import tempfile
 from ..config import GenerateCfg
 from ..utils.io import save_npz
 from ..utils.tour import tour_length, two_opt, tour_length_tsplib, verify_tour
+from ..utils.elkai_solver import solve_with_elkai
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
 
+
+def _seed_for_instance(base_seed: int, n: int, split: str, idx: int) -> int:
+    """
+    Build a deterministic per-instance seed that separates train/val/test streams.
+    This prevents accidental split overlap when idx numbering restarts per split.
+    """
+    key = f"{int(base_seed)}|{int(n)}|{str(split).lower()}|{int(idx)}"
+    digest = hashlib.blake2b(key.encode("utf-8"), digest_size=8).digest()
+    return int.from_bytes(digest, byteorder="little", signed=False)
+
+
 def _make_one(args):
     (
-        idx, n, seed, dist, solver, elkai_frac,
-        concorde_cmd, concorde_scale, concorde_timeout, concorde_keep_tmp
+        idx, n, split, seed, dist, solver, elkai_frac,
+        concorde_cmd, concorde_scale, concorde_timeout, concorde_keep_tmp,
+        concorde_require_optimal_proof,
     ) = args
-    rng = np.random.default_rng(seed + idx * 1337)
+    rng = np.random.default_rng(_seed_for_instance(seed, n, split, idx))
     coords = _sample(rng, n, dist)
     coords_orig = None
     label_len_tsplib = None
     label_source = None
+    concorde_optimal_proved = None
 
     solver = str(solver).lower()
     if solver == "concorde":
-        tour, coords_orig, label_len_tsplib = _concorde_tour(
+        tour, coords_orig, label_len_tsplib, concorde_optimal_proved = _concorde_tour(
             coords,
             cmd=concorde_cmd,
             scale=concorde_scale,
             timeout=concorde_timeout,
             keep_tmp=concorde_keep_tmp,
         )
+        if bool(concorde_require_optimal_proof):
+            if tour is None:
+                raise RuntimeError("Concorde did not produce a valid tour")
+            if concorde_optimal_proved is not True:
+                raise RuntimeError("Concorde output does not confirm optimal proof")
         if tour is not None:
             label_source = "concorde"
     elif solver == "elkai":
-        tour = _elkai_tour(coords)
+        tour = solve_with_elkai(coords)
         if tour is not None:
             label_source = "elkai"
     elif solver == "nn2opt":
@@ -45,7 +64,7 @@ def _make_one(args):
     else:
         # auto: previous behavior (elkai if available, else NN+2opt)
         use_elkai = bool(rng.random() < float(elkai_frac))
-        tour = _elkai_tour(coords) if use_elkai else None
+        tour = solve_with_elkai(coords) if use_elkai else None
         if tour is not None:
             label_source = "elkai"
 
@@ -67,19 +86,8 @@ def _make_one(args):
         coords_orig,
         label_len_tsplib,
         label_source,
+        concorde_optimal_proved,
     )
-
-def _elkai_tour(coords: np.ndarray):
-    try:
-        elkai = importlib.import_module("elkai")
-    except Exception:
-        return None
-    try:
-        dist = np.sqrt(((coords[:,None,:]-coords[None,:,:])**2).sum(-1))
-        mat = (dist*10_000).astype(int)
-        return np.array(elkai.solve_int_matrix(mat.tolist()), dtype=np.int64)
-    except Exception:
-        return None
 
 def _write_tsplib(path: Path, coords: np.ndarray, name: str = "synthetic"):
     n = coords.shape[0]
@@ -129,6 +137,25 @@ def _parse_tour_file(path: Path, n: int):
     tour = np.asarray(nums, dtype=np.int64)
     return tour if verify_tour(tour, n) else None
 
+
+def _concorde_log_has_optimal_proof(log_text: str) -> bool:
+    t = (log_text or "").lower()
+    if not t:
+        return False
+    negative_markers = (
+        "not proven",
+        "no proof",
+        "time limit",
+        "timelimit",
+        "timeout",
+        "interrupted",
+        "aborted",
+    )
+    if any(m in t for m in negative_markers):
+        return False
+    return "optimal" in t
+
+
 def _concorde_tour(
     coords: np.ndarray,
     cmd: str,
@@ -148,6 +175,7 @@ def _concorde_tour(
         _write_tsplib(tsp_path, coords_scaled, name="synthetic")
         out_tour = tmpdir / "prob.tour"
         cmd_list = shlex.split(str(cmd)) if str(cmd).strip() else ["concorde"]
+        run_logs: list[str] = []
 
         try:
             # Try explicit output file first
@@ -159,9 +187,10 @@ def _concorde_tour(
                 text=True,
                 timeout=float(timeout) if timeout else None,
             )
+            run_logs.append((res.stdout or "") + "\n" + (res.stderr or ""))
             if res.returncode != 0 or not out_tour.exists():
                 # Fallback: default concorde output (prob.sol)
-                subprocess.run(
+                res2 = subprocess.run(
                     cmd_list + [str(tsp_path)],
                     cwd=str(tmpdir),
                     stdout=subprocess.PIPE,
@@ -169,10 +198,11 @@ def _concorde_tour(
                     text=True,
                     timeout=float(timeout) if timeout else None,
                 )
+                run_logs.append((res2.stdout or "") + "\n" + (res2.stderr or ""))
         except FileNotFoundError:
-            return None, None, None
+            return None, None, None, False
         except subprocess.TimeoutExpired:
-            return None, None, None
+            return None, None, None, False
 
         cand = None
         if out_tour.exists():
@@ -185,15 +215,16 @@ def _concorde_tour(
             elif tour.exists():
                 cand = tour
         if cand is None:
-            return None, None, None
+            return None, None, None, _concorde_log_has_optimal_proof("\n".join(run_logs))
 
         tour = _parse_tour_file(cand, n)
         if tour is None:
-            return None, None, None
+            return None, None, None, _concorde_log_has_optimal_proof("\n".join(run_logs))
 
         coords_orig = coords_scaled.astype(np.float32)
         label_len_tsplib = float(tour_length_tsplib(coords_orig, tour, "EUC_2D"))
-        return tour, coords_orig, label_len_tsplib
+        optimal_proved = _concorde_log_has_optimal_proof("\n".join(run_logs))
+        return tour, coords_orig, label_len_tsplib, optimal_proved
     finally:
         if not keep_tmp:
             shutil.rmtree(tmpdir, ignore_errors=True)
@@ -230,6 +261,41 @@ def _sample(rng: np.random.Generator, n: int, kind: str):
         return np.clip(pts,0,1).astype(np.float32)
     raise ValueError(kind)
 
+
+def _build_payload(
+    *,
+    idx: int,
+    n: int,
+    coords: np.ndarray,
+    tour: np.ndarray,
+    length_norm: float,
+    dist: str,
+    seed: int,
+    label_source: str | None,
+    coords_orig: np.ndarray | None,
+    length_tsplib: float | None,
+    concorde_optimal_proved: bool | None,
+) -> dict:
+    payload = {
+        "id": np.array(f"syn_{idx:06d}"),
+        "n": np.int32(n),
+        "coords": coords,
+        "label_tour": tour,
+        "label_len_norm": float(length_norm),
+        "distribution": np.array(dist),
+        "metric": np.array("EUC_2D"),
+        "source": np.array("synthetic"),
+        "seed": np.int32(seed),
+        "label_source": np.array(label_source or "unknown"),
+    }
+    if coords_orig is not None:
+        payload["coords_orig"] = coords_orig
+    if length_tsplib is not None:
+        payload["label_len_tsplib"] = float(length_tsplib)
+    if concorde_optimal_proved is not None:
+        payload["concorde_optimal_proved"] = bool(concorde_optimal_proved)
+    return payload
+
 def run(cfg: GenerateCfg, logger):
     rng = np.random.default_rng(int(cfg.seed))
     root = Path(cfg.out_root)
@@ -241,10 +307,15 @@ def run(cfg: GenerateCfg, logger):
         raise ValueError("dist_probs must sum to a positive value")
     probs /= probs.sum()
 
-    # worker count: always use max cores
-    workers = max(1, (os.cpu_count() or 1))
+    # worker count: cap auto mode to avoid oversubscription in constrained environments
+    cfg_workers = getattr(cfg, "workers", None)
+    if cfg_workers is None:
+        workers = max(1, min(8, (os.cpu_count() or 1)))
+    else:
+        workers = max(1, int(cfg_workers))
     solver = str(cfg.tour_solver).lower()
-    logger.info(f"[gen] tour_solver={solver}")
+    strict_opt = bool(getattr(cfg, "concorde_require_optimal_proof", False))
+    logger.info(f"[gen] tour_solver={solver} concorde_require_optimal_proof={strict_opt}")
 
     for n in cfg.n_list:
         for split, count in {
@@ -262,10 +333,11 @@ def run(cfg: GenerateCfg, logger):
             for i in range(int(count)):
                 dist = str(rng.choice(dists, p=probs))
                 tasks.append((
-                    start_idx + i, n, int(cfg.seed), dist,
+                    start_idx + i, n, split, int(cfg.seed), dist,
                     solver, float(cfg.elkai_frac),
                     str(cfg.concorde_cmd), int(cfg.concorde_scale),
                     int(cfg.concorde_timeout_sec), bool(cfg.concorde_keep_tmp),
+                    bool(getattr(cfg, "concorde_require_optimal_proof", False)),
                 ))
 
             # run with a nice progress bar (fallback to single process if needed)
@@ -273,26 +345,23 @@ def run(cfg: GenerateCfg, logger):
                 with ProcessPoolExecutor(max_workers=workers) as ex:
                     futures = [ex.submit(_make_one, t) for t in tasks]
                     with tqdm(total=len(futures), ncols=100,
-                              desc=f"N={n} | {split}", leave=True) as bar:
+                        desc=f"N={n} | {split}", leave=True) as bar:
                         for fut in as_completed(futures):
-                            idx, coords, tour, L, dist, coords_orig, L_tsplib, label_source = fut.result()
+                            idx, coords, tour, L, dist, coords_orig, L_tsplib, label_source, concorde_optimal_proved = fut.result()
                             # deterministic filename from idx (no glob scans)
-                            payload = {
-                                "id": np.array(f"syn_{idx:06d}"),
-                                "n": np.int32(n),
-                                "coords": coords,
-                                "label_tour": tour,
-                                "label_len_norm": L,
-                                "distribution": np.array(dist),
-                                "metric": np.array("EUC_2D"),
-                                "source": np.array("synthetic"),
-                                "seed": np.int32(cfg.seed),
-                                "label_source": np.array(label_source or "unknown"),
-                            }
-                            if coords_orig is not None:
-                                payload["coords_orig"] = coords_orig
-                            if L_tsplib is not None:
-                                payload["label_len_tsplib"] = float(L_tsplib)
+                            payload = _build_payload(
+                                idx=idx,
+                                n=n,
+                                coords=coords,
+                                tour=tour,
+                                length_norm=L,
+                                dist=dist,
+                                seed=int(cfg.seed),
+                                label_source=label_source,
+                                coords_orig=coords_orig,
+                                length_tsplib=L_tsplib,
+                                concorde_optimal_proved=concorde_optimal_proved,
+                            )
                             save_npz(out_dir / f"syn_{idx:06d}.npz", **payload)
                             bar.update(1)
             except PermissionError:
@@ -300,23 +369,20 @@ def run(cfg: GenerateCfg, logger):
                 with tqdm(total=len(tasks), ncols=100,
                           desc=f"N={n} | {split} (single)", leave=True) as bar:
                     for t in tasks:
-                        idx, coords, tour, L, dist, coords_orig, L_tsplib, label_source = _make_one(t)
-                        payload = {
-                            "id": np.array(f"syn_{idx:06d}"),
-                            "n": np.int32(n),
-                            "coords": coords,
-                            "label_tour": tour,
-                            "label_len_norm": L,
-                            "distribution": np.array(dist),
-                            "metric": np.array("EUC_2D"),
-                            "source": np.array("synthetic"),
-                            "seed": np.int32(cfg.seed),
-                            "label_source": np.array(label_source or "unknown"),
-                        }
-                        if coords_orig is not None:
-                            payload["coords_orig"] = coords_orig
-                        if L_tsplib is not None:
-                            payload["label_len_tsplib"] = float(L_tsplib)
+                        idx, coords, tour, L, dist, coords_orig, L_tsplib, label_source, concorde_optimal_proved = _make_one(t)
+                        payload = _build_payload(
+                            idx=idx,
+                            n=n,
+                            coords=coords,
+                            tour=tour,
+                            length_norm=L,
+                            dist=dist,
+                            seed=int(cfg.seed),
+                            label_source=label_source,
+                            coords_orig=coords_orig,
+                            length_tsplib=L_tsplib,
+                            concorde_optimal_proved=concorde_optimal_proved,
+                        )
                         save_npz(out_dir / f"syn_{idx:06d}.npz", **payload)
                         bar.update(1)
 

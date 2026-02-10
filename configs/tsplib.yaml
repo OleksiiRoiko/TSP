@@ -1,0 +1,5 @@
+﻿tsplib:
+  raw_root: runs/data/tsplib/raw
+  out_root: runs/data/tsplib/processed
+  download: true
+  names: ["ulysses16","ulysses22","att48","eil51","berlin52","st70","eil76","pr76","gr96","kroA100","kroC100","kroD100","rd100","lin105"]

@@ -10,7 +10,7 @@ from .viz.plot import run as cmd_visualize
 
 def main():
     p = argparse.ArgumentParser(prog="tspgnn", description="TSP-GNN unified CLI")
-    p.add_argument("--config", default="config.yaml", help="Path to config YAML")
+    p.add_argument("--config", required=True, help="Path to config YAML")
     sp = p.add_subparsers(dest="cmd", required=True)
     sp.add_parser("generate")
     sp.add_parser("tsplib")
@@ -21,7 +21,6 @@ def main():
     args = p.parse_args()
 
     cfg = load_config(args.config)  # YAML -> validated dataclasses
-    cfg_data = load_config_data(args.config)
     if args.cmd == "generate":
         logger = setup_logger("generate", "runs/logs/generate.log")
         cmd_generate(cfg.generate, logger)
@@ -30,6 +29,7 @@ def main():
         cmd_tsplib(cfg.tsplib, logger)
     elif args.cmd == "train":
         logger = setup_logger("train", f"runs/logs/train_{cfg.train.exp_id}.log")
+        cfg_data = load_config_data(args.config)
         cmd_train(cfg.train, logger, full_config=cfg_data, config_path=args.config)
     elif args.cmd == "eval":
         logger = setup_logger("eval", "runs/logs/eval.log")

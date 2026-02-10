@@ -1,33 +1,23 @@
-﻿base: ../config.yaml
-
 train:
-  # REQUIRED
   exp_id: exp_name
 
   # Model choice + hyper-params
-  model_name: edge_mlp  # edge_mlp | edge_mlp_deep | edge_res_mlp
+  model_name: edge_mlp  # edge_mlp | edge_mlp_deep | edge_res_mlp | edge_transformer
   hidden: 128
   depth: 2
   dropout: 0.0
 
   # Optional training overrides
-  # epochs: 30
-  # batch_size: 32
+  # Default training flow is simple:
+  #   epochs=10, val_every=1, lr_scheduler=plateau
+  #   early_stop=true, early_patience=2
+  # batch_size: 64
   # lr: 0.001
-  # weight_decay: 0.0
-  # lr_scheduler: plateau   # none | plateau
-  # lr_factor: 0.5
-  # lr_patience: 5
-  # lr_min: 1.0e-6
-  # val_every: 1
-  # early_stop: true
-  # early_patience: 10
-  # early_min_delta: 0.0001
-  # tf32: true
-  # fused_optimizer: true
-  # compile_model: false
-  # compile_mode: reduce-overhead
+  # weight_decay: 0.00005
   # seed: 0
+  # Only set advanced options if intentionally needed:
+  # lr_scheduler: plateau   # none | plateau
+  # val_every: 1
 
   # Optional dataset overrides
   # train_root: runs/data/synthetic/train
@@ -37,6 +27,7 @@ train:
 eval:
   device: cuda
   model_path: runs/experiments/{exp_id}/latest.json
+  # save_pred_tour: false   # keep eval JSON compact
   data_roots:
     - runs/data/tsplib/processed
     - runs/data/synthetic/test

@@ -154,5 +154,4 @@ def tour_length_tsplib(coords_orig: np.ndarray, tour: np.ndarray, metric: str) -
     if metric == "GEO":
         return float(_len_geo(coords_orig, tour))
     # Fallback: continuous Euclidean on original coords
-    from .tour import tour_length as _norm_len  # avoid cycle if you placed above
-    return float(_norm_len(coords_orig.astype(np.float32), tour))
+    return float(tour_length(coords_orig.astype(np.float32), tour))

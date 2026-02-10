@@ -79,7 +79,7 @@ def ensure_data() -> None:
         log(f"Using existing data at {DATA_DIR}")
         return
 
-    dataset_slug = os.environ.get("KAGGLE_DATASET_SLUG", "tsp-data-v2")
+    dataset_slug = os.environ.get("KAGGLE_DATASET_SLUG", "tsp-data-v3")
     dataset_dir = _find_dataset_dir(dataset_slug)
     if dataset_dir is None:
         available = []
@@ -192,10 +192,28 @@ def stage_workdir() -> None:
     if proj_root != WORK_ROOT:
         shutil.copytree(proj_root / "src", WORK_ROOT / "src", dirs_exist_ok=True)
         shutil.copytree(proj_root / "configs", WORK_ROOT / "configs", dirs_exist_ok=True)
-    for name in ("requirements.txt", "configs_to_run.txt", "config.yaml"):
-        src = proj_root / name
-        if src.exists():
-            shutil.copy2(src, WORK_ROOT / name)
+
+    def _copy_with_fallbacks(name: str) -> None:
+        candidates = [
+            proj_root / name,
+            READ_ROOT / name,
+            proj_root / "kaggle" / "kernel" / name,
+            READ_ROOT / "kaggle" / "kernel" / name,
+        ]
+        for src in candidates:
+            if not src.exists():
+                continue
+            dst = WORK_ROOT / name
+            try:
+                if src.resolve() == dst.resolve():
+                    return
+            except Exception:
+                pass
+            shutil.copy2(src, dst)
+            return
+
+    for name in ("requirements.txt", "configs_to_run.txt"):
+        _copy_with_fallbacks(name)
 
 
 def resolve_configs() -> list[str]:
@@ -225,10 +243,19 @@ def resolve_configs() -> list[str]:
     if default.exists():
         return [str(default)]
 
-    cfgs = sorted((WORK_ROOT / "configs").glob("*.yaml"))
-    if not cfgs:
+    cfg_paths = sorted((WORK_ROOT / "configs").glob("*.yaml"))
+    if not cfg_paths:
         raise FileNotFoundError("No configs found in configs/")
-    return [str(cfgs[0])]
+    return [str(cfg_paths[0])]
+
+
+def prune_output_artifacts() -> None:
+    # Keep only experiment artifacts/logs in Kaggle output to reduce archive size.
+    for name in ("data", "cache"):
+        path = RUNS_DIR / name
+        if path.exists():
+            log(f"Pruning output artifact: {path}")
+            shutil.rmtree(path, ignore_errors=True)
 
 
 def main() -> None:
@@ -246,14 +273,21 @@ def main() -> None:
         ensure_data()
 
         cfgs = resolve_configs()
+        resolved_cfgs: list[str] = []
+        for cfg in cfgs:
+            p = Path(cfg)
+            if not p.exists():
+                raise FileNotFoundError(f"Config path does not exist: {cfg}")
+            resolved_cfgs.append(str(p))
+        cfgs = resolved_cfgs
+
         env = os.environ.copy()
         env["PYTHONPATH"] = str(WORK_ROOT / "src")
 
         for cfg in cfgs:
-            if os.environ.get("SKIP_TRAIN") != "1":
-                run([sys.executable, "-m", "tspgnn.cli", "--config", cfg, "train"], env=env, cwd=str(WORK_ROOT))
-            if os.environ.get("SKIP_EVAL") != "1":
-                run([sys.executable, "-m", "tspgnn.cli", "--config", cfg, "eval"], env=env, cwd=str(WORK_ROOT))
+            run([sys.executable, "-m", "tspgnn.cli", "--config", cfg, "train"], env=env, cwd=str(WORK_ROOT))
+            run([sys.executable, "-m", "tspgnn.cli", "--config", cfg, "eval"], env=env, cwd=str(WORK_ROOT))
+        prune_output_artifacts()
     finally:
         # Restore original streams before closing file to prevent shutdown-time tracebacks.
         sys.stdout = orig_stdout

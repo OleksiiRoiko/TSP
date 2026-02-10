@@ -63,6 +63,18 @@ def _git_hash(repo_root: Path) -> str | None:
     return ref or None
 
 
+def _forward_logits(model: torch.nn.Module, batch: dict[str, Any], device: torch.device) -> torch.Tensor:
+    x = batch["edge_feats"].to(device, non_blocking=True)
+    if bool(getattr(model, "requires_graph_context", False)):
+        edge_counts = batch.get("edge_counts", None)
+        coords = batch.get("coords", None)
+        if edge_counts is None or coords is None:
+            raise ValueError("Model requires graph context, but batch is missing edge_counts/coords")
+        coords_dev = [c.to(device, non_blocking=True) for c in coords]
+        return model(x, edge_counts=edge_counts, coords=coords_dev)
+    return model(x)
+
+
 def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, config_path: str | None = None):
     # ---- setup and validation ----
     train_root = Path(cfg.train_root)
@@ -76,13 +88,12 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     logger.info(f"Device: {device}")
     if device.type == "cuda":
         # Use fast Tensor Core math where possible (small numeric drift is expected).
-        if bool(getattr(cfg, "tf32", True)):
-            try:
-                torch.set_float32_matmul_precision("high")
-            except Exception:
-                pass
-            torch.backends.cuda.matmul.allow_tf32 = True
-            torch.backends.cudnn.allow_tf32 = True
+        try:
+            torch.set_float32_matmul_precision("high")
+        except Exception:
+            pass
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
         torch.backends.cudnn.benchmark = True
 
     # ---- datasets (complete graph, fixed 10-dim features) ----
@@ -112,7 +123,7 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         )
         return tr_loader, va_loader
 
-    num_workers = max(0, (os.cpu_count() or 1))
+    num_workers = max(0, min(8, (os.cpu_count() or 1)))
     tr, va = _make_loaders(num_workers)
 
     def _iter_loader(kind: str):
@@ -134,26 +145,18 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     overrides: dict[str, Any] = {"in_dim": 10}
     if cfg.hidden is not None:  overrides["hidden"]  = int(cfg.hidden)
     if cfg.dropout is not None: overrides["dropout"] = float(cfg.dropout)
-    if hasattr(cfg, "depth") and cfg.depth is not None:  # depth from config.yaml
+    if hasattr(cfg, "depth") and cfg.depth is not None:  # depth from train config
         overrides["depth"] = int(cfg.depth)
 
     model, mparams = build_model(cfg.model_name, overrides or None)
     model = cast(torch.nn.Module, model)
     model.to(device)
-    if bool(getattr(cfg, "compile_model", False)):
-        try:
-            c_mode = str(getattr(cfg, "compile_mode", "reduce-overhead"))
-            compiled = torch.compile(model, mode=c_mode)
-            model = cast(torch.nn.Module, compiled)
-            logger.info(f"torch.compile enabled (mode={c_mode})")
-        except Exception as e:
-            logger.warning(f"torch.compile disabled due to error: {e}")
     logger.info(f"Model: {cfg.model_name} | Params: {mparams}")
 
     # ---- optim + AMP (new API) ----
     lr_value = float(cfg.lr)
     wd_value = float(getattr(cfg, "weight_decay", 0.0))
-    use_fused_opt = bool(getattr(cfg, "fused_optimizer", True)) and (device.type == "cuda")
+    use_fused_opt = (device.type == "cuda")
     if use_fused_opt:
         try:
             opt = torch.optim.AdamW(
@@ -248,6 +251,7 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     meta_base = {
         "exp_id": cfg.exp_id,
         "model": cfg.model_name,
+        "model_params": dict(mparams),
         "in_dim": mparams["in_dim"],
         "hidden": mparams["hidden"],
         "dropout": mparams["dropout"],
@@ -263,10 +267,8 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         "early_stop": early_stop,
         "early_patience": early_patience,
         "early_min_delta": early_min_delta,
-        "tf32": bool(getattr(cfg, "tf32", True)),
-        "fused_optimizer": bool(getattr(cfg, "fused_optimizer", True)),
-        "compile_model": bool(getattr(cfg, "compile_model", False)),
-        "compile_mode": str(getattr(cfg, "compile_mode", "reduce-overhead")),
+        "tf32": (device.type == "cuda"),
+        "fused_optimizer": use_fused_opt,
         "epochs": cfg.epochs,
         "seed": cfg.seed,
         "train_root": str(train_root),
@@ -298,11 +300,10 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
             for b in _iter_loader("train"):
                 if b["labels"] is None:
                     raise ValueError("training data missing labels")
-                x = b["edge_feats"].to(device, non_blocking=True)
                 y = b["labels"].to(device, non_blocking=True)
                 opt.zero_grad(set_to_none=True)
                 with _amp_ctx():
-                    logits = model(x)
+                    logits = _forward_logits(model, b, device)
                     loss = _bce_balanced(logits, y)
                 scaler.scale(loss).backward()
                 scaler.step(opt)
@@ -319,10 +320,9 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
                 for b in _iter_loader("val"):
                     if b["labels"] is None:
                         raise ValueError("validation data missing labels")
-                    x = b["edge_feats"].to(device, non_blocking=True)
                     y = b["labels"].to(device, non_blocking=True)
                     with _amp_ctx():
-                        logits = model(x)
+                        logits = _forward_logits(model, b, device)
                         loss = _bce_balanced(logits, y)
                     vtot += float(loss.item()) * y.numel(); vcnt += y.numel()
                     pbar.update(1)

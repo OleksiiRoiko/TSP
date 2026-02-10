@@ -1,0 +1,7 @@
+﻿qa:
+  root: runs/data
+  check_gt: true
+  lengths: true
+  check_split_overlap: true
+  check_concorde: true
+  csv: runs/qa_report.csv

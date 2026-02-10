@@ -1,13 +1,13 @@
 from __future__ import annotations
 from pathlib import Path
 import gzip
-import importlib
 from typing import Iterable, cast
 import numpy as np
 from tsplib95.loaders import parse as _tsplib_parse
 from ..config import TsplibCfg
 from ..utils.io import save_npz, download_tsplib_file
-from ..utils.tour import tour_length
+from ..utils.elkai_solver import solve_with_elkai
+from ..utils.tour import tour_length, verify_tour
 
 def _read_text_maybe_gzip(path: Path) -> str:
     data = path.read_bytes()
@@ -36,18 +36,6 @@ def _parse_opt_tour(path: Path):
                     if val > 0:
                         seq.append(val - 1)
     return seq if seq else None
-
-def _elkai(coords: np.ndarray):
-    try:
-        elkai = importlib.import_module("elkai")
-    except Exception:
-        return None
-    try:
-        dist = np.sqrt(((coords[:,None,:]-coords[None,:,:])**2).sum(-1))
-        mat = (dist*10_000).astype(int)
-        return np.array(elkai.solve_int_matrix(mat.tolist()), dtype=np.int64)
-    except Exception:
-        return None
 
 def run(cfg: TsplibCfg, logger):
     raw_dir=Path(cfg.raw_root); out_dir=Path(cfg.out_root)
@@ -82,10 +70,18 @@ def run(cfg: TsplibCfg, logger):
         seq = _parse_opt_tour(raw_dir / f"{nm}.opt.tour")
         source="opt.tour"
         if not seq:
-            t=_elkai(coords)
+            t = solve_with_elkai(coords)
             if t is None: logger.error(f"{nm}: no opt.tour and elkai unavailable"); continue
             seq=t.tolist(); source="elkai"
         tour=np.asarray(seq, dtype=np.int64)
+        if not verify_tour(tour, coords.shape[0]):
+            logger.warning(f"{nm}: invalid tour parsed from {source}, trying elkai fallback")
+            t = solve_with_elkai(coords)
+            if t is None or not verify_tour(t, coords.shape[0]):
+                logger.error(f"{nm}: invalid tour and elkai fallback failed")
+                continue
+            tour = t
+            source = "elkai"
 
         def wlen(tt):
             L=0.0; n=len(tt)

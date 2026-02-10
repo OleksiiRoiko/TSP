@@ -11,6 +11,7 @@ from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import greedy_cycle_from_edges, two_opt
 from ..utils.run_paths import resolve_model_path, infer_run_dir, dataset_tag
 from ..models.registry import build_model_from_state, load_weights_flex
+from ..models.inference import load_state_dict, predict_logits
 
 
 def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
@@ -58,10 +59,10 @@ def run(cfg: VisualizeCfg, logger):
     if any(mode == "predict" for mode, _, _, _ in targets):
         model_path_cfg = Path(cfg.model)
         mp = resolve_model_path(model_path_cfg)
-        state = torch.load(mp, map_location="cpu")
+        state = load_state_dict(mp)
         model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
         logger.info(f"Viz model params: {mparams}")
-        load_weights_flex(model, state, logger=logger)
+        load_weights_flex(model, state, logger=logger, require_all_matched=True)
         dev = torch.device("cpu" if cfg.device == "cpu" or not torch.cuda.is_available() else "cuda")
         model.to(dev).eval()
         run_dir = infer_run_dir(model_path_cfg, mp)
@@ -118,7 +119,7 @@ def run(cfg: VisualizeCfg, logger):
                 Ebg = complete_edges(C.shape[0])
                 F = edge_features(C, Ebg, feature_dim=mparams["in_dim"])
                 with torch.no_grad():
-                    s = model(torch.from_numpy(F).float().to(dev)).cpu().numpy()
+                    s = predict_logits(model, F, C, dev)
                 pred = greedy_cycle_from_edges(C.shape[0], Ebg, s)
                 pred = two_opt(C, pred, max_passes=20)
 

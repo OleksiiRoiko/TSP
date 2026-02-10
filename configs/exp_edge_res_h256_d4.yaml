@@ -1,24 +1,13 @@
-﻿base: ../config.yaml
-
 train:
   exp_id: exp_edge_res_h256_d4
   model_name: edge_res_mlp
-  epochs: 15
-  batch_size: 48
+  batch_size: 64
   hidden: 256
   dropout: 0.05
   depth: 4
   lr: 0.0005
   weight_decay: 0.00005
-  lr_scheduler: plateau
-  lr_factor: 0.5
-  lr_patience: 2
-  lr_min: 1.0e-6
-  early_stop: true
-  early_patience: 4
-  early_min_delta: 0.00003
-  tf32: true
-  fused_optimizer: true
+
   train_root: runs/data/synthetic/train
   val_root: runs/data/synthetic/val
 
@@ -37,3 +26,4 @@ visualize:
     - npz_dir: runs/data/synthetic/test
       limit: 5
   out_dir: auto
+
