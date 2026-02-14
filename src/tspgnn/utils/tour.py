@@ -74,6 +74,56 @@ def two_opt(coords: np.ndarray, tour: np.ndarray, max_passes: int=20) -> np.ndar
             if improved: break
     return T
 
+
+def decode_tour_from_edge_scores(
+    coords: np.ndarray,
+    edges: np.ndarray,
+    scores: np.ndarray,
+    *,
+    run_twoopt: bool = True,
+    twoopt_passes: int = 20,
+    multistart: int = 1,
+    noise_std: float = 0.0,
+    seed: int = 0,
+) -> np.ndarray:
+    """
+    Decode tour from edge scores with optional multi-start perturbations.
+
+    Default settings preserve previous behavior:
+      multistart=1, noise_std=0.0 -> greedy_cycle_from_edges (+ optional 2-opt)
+    """
+    C = np.asarray(coords, dtype=np.float32)
+    E = np.asarray(edges, dtype=np.int64)
+    S = np.asarray(scores, dtype=np.float64)
+
+    n_starts = max(1, int(multistart))
+    sigma = max(0.0, float(noise_std))
+    passes = max(1, int(twoopt_passes))
+    rng = np.random.default_rng(int(seed))
+
+    best_tour = None
+    best_len = float("inf")
+    for k in range(n_starts):
+        if k == 0 or sigma <= 0.0:
+            sc = S
+        else:
+            sc = S + rng.normal(loc=0.0, scale=sigma, size=S.shape)
+
+        pred = greedy_cycle_from_edges(C.shape[0], E, sc)
+        if run_twoopt:
+            pred = two_opt(C, pred, max_passes=passes)
+
+        L = float(tour_length(C, pred))
+        if L < best_len:
+            best_len = L
+            best_tour = pred
+
+    if best_tour is None:
+        best_tour = greedy_cycle_from_edges(C.shape[0], E, S)
+        if run_twoopt:
+            best_tour = two_opt(C, best_tour, max_passes=passes)
+    return np.asarray(best_tour, dtype=np.int64)
+
 def _pair_iter(tour: np.ndarray):
     n = len(tour)
     for i in range(n):

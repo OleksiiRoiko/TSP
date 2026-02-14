@@ -147,6 +147,12 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
     if cfg.dropout is not None: overrides["dropout"] = float(cfg.dropout)
     if hasattr(cfg, "depth") and cfg.depth is not None:  # depth from train config
         overrides["depth"] = int(cfg.depth)
+    if getattr(cfg, "n_heads", None) is not None:
+        overrides["n_heads"] = int(getattr(cfg, "n_heads"))
+    if getattr(cfg, "ff_mult", None) is not None:
+        overrides["ff_mult"] = int(getattr(cfg, "ff_mult"))
+    if getattr(cfg, "edge_feat_mode", None) is not None:
+        overrides["edge_feat_mode"] = str(getattr(cfg, "edge_feat_mode")).lower()
 
     model, mparams = build_model(cfg.model_name, overrides or None)
     model = cast(torch.nn.Module, model)
@@ -256,6 +262,9 @@ def run(cfg: TrainCfg, logger, *, full_config: Dict[str, Any] | None = None, con
         "hidden": mparams["hidden"],
         "dropout": mparams["dropout"],
         "depth": mparams.get("depth"),
+        "n_heads": mparams.get("n_heads"),
+        "ff_mult": mparams.get("ff_mult"),
+        "edge_feat_mode": mparams.get("edge_feat_mode"),
         "batch_size": cfg.batch_size,
         "lr": cfg.lr,
         "weight_decay": getattr(cfg, "weight_decay", 0.0),

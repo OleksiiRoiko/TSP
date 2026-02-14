@@ -1,8 +1,5 @@
 # One config per line, relative to this folder.
-# Kaggle split: 6 heavier configs (4 lighter configs run locally).
-configs/exp_edge_mlp_h256_d2.yaml
-configs/exp_edge_mlp_h256_d3.yaml
-configs/exp_edge_res_h256_d4.yaml
-configs/exp_edge_mlp_h256_d2_ccv1.yaml
-configs/exp_edge_mlp_h256_d3_ccv1.yaml
-configs/exp_edge_res_h256_d4_ccv1.yaml
+# Current Kaggle run: v2 transformer features + multi-start decode.
+configs/exp_edge_tf_h128_d3_relv2_ms_ccv1.yaml
+configs/exp_edge_tf_h256_d4_relv2_ms_ccv1.yaml
+configs/exp_edge_tf_h256_d5_relv2_ms_ccv1.yaml

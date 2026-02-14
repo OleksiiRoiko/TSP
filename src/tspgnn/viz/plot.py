@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+import json
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
@@ -8,7 +9,7 @@ from tqdm import tqdm
 from ..config import VisualizeCfg
 from ..utils.io import load_npz
 from ..utils.geom import complete_edges, edge_features
-from ..utils.tour import greedy_cycle_from_edges, two_opt
+from ..utils.tour import decode_tour_from_edge_scores
 from ..utils.run_paths import resolve_model_path, infer_run_dir, dataset_tag
 from ..models.registry import build_model_from_state, load_weights_flex
 from ..models.inference import load_state_dict, predict_logits
@@ -33,6 +34,40 @@ def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
         plt.close(fig)
     else:
         plt.show()
+
+
+def _extract_model_overrides(meta_path: Path) -> tuple[str | None, dict | None]:
+    if not meta_path.exists():
+        return None, None
+    try:
+        data = json.loads(meta_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None, None
+    if not isinstance(data, dict):
+        return None, None
+
+    model_params = data.get("model_params", None)
+    if not isinstance(model_params, dict):
+        return None, None
+
+    params = dict(model_params)
+    prefer_name_raw = params.pop("model_name", data.get("model", None))
+    prefer_name = str(prefer_name_raw).lower() if prefer_name_raw else None
+    return prefer_name, (params or None)
+
+
+def _model_overrides_from_metadata(model_path_cfg: Path, resolved_model_path: Path) -> tuple[str | None, dict | None]:
+    if model_path_cfg.suffix.lower() == ".json":
+        pref, ov = _extract_model_overrides(model_path_cfg)
+        if pref is not None or ov is not None:
+            return pref, ov
+
+    if resolved_model_path.exists():
+        pref, ov = _extract_model_overrides(resolved_model_path.parent / "meta.json")
+        if pref is not None or ov is not None:
+            return pref, ov
+
+    return None, None
 
 
 def run(cfg: VisualizeCfg, logger):
@@ -60,7 +95,8 @@ def run(cfg: VisualizeCfg, logger):
         model_path_cfg = Path(cfg.model)
         mp = resolve_model_path(model_path_cfg)
         state = load_state_dict(mp)
-        model, mparams = build_model_from_state(state, prefer_name=None, overrides=None)
+        prefer_name, overrides = _model_overrides_from_metadata(model_path_cfg, mp)
+        model, mparams = build_model_from_state(state, prefer_name=prefer_name, overrides=overrides)
         logger.info(f"Viz model params: {mparams}")
         load_weights_flex(model, state, logger=logger, require_all_matched=True)
         dev = torch.device("cpu" if cfg.device == "cpu" or not torch.cuda.is_available() else "cuda")
@@ -106,7 +142,7 @@ def run(cfg: VisualizeCfg, logger):
         if model is None or mparams is None or dev is None:
             logger.error("predict mode requested but model is not loaded")
             continue
-        for f in tqdm(files, ncols=100):
+        for idx, f in enumerate(tqdm(files, ncols=100)):
             try:
                 d = load_npz(f)
                 C = d["coords"].astype(np.float32)
@@ -120,8 +156,16 @@ def run(cfg: VisualizeCfg, logger):
                 F = edge_features(C, Ebg, feature_dim=mparams["in_dim"])
                 with torch.no_grad():
                     s = predict_logits(model, F, C, dev)
-                pred = greedy_cycle_from_edges(C.shape[0], Ebg, s)
-                pred = two_opt(C, pred, max_passes=20)
+                pred = decode_tour_from_edge_scores(
+                    C,
+                    Ebg,
+                    s,
+                    run_twoopt=True,
+                    twoopt_passes=int(getattr(cfg, "decode_twoopt_passes", 20)),
+                    multistart=int(getattr(cfg, "decode_multistart", 1)),
+                    noise_std=float(getattr(cfg, "decode_noise_std", 0.0)),
+                    seed=int(getattr(cfg, "seed", 0)) + (idx * 9973),
+                )
 
                 _render(C, gt, pred, Ebg, out_dir / f"{f.stem}.png", figsize=cfg.figsize, dpi=int(cfg.dpi))
             except Exception as e:

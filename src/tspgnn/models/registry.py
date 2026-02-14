@@ -29,7 +29,15 @@ def build_model(name: str, overrides: Dict[str, Any] | None = None) -> Tuple[tor
         cls = EdgeMLPAny
     elif canonical == "edge_transformer":
         canonical = "edge_transformer"
-        params = dict(in_dim=10, hidden=128, dropout=0.1, depth=3, n_heads=4, ff_mult=4)
+        params = dict(
+            in_dim=10,
+            hidden=128,
+            dropout=0.1,
+            depth=3,
+            n_heads=4,
+            ff_mult=4,
+            edge_feat_mode="full",
+        )
         cls = EdgeTransformer
     elif canonical == "edge_res_mlp":
         canonical = "edge_res_mlp"
@@ -104,6 +112,7 @@ def _infer_edge_transformer_params_from_state(state: Dict[str, torch.Tensor]) ->
         "dropout": 0.1,
         "n_heads": 4,
         "ff_mult": 4,
+        "edge_feat_mode": "full",
     }
 
 

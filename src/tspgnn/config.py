@@ -109,6 +109,10 @@ class TrainCfg(BaseModel):
     hidden: Optional[int] = 128
     dropout: Optional[float] = 0.0
     depth: int = 2   # NEW: number of hidden layers
+    # Transformer-specific overrides (optional)
+    n_heads: Optional[int] = None
+    ff_mult: Optional[int] = None
+    edge_feat_mode: Optional[str] = None
 
     @field_validator("model_name")
     @classmethod
@@ -129,6 +133,35 @@ class TrainCfg(BaseModel):
             raise ValueError(f"lr_scheduler must be one of {sorted(allowed)}")
         return vv
 
+    @field_validator("n_heads")
+    @classmethod
+    def _n_heads_ok(cls, v: Optional[int]) -> Optional[int]:
+        if v is None:
+            return None
+        if int(v) < 1:
+            raise ValueError("n_heads must be >= 1")
+        return int(v)
+
+    @field_validator("ff_mult")
+    @classmethod
+    def _ff_mult_ok(cls, v: Optional[int]) -> Optional[int]:
+        if v is None:
+            return None
+        if int(v) < 1:
+            raise ValueError("ff_mult must be >= 1")
+        return int(v)
+
+    @field_validator("edge_feat_mode")
+    @classmethod
+    def _edge_feat_mode_ok(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        vv = str(v).lower()
+        allowed = {"full", "relative", "relative_sincos", "relative_sincos_v2"}
+        if vv not in allowed:
+            raise ValueError(f"edge_feat_mode must be one of {sorted(allowed)}")
+        return vv
+
 class EvalCfg(BaseModel):
     model_path: str = "runs/experiments/edge_mlp_v1/latest.json"
     data_roots: List[str] = ["runs/data/tsplib/processed"]
@@ -136,7 +169,32 @@ class EvalCfg(BaseModel):
     save_json: Optional[str] = "auto"
     save_pred_tour: bool = False
     run_twoopt: bool = True
+    decode_multistart: int = 1
+    decode_noise_std: float = 0.0
+    decode_twoopt_passes: int = 20
     seed: int = 0
+
+    @field_validator("decode_multistart")
+    @classmethod
+    def _decode_multistart_ok(cls, v: int) -> int:
+        if int(v) < 1:
+            raise ValueError("decode_multistart must be >= 1")
+        return int(v)
+
+    @field_validator("decode_noise_std")
+    @classmethod
+    def _decode_noise_ok(cls, v: float) -> float:
+        vv = float(v)
+        if vv < 0.0:
+            raise ValueError("decode_noise_std must be >= 0.0")
+        return vv
+
+    @field_validator("decode_twoopt_passes")
+    @classmethod
+    def _twoopt_passes_ok(cls, v: int) -> int:
+        if int(v) < 1:
+            raise ValueError("decode_twoopt_passes must be >= 1")
+        return int(v)
 
 
 class VisualizeTargetCfg(BaseModel):
@@ -152,7 +210,33 @@ class VisualizeCfg(BaseModel):
     figsize: List[float] = [11.0, 5.5]
     dpi: int = 150
     device: str = "cpu"
+    decode_multistart: int = 1
+    decode_noise_std: float = 0.0
+    decode_twoopt_passes: int = 20
+    seed: int = 0
     targets: List[VisualizeTargetCfg] = []
+
+    @field_validator("decode_multistart")
+    @classmethod
+    def _viz_decode_multistart_ok(cls, v: int) -> int:
+        if int(v) < 1:
+            raise ValueError("visualize.decode_multistart must be >= 1")
+        return int(v)
+
+    @field_validator("decode_noise_std")
+    @classmethod
+    def _viz_decode_noise_ok(cls, v: float) -> float:
+        vv = float(v)
+        if vv < 0.0:
+            raise ValueError("visualize.decode_noise_std must be >= 0.0")
+        return vv
+
+    @field_validator("decode_twoopt_passes")
+    @classmethod
+    def _viz_twoopt_passes_ok(cls, v: int) -> int:
+        if int(v) < 1:
+            raise ValueError("visualize.decode_twoopt_passes must be >= 1")
+        return int(v)
 
 
 class QACfg(BaseModel):

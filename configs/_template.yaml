@@ -6,6 +6,10 @@ train:
   hidden: 128
   depth: 2
   dropout: 0.0
+  # Transformer-only (optional):
+  # n_heads: 8
+  # ff_mult: 3
+  # edge_feat_mode: relative_sincos_v2  # full | relative | relative_sincos | relative_sincos_v2
 
   # Optional training overrides
   # Default training flow is simple:
@@ -23,21 +27,26 @@ train:
   # train_root: runs/data/synthetic/train
   # val_root: runs/data/synthetic/val
 
-# Evaluate on both TSPLIB and synthetic test in one run
+# Evaluate on TSPLIB (recommended for leaderboard-style comparison)
 eval:
   device: cuda
   model_path: runs/experiments/{exp_id}/latest.json
   # save_pred_tour: false   # keep eval JSON compact
+  # Decode options (defaults keep old behavior):
+  # decode_multistart: 1
+  # decode_noise_std: 0.0
+  # decode_twoopt_passes: 20
   data_roots:
     - runs/data/tsplib/processed
-    - runs/data/synthetic/test
 
-# Visualize: all TSPLIB instances + 5 synthetic test instances
+# Visualize: all TSPLIB instances
 visualize:
   model: runs/experiments/{exp_id}/latest.json
+  # Decode options for predict-mode figures:
+  # decode_multistart: 1
+  # decode_noise_std: 0.0
+  # decode_twoopt_passes: 20
   targets:
     - npz_dir: runs/data/tsplib/processed
       limit: 0
-    - npz_dir: runs/data/synthetic/test
-      limit: 5
   out_dir: auto

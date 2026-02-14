@@ -93,46 +93,48 @@ Multi-dataset runs:
 - `eval.data_roots` evaluates multiple datasets in one command
 - `visualize.targets` renders multiple datasets in one command (required)
 
-## Kaggle Output (Download/Extract)
+## Kaggle Output (Download/Merge)
 
-PowerShell UTF-8 (avoids `charmap` console errors):
+Current Kaggle CLI layout in this project:
 ```
-[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
-$OutputEncoding = [Console]::OutputEncoding
-$env:PYTHONIOENCODING = "utf-8"
+kaggle/output/TSP/...
 ```
+(files are downloaded directly, not only as `_output_.zip`).
 
-Download kernel output:
+Download output using kernel id from metadata:
 ```
-kaggle kernels output <owner>/<kernel-slug> -p kaggle/output --force
-```
-
-Extract only useful artifacts (fast, no full unpack):
-```
-tar -xf kaggle/output/_output_.zip -C kaggle/output/unpacked `
-  TSP/runs/experiments TSP/runs/logs TSP/runs/kaggle_run.log
+$id = (Get-Content kaggle/kernel/kernel-metadata.json | ConvertFrom-Json).id
+kaggle kernels output $id -p kaggle/output --force
 ```
 
-If full extraction is needed:
+If Kaggle CLI fails with proxy errors, run once with proxy vars cleared:
 ```
-Expand-Archive -LiteralPath kaggle/output/_output_.zip `
-  -DestinationPath kaggle/output/unpacked -Force
-```
-
-Merge Kaggle artifacts into local `runs` (single source of truth):
-```
-robocopy kaggle\output\unpacked\TSP\runs\experiments runs\experiments /E
-robocopy kaggle\output\unpacked\TSP\runs\logs runs\logs /E
+$env:HTTP_PROXY=''; $env:HTTPS_PROXY=''; $env:ALL_PROXY=''
+$env:http_proxy=''; $env:https_proxy=''; $env:all_proxy=''
+kaggle kernels output $id -p kaggle/output --force
 ```
 
-Quick verify after merge:
+Merge Kaggle artifacts into local `runs`:
+```
+robocopy kaggle\output\TSP\runs\experiments runs\experiments /E
+robocopy kaggle\output\TSP\runs\logs runs\logs /E
+Copy-Item kaggle\output\TSP\runs\kaggle_run.log runs\logs\kaggle_run_latest.log -Force
+```
+
+Quick verify:
 ```
 Get-ChildItem runs\experiments | Select-Object Name,LastWriteTime
+Get-ChildItem runs\logs | Select-Object Name,LastWriteTime
 ```
 
-Cleanup temporary Kaggle output files:
+Optional cleanup:
 ```
-if (Test-Path kaggle\output\unpacked) { Remove-Item -Recurse -Force kaggle\output\unpacked }
-if (Test-Path kaggle\output\_output_.zip) { Remove-Item -Force kaggle\output\_output_.zip }
+if (Test-Path kaggle\output\TSP) { Remove-Item -Recurse -Force kaggle\output\TSP }
 if (Test-Path kaggle\output\tsp-train-eval.log) { Remove-Item -Force kaggle\output\tsp-train-eval.log }
+if (Test-Path kaggle\output\_output_.zip) { Remove-Item -Force kaggle\output\_output_.zip }
+```
+
+Legacy fallback (if Kaggle returns `_output_.zip`):
+```
+Expand-Archive -LiteralPath kaggle/output/_output_.zip -DestinationPath kaggle/output/unpacked -Force
 ```

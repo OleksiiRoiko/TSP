@@ -30,8 +30,15 @@ Notes:
 - You can use `{exp_id}` in string fields (auto-replaced by train.exp_id)
 - `eval.data_roots` lets you evaluate multiple datasets in a single run
 - `eval.save_pred_tour` controls whether per-instance tours are stored in eval JSON (default: false)
+- Decode defaults are backward-compatible (`decode_multistart: 1`, `decode_noise_std: 0.0`).
+  Enable stronger decoding by setting e.g. `decode_multistart: 8` + `decode_noise_std: 0.01`.
 - `visualize.targets` is required and lets you render multiple datasets in a single run
 - Available model names: `edge_mlp`, `edge_mlp_deep`, `edge_res_mlp`, `edge_transformer`
+- `edge_transformer.edge_feat_mode` options:
+  - `full` (legacy default)
+  - `relative`
+  - `relative_sincos` (legacy compatible layout used in older experiments)
+  - `relative_sincos_v2` (new dense relative layout without zero-only channels)
 - QA includes `qa.check_split_overlap` (enabled by default) to detect duplicate samples across train/val/test.
 - Active experiment set is reduced to 10 configs (5 synthetic + 5 concorde/ccv1) to avoid redundant runs.
 - Split:
@@ -56,5 +63,14 @@ Active experiments:
   `exp_edge_res_h256_d4_ccv1.yaml`
 
 Optional graph-aware (ccv1):
-- `exp_edge_tf_h128_d3_ccv1.yaml`
-- `exp_edge_tf_h256_d4_ccv1.yaml`
+- Baselines:
+  - `exp_edge_tf_h128_d3_ccv1.yaml`
+  - `exp_edge_tf_h256_d4_ccv1.yaml`
+- Optimized variants (relative edge mode + TSPLIB-only eval):
+  - `exp_edge_tf_h192_d4_relsc_ccv1.yaml`
+  - `exp_edge_tf_h256_d5_relsc_ccv1.yaml`
+  - `exp_edge_tf_h320_d3_relsc_ccv1.yaml`
+- New variants (`relative_sincos_v2` + multi-start decode), preserving old experiment semantics:
+  - `exp_edge_tf_h128_d3_relv2_ms_ccv1.yaml`
+  - `exp_edge_tf_h256_d4_relv2_ms_ccv1.yaml`
+  - `exp_edge_tf_h256_d5_relv2_ms_ccv1.yaml`
