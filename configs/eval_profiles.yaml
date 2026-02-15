@@ -1,0 +1,15 @@
+eval_profiles:
+  baseline:
+    description: "Historical baseline decode settings for fair comparisons."
+    run_twoopt: true
+    decode_multistart: 1
+    decode_noise_std: 0.0
+    decode_twoopt_passes: 20
+
+  optimized:
+    description: "Stronger shared decode settings used for TF re-eval."
+    run_twoopt: true
+    decode_multistart: 8
+    decode_noise_std: 0.02
+    decode_twoopt_passes: 40
+

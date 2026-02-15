@@ -32,6 +32,9 @@ Notes:
 - `eval.save_pred_tour` controls whether per-instance tours are stored in eval JSON (default: false)
 - Decode defaults are backward-compatible (`decode_multistart: 1`, `decode_noise_std: 0.0`).
   Enable stronger decoding by setting e.g. `decode_multistart: 8` + `decode_noise_std: 0.01`.
+- Canonical decode profiles are stored in `configs/eval_profiles.yaml`:
+  - `baseline`: `run_twoopt=true`, `multistart=1`, `noise=0.0`, `twoopt_passes=20`
+  - `optimized`: `run_twoopt=true`, `multistart=8`, `noise=0.02`, `twoopt_passes=40`
 - `visualize.targets` is required and lets you render multiple datasets in a single run
 - Available model names: `edge_mlp`, `edge_mlp_deep`, `edge_res_mlp`, `edge_transformer`
 - `edge_transformer.edge_feat_mode` options:

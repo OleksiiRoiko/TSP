@@ -254,6 +254,38 @@ class QACfg(BaseModel):
     csv: Optional[str] = "runs/qa_report.csv"
 
 
+class AnalyzeCfg(BaseModel):
+    experiments_root: str = "runs/experiments"
+    out_dir: str = "runs/analysis"
+    exp_glob: str = "exp_edge_*"
+    eval_files: List[str] = [
+        "eval_tsplib.json",
+        "eval_tsplib_baseline.json",
+        "eval_tsplib_optimized.json",
+    ]
+    primary_eval: str = "eval_tsplib.json"
+
+    @field_validator("eval_files")
+    @classmethod
+    def _eval_files_ok(cls, v: List[str]) -> List[str]:
+        vals = [str(x).strip() for x in v if str(x).strip()]
+        if not vals:
+            raise ValueError("analyze.eval_files must contain at least one filename")
+        if any(not x.lower().endswith(".json") for x in vals):
+            raise ValueError("analyze.eval_files entries must be .json files")
+        return vals
+
+    @field_validator("primary_eval")
+    @classmethod
+    def _primary_eval_ok(cls, v: str) -> str:
+        vv = str(v).strip()
+        if not vv:
+            raise ValueError("analyze.primary_eval must be non-empty")
+        if not vv.lower().endswith(".json"):
+            raise ValueError("analyze.primary_eval must be a .json file")
+        return vv
+
+
 class AppCfg(BaseModel):
     generate: GenerateCfg = GenerateCfg()
     tsplib: TsplibCfg = TsplibCfg()
@@ -261,6 +293,7 @@ class AppCfg(BaseModel):
     eval: EvalCfg = EvalCfg()
     visualize: VisualizeCfg = VisualizeCfg()
     qa: QACfg = QACfg()
+    analyze: AnalyzeCfg = AnalyzeCfg()
 
 
 # -----------------------------

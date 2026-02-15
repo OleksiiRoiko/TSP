@@ -19,9 +19,15 @@ eval:
   model_path: runs/experiments/{exp_id}/latest.json
   data_roots:
     - runs/data/tsplib/processed
+  decode_multistart: 8
+  decode_noise_std: 0.02
+  decode_twoopt_passes: 40
 
 visualize:
   model: runs/experiments/{exp_id}/latest.json
+  decode_multistart: 8
+  decode_noise_std: 0.02
+  decode_twoopt_passes: 40
   targets:
     - npz_dir: runs/data/tsplib/processed
       limit: 0

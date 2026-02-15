@@ -1,0 +1,9 @@
+analyze:
+  experiments_root: runs/experiments
+  out_dir: runs/analysis
+  exp_glob: exp_edge_*
+  eval_files:
+    - eval_tsplib.json
+    - eval_tsplib_baseline.json
+    - eval_tsplib_optimized.json
+  primary_eval: eval_tsplib.json

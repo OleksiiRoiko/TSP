@@ -7,6 +7,7 @@ from .data.tsplib import run as cmd_tsplib
 from .training.train import run as cmd_train
 from .eval.evaluate import run as cmd_eval, run_qa as cmd_qa
 from .viz.plot import run as cmd_visualize
+from .analysis.report import run as cmd_analyze
 
 def main():
     p = argparse.ArgumentParser(prog="tspgnn", description="TSP-GNN unified CLI")
@@ -18,6 +19,7 @@ def main():
     sp.add_parser("visualize")
     sp.add_parser("qa")
     sp.add_parser("train")
+    sp.add_parser("analyze")
     args = p.parse_args()
 
     cfg = load_config(args.config)  # YAML -> validated dataclasses
@@ -40,6 +42,9 @@ def main():
     elif args.cmd == "qa":
         logger = setup_logger("qa", "runs/logs/qa.log")
         cmd_qa(cfg.qa, logger)
+    elif args.cmd == "analyze":
+        logger = setup_logger("analyze", "runs/logs/analyze.log")
+        cmd_analyze(cfg.analyze, logger)
 
 if __name__ == "__main__":
     main()
