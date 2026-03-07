@@ -1,0 +1,132 @@
+\documentclass[12pt,a4paper,twoside,openany]{report}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{slovak}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Consolas}
+
+% Odporúčané nastavenie podľa IS 1/2024 (čl. 7):
+% vnútorný okraj 3,5 cm; vonkajší okraj 2 cm; horný a dolný 2,5 cm; päta 1,25 cm.
+% Pri obojstrannej tlači sa používajú zrkadlové okraje.
+\usepackage[
+    a4paper,
+    inner=35mm,
+    outer=20mm,
+    top=25mm,
+    bottom=25mm,
+    footskip=12.5mm
+]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{indentfirst}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{amsmath,amssymb}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric}
+\usetikzlibrary{backgrounds,decorations.pathreplacing}
+\usepackage[hidelinks,pdfpagelayout=SinglePage]{hyperref}
+\usepackage[indentafter]{titlesec}
+\usepackage[
+    backend=biber,
+    style=apa,
+    sorting=nyt
+]{biblatex}
+\addbibresource{references.bib}
+
+% Formátovanie nadpisov podľa odporúčania v smernici:
+% 1. úroveň 16b/Bold, 2. úroveň 14b/Bold, 3. úroveň 14b/Italic.
+\titleformat{\chapter}
+  {\bfseries\fontsize{16pt}{19pt}\selectfont}
+  {\thechapter}{1em}{}
+\titleformat{\section}
+  {\bfseries\fontsize{14pt}{17pt}\selectfont}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\itshape\fontsize{14pt}{17pt}\selectfont}
+  {\thesubsection}{1em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+\titlespacing{\section}{0pt}{18pt}{8pt}
+\titlespacing{\subsection}{0pt}{14pt}{6pt}
+
+% Obsah v štýle vzoru (Príloha 4): "O B S A H" + "str." vpravo.
+\makeatletter
+\renewcommand{\contentsname}{O B S A H}
+\renewcommand{\tableofcontents}{%
+  \chapter*{\contentsname\hfill str.}%
+  \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}%
+  \@starttoc{toc}%
+}
+% Ulozenie povodneho stylu "plain", aby sa dal obnovit od casti Uvod.
+\let\ps@origplain\ps@plain
+\makeatother
+
+\input{metadata.tex}
+
+\begin{document}
+
+% Číslovanie začína od titulného listu, ale zobrazí sa až od časti Úvod.
+\pagenumbering{arabic}
+\pagestyle{empty}
+% Pred castou Uvod pouzijeme jednostrannu geometriu (bez zrkadlenia okrajov).
+\newgeometry{
+  asymmetric,
+  left=35mm,
+  right=20mm,
+  top=25mm,
+  bottom=25mm,
+  footskip=12.5mm
+}
+% V uvodnej casti skryjeme cisla aj na stranach, kde chapter* vynucuje "plain".
+\makeatletter
+\let\ps@plain\ps@empty
+\makeatother
+
+\include{frontmatter/01_obal}
+\include{frontmatter/02_titulny_list}
+
+% Voliteľné strany:
+\include{frontmatter/03_podakovanie}
+% \includepdf[pages=-]{frontmatter/zadanie.pdf}
+
+\include{frontmatter/04_abstrakt_sk}
+\include{frontmatter/05_abstrakt_en}
+
+\tableofcontents
+\clearpage
+
+% Od casti Uvod zapneme geometriu so zrkadlovymi okrajmi.
+\newgeometry{
+  inner=35mm,
+  outer=20mm,
+  top=25mm,
+  bottom=25mm,
+  footskip=12.5mm
+}
+% Od casti Uvod obnovime standardny "plain" so zobrazenim cisel stran.
+\makeatletter
+\let\ps@plain\ps@origplain
+\makeatother
+\pagestyle{plain}
+
+\include{chapters/01_uvod}
+\include{chapters/02_sucasny_stav}
+\include{chapters/03_ciel_metodika}
+\include{chapters/04_vysledky_diskusia}
+\include{chapters/05_zaver}
+
+\printbibliography[title={Zoznam použitej literatúry}]
+
+\appendix
+\include{appendix/A_prilohy}
+
+\end{document}

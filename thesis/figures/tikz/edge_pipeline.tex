@@ -1,0 +1,37 @@
+\begin{tikzpicture}[
+    node distance=0.85cm and 0.65cm,
+    box/.style={
+        draw,
+        rounded corners,
+        align=center,
+        minimum width=1.95cm,
+        minimum height=0.82cm,
+        inner sep=3pt
+    },
+    arrow/.style={-{Latex[length=2mm]}, thick}
+]
+
+% horný riadok
+\node[box] (input) {Vstupná\\ inštancia};
+\node[box, right=of input] (graph) {Úplný\\ graf};
+\node[box, right=of graph] (features) {Príznaky\\ hrán};
+\node[box, right=of features] (model) {Neurónový\\ model};
+\node[box, right=of model] (scores) {Skóre\\ hrán};
+
+% dolný riadok – kompaktnejší a centrovaný
+\node[box, below=1.1cm of model] (decode) {Dekódovanie};
+\node[box, left=of decode] (opt) {2-opt / lokálne\\ zlepšenie};
+\node[box, left=of opt] (route) {Finálna\\ trasa};
+
+% šípky horný riadok
+\draw[arrow] (input) -- (graph);
+\draw[arrow] (graph) -- (features);
+\draw[arrow] (features) -- (model);
+\draw[arrow] (model) -- (scores);
+
+% prechod dole a dokončenie pipeline
+\draw[arrow] (scores) |- (decode);
+\draw[arrow] (decode) -- (opt);
+\draw[arrow] (opt) -- (route);
+
+\end{tikzpicture}

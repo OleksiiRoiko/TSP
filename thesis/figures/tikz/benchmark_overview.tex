@@ -1,0 +1,30 @@
+\begin{tikzpicture}[
+    node distance=1.5cm and 1.3cm,
+    box/.style={
+        draw,
+        rounded corners,
+        align=center,
+        minimum width=3.3cm,
+        minimum height=1cm
+    },
+    arrow/.style={-{Latex[length=2.5mm]}, thick}
+]
+
+\node[box] (data) {Dátové zdroje\\ pre hodnotenie};
+
+\node[box, below left=of data] (synthetic) {Syntetické\\ inštancie};
+\node[box, below right=of data] (tsplib) {TSPLIB\\ benchmarky};
+
+\node[box, below=of synthetic] (train) {Tréning a\\ experimentovanie};
+\node[box, below=of tsplib] (eval) {Nezávislé\\ hodnotenie};
+
+\node[box, below=1.7cm of $(train)!0.5!(eval)$] (ref) {Referenčné riešenia\\ a optimality gap};
+
+\draw[arrow] (data) -- (synthetic);
+\draw[arrow] (data) -- (tsplib);
+\draw[arrow] (synthetic) -- (train);
+\draw[arrow] (tsplib) -- (eval);
+\draw[arrow] (train) |- (ref);
+\draw[arrow] (eval) |- (ref);
+
+\end{tikzpicture}

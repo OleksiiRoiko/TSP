@@ -1,0 +1,26 @@
+\begin{tikzpicture}[
+    node distance=1.4cm and 1.6cm,
+    box/.style={
+        draw,
+        rounded corners,
+        align=center,
+        minimum width=3.2cm,
+        minimum height=0.95cm
+    },
+    arrow/.style={-{Latex[length=2.5mm]}, thick}
+]
+
+\node[box] (tsp) {Prístupy k riešeniu TSP};
+
+\node[box, below left=of tsp] (exact) {Presné\\ metódy};
+\node[box, below=of tsp] (heur) {Heuristiky a\\ metaheuristiky};
+\node[box, below right=of tsp] (ml) {Dátovo riadené\\ prístupy};
+\node[box, below=of heur] (hybrid) {Hybridné\\ prístupy};
+
+\draw[arrow] (tsp) -- (exact);
+\draw[arrow] (tsp) -- (heur);
+\draw[arrow] (tsp) -- (ml);
+\draw[arrow] (heur) -- (hybrid);
+\draw[arrow] (ml) -- (hybrid);
+
+\end{tikzpicture}
