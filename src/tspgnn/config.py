@@ -264,6 +264,7 @@ class AnalyzeCfg(BaseModel):
         "eval_tsplib_optimized.json",
     ]
     primary_eval: str = "eval_tsplib.json"
+    baseline_summary_csv: Optional[str] = "runs/baselines/summary.csv"
 
     @field_validator("eval_files")
     @classmethod
@@ -286,11 +287,57 @@ class AnalyzeCfg(BaseModel):
         return vv
 
 
+class BaselineEvalCfg(BaseModel):
+    data_roots: List[str] = ["runs/data/tsplib/processed"]
+    names: List[str] = ["nn2opt", "dist_greedy2opt"]
+    save_root: str = "runs/baselines"
+    run_twoopt: bool = True
+    decode_multistart: int = 1
+    decode_noise_std: float = 0.0
+    decode_twoopt_passes: int = 20
+    seed: int = 0
+
+    @field_validator("names")
+    @classmethod
+    def _names_ok(cls, v: List[str]) -> List[str]:
+        allowed = {"nn2opt", "dist_greedy2opt"}
+        vals = [str(x).strip().lower() for x in v if str(x).strip()]
+        if not vals:
+            raise ValueError("baseline.names must contain at least one baseline")
+        bad = [x for x in vals if x not in allowed]
+        if bad:
+            raise ValueError(f"baseline.names contains unsupported values: {bad}; allowed={sorted(allowed)}")
+        return vals
+
+    @field_validator("decode_multistart")
+    @classmethod
+    def _decode_multistart_ok(cls, v: int) -> int:
+        if int(v) < 1:
+            raise ValueError("baseline.decode_multistart must be >= 1")
+        return int(v)
+
+    @field_validator("decode_noise_std")
+    @classmethod
+    def _decode_noise_ok(cls, v: float) -> float:
+        vv = float(v)
+        if vv < 0.0:
+            raise ValueError("baseline.decode_noise_std must be >= 0.0")
+        return vv
+
+    @field_validator("decode_twoopt_passes")
+    @classmethod
+    def _twoopt_passes_ok(cls, v: int) -> int:
+        if int(v) < 1:
+            raise ValueError("baseline.decode_twoopt_passes must be >= 1")
+        return int(v)
+
+
 class AppCfg(BaseModel):
     generate: GenerateCfg = GenerateCfg()
     tsplib: TsplibCfg = TsplibCfg()
     train: TrainCfg = TrainCfg()
     eval: EvalCfg = EvalCfg()
+    baseline: BaselineEvalCfg = BaselineEvalCfg()
     visualize: VisualizeCfg = VisualizeCfg()
     qa: QACfg = QACfg()
     analyze: AnalyzeCfg = AnalyzeCfg()

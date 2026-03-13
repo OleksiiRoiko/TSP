@@ -3,8 +3,281 @@
 \section{Hlavný cieľ práce}
 \indent \AssignmentGoalSK
 
-\section{Čiastkové ciele}
-\indent \textit{Doplňte čiastkové ciele podľa schváleného zadania a návrhu riešenia.}
+\section{Metodika práce a použité metódy}
+\indent V tejto časti práce sa podrobne rozoberá spôsob realizácie praktickej
+časti výskumu. Postup je predstavený postupne, od prípravy údajov, cez návrh
+a trénovanie modelov, až po ich hodnotenie a analýzu dosiahnutých výsledkov.
+Zámerom tejto kapitoly je vytvoriť zrozumiteľný a reprodukovateľný experimentálny
+rámec, ktorý umožní objektívne posúdiť, do akej miery sú vybrané neurónové
+modely schopné prispieť k riešeniu symetrického problému obchodného
+cestujúceho. Keďže pri dátovo riadených prístupoch nemožno oddeliť model od
+spôsobu prípravy dát, tvorby referenčných riešení a hodnotiaceho postupu,
+metodická časť je koncipovaná ako opis uceleného experimentálneho procesu
+\parencite{bengio2021mlco,joshi2022generalization}.
 
-\section{Metodika a použité metódy}
-\indent \textit{Doplňte metodiku zberu údajov, experimentálny dizajn, metódy AI a spôsob hodnotenia výsledkov.}
+\subsection{Celkový návrh experimentálneho postupu}
+\indent Predchádzajúca kapitola sa sústredila na teoretické východiská problému,
+na vývoj klasických a neurónových prístupov a na ich miesto v súčasnom výskume.
+V tejto časti sa preto pozornosť presúva od literárneho prehľadu ku konkrétnej
+realizácii experimentálneho postupu použitého v práci. Cieľom nie je znovu
+rozoberať všeobecné dôvody významu grafovej reprezentácie, benchmarkových dát
+alebo hybridných prístupov, ale ukázať, ako boli tieto princípy premietnuté do
+praktického riešenia. Takto koncipovaný metodický rámec zároveň zodpovedá aj
+tomu, ako sú moderné prístupy k TSP opisované v novších prehľadových prácach,
+ktoré zdôrazňujú potrebu hodnotiť celé experimentálne nastavenie, nie iba samotnú
+architektúru modelu \parencite{bengio2021mlco,sui2025dltsp_survey,
+alanzi2025mltsp_review}.
+
+\indent Praktická časť práce bola navrhnutá ako ucelený experimentálny postup,
+v ktorom na seba jednotlivé kroky priamo nadväzujú. Celý proces sa začínal
+prípravou údajov, pokračoval tvorbou referenčných riešení a cieľových štítkov,
+následne trénovaním modelov, dekódovaním výslednej trasy a lokálnym zlepšovaním
+riešenia, a napokon sa uzatváral nezávislým hodnotením a analýzou výsledkov.
+Takéto usporiadanie je dôležité preto, že pri dátovo riadených prístupoch ku
+kombinatorickej optimalizácii kvalita výsledku nezávisí iba od modelu, ale aj
+od spôsobu prípravy dát, od kvality referenčných riešení a od následného
+spracovania modelového výstupu \parencite{bengio2021mlco,joshi2022generalization,
+cappart2023gnnco}.
+
+\indent Z hľadiska dátovej časti bol experimentálny postup rozdelený na dve
+vzájomne prepojené vetvy. Prvú vetvu tvorili synteticky generované euklidovské
+inštancie, ktoré slúžili ako základ pre trénovanie a validáciu modelov. V rámci
+tejto vetvy boli pripravené dva varianty referenčných riešení. Prvý variant
+vychádzal z heuristicky vytvorených trás, ktoré bolo možné generovať vo väčšom
+objeme a s nižšími výpočtovými nárokmi. Druhý variant bol založený na riešeniach
+získaných pomocou nástroja Concorde, ktorý sa v praxi používa ako referenčný
+presný riešič pre symetrický problém obchodného cestujúceho
+\parencite{concorde2003solver}. Zaradenie oboch variantov do experimentu malo
+praktický aj metodologický význam. Umožnilo porovnať situáciu, keď sa model učí
+na kvalitných, ale približných riešeniach, so situáciou, keď sú cieľové štítky
+odvodené z riešení reprezentujúcich optimálny alebo takmer optimálny etalón.
+
+\indent Druhú vetvu tvorili benchmarkové inštancie TSPLIB, ktoré sa nepoužívali
+na trénovanie, ale výhradne na nezávislé overenie modelov. Takéto oddelenie
+tréningovej a benchmarkovej časti bolo dôležité preto, aby sa výsledky nehodnotili
+iba na údajoch podobných tréningovým príkladom, ale aj na štandardných úlohách
+používaných v odbornej literatúre \parencite{reinelt1991tsplib,
+joshi2022generalization,alanzi2025mltsp_review}. Benchmarková vetva tak tvorila
+spoločný referenčný rámec pre porovnanie navrhnutých modelov a zároveň umožnila
+sledovať, do akej miery sa získané poznatky prenášajú mimo synteticky pripravenej
+trénovacej množiny.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/tikz/method_overview}
+    \caption{Celkový experimentálny postup použitý v práci.}
+    \label{fig:method_overview}
+\end{figure}
+
+\newpage
+\indent Po príprave údajov nasledovala spoločná modelová časť experimentu.
+Všetky inštancie boli reprezentované ako úplný graf a učenie modelov bolo
+postavené na predikcii hrán, nie na priamom generovaní celej postupnosti vrcholov.
+Takáto formulácia umožnila udržať jednotné experimentálne nastavenie pre viacero
+architektúr a zároveň lepšie previazať modelovú časť s následným dekódovaním
+výslednej trasy. Tento spôsob uvažovania je v súlade s grafovo orientovanou líniou
+výskumu v oblasti TSP, no zároveň sa odlišuje od skorších sekvenčných prístupov,
+ktoré pristupovali k riešeniu skôr ako ku generovaniu poradia navštívených miest.
+Práve tento posun od sekvenčného k štruktúrnemu spracovaniu úlohy dobre ilustrujú
+základné neurónové práce o TSP, od Pointer Networks až po attention-based a
+reinforcement learning prístupy \parencite{vinyals2015pointer,kool2019attention,
+kwon2020pomo,joshi2019gcn,sui2025dltsp_survey}.
+
+\indent Na všeobecnej úrovni možno použitý experimentálny postup schematicky
+zapísať ako
+\begin{equation}
+\text{inštancia}
+\;\xrightarrow{\text{príprava dát}}\;
+G=(V,E)
+\;\xrightarrow{\text{model}}\;
+s_{ij}
+\;\xrightarrow{\text{dekódovanie}}\;
+\hat{\pi}
+\;\xrightarrow{\text{lokálne zlepšenie}}\;
+\hat{\pi}^{*}
+\;\xrightarrow{\text{hodnotenie}}\;
+(\hat{L}, \mathrm{gap}),
+\end{equation}
+kde $G=(V,E)$ označuje grafovú reprezentáciu úlohy, $s_{ij}$ predstavuje
+predikované skóre hrán, $\hat{\pi}$ je trasa zostavená z modelového výstupu,
+$\hat{\pi}^{*}$ je trasa po lokálnom zlepšení, $\hat{L}$ je jej výsledná dĺžka
+a $\mathrm{gap}$ vyjadruje relatívnu odchýlku od referenčného riešenia. Zápis
+zároveň zdôrazňuje, že hodnoteným objektom nebol iba model ako taký, ale celý
+reťazec krokov od vstupnej inštancie až po finálnu trasu.
+
+\indent Samotný neurónový model preto v tejto práci nepredstavoval úplný riešič
+TSP, ale jednu časť širšieho hybridného postupu. Jeho úlohou bolo odhadnúť, ktoré
+hrany sú z pohľadu výslednej trasy dôležité, zatiaľ čo algoritmická časť zabezpečila
+prevod týchto skóre na realizovateľnú Hamiltonovskú trasu a jej následné zlepšenie
+pomocou heuristiky 2-opt \parencite{croes1958twoopt,hudson2022gls,xin2021neurolkh}.
+Takéto prepojenie neurónového modelu a klasického algoritmického spracovania je
+typické aj pre novšie úspešné prístupy, v ktorých sa učenie nepoužíva izolovane,
+ale ako nástroj podporujúci konštrukciu kvalitného riešenia
+\parencite{bengio2021mlco,sui2025dltsp_survey,alanzi2025mltsp_review}.
+
+\indent Záverečné hodnotenie bolo preto založené predovšetkým na kvalite finálnej
+trasy po celom spracovateľskom reťazci. Hlavnými ukazovateľmi boli jej dĺžka a
+relatívna odchýlka od referenčného riešenia. Takto nastavené hodnotenie umožňuje
+porovnávať jednotlivé modely v jednotnom rámci a súčasne rešpektuje logiku
+benchmarkového testovania, ktorá je v oblasti TSP štandardom
+\parencite{reinelt1991tsplib,joshi2022generalization,sui2025dltsp_survey}.
+
+\subsection{Príprava syntetických tréningových dát}
+\indent Dôležitou súčasťou praktickej časti práce bola príprava syntetických
+tréningových dát, ktoré vytvorili základ pre učenie a validáciu navrhnutých
+modelov. Keďže cieľom práce nebolo pracovať iba s obmedzeným počtom známych
+benchmarkových inštancií, ale vytvoriť dostatočne veľký a kontrolovaný súbor
+úloh pre trénovanie neurónových sietí, syntetické dáta boli generované
+programovo. Takýto prístup umožňuje presne riadiť veľkosť inštancií, charakter
+priestorového rozloženia bodov aj spôsob tvorby referenčných riešení. Zároveň
+vytvára reprodukovateľné prostredie, v ktorom možno systematicky porovnávať
+správanie jednotlivých modelov \parencite{bengio2021mlco,joshi2022generalization}.
+
+\indent Generovanie syntetických dát bolo v implementácii riešené ako samostatná
+etapa experimentálneho postupu. Pre každú zvolenú veľkosť inštancie sa
+vytvárali tri oddelené množiny, konkrétne tréningová, validačná a testovacia.
+Použité boli veľkosti
+\begin{equation}
+N \in \{20,30,40,50,60,70,80,90,100\},
+\end{equation}
+pričom pre každú hodnotu $N$ bolo vygenerovaných $5000$ tréningových,
+$1000$ validačných a $1000$ testovacích inštancií. Takéto rozdelenie bolo
+zvolené s cieľom zabezpečiť dostatočný objem dát na učenie modelov, ale zároveň
+ponechať samostatný priestor na priebežnú validáciu a neskoršie interné
+testovanie.
+
+\indent Každá syntetická inštancia pozostávala zo súradníc $N$ bodov
+v dvojrozmernej rovine. Body boli generované v normalizovanom priestore
+$[0,1]^2$, čo zjednodušuje neskoršiu prácu s príznakmi hrán aj porovnateľnosť
+medzi inštanciami rôznych veľkostí. Dôležité však bolo, aby všetky inštancie
+nemali rovnaký geometrický charakter. Z tohto dôvodu sa nepoužívalo iba jedno
+rozdelenie bodov, ale kombinácia viacerých typov priestorových štruktúr. Takýto
+postup znižuje riziko, že sa model naučí iba úzky typ geometrického vzoru, a
+zároveň vytvára rôznorodejšie tréningové prostredie.
+
+\indent V implementácii boli použité štyri základné typy rozložení bodov:
+\textit{uniform}, \textit{clustered}, \textit{ring} a \textit{grid\_jitter}.
+Jednotlivé typy neboli zastúpené rovnako, ale boli losované s pravdepodobnosťami
+\begin{equation}
+p = (0.3,\,0.2,\,0.2,\,0.3),
+\end{equation}
+kde hodnoty postupne zodpovedajú uvedeným štyrom distribúciám. Vďaka tomu sa v
+dátach kombinovali jednoduchšie aj štruktúrovanejšie geometrické situácie.
+
+\indent Pri rozdelení \textit{uniform} boli všetky body generované nezávisle a
+rovnomerne v jednotkovom štvorci, teda
+\begin{equation}
+(x_i,y_i) \sim \mathcal{U}([0,1]^2), \qquad i=1,\dots,N.
+\end{equation}
+Tento variant predstavuje najštandardnejší typ euklidovskej inštancie a slúži
+ako prirodzený základ pre vytváranie všeobecných tréningových príkladov.
+
+\indent Pri rozdelení \textit{clustered} sa najskôr vygenerovali štyri centrá
+zhlukov a jednotlivým bodom sa následne priradilo jedno z týchto centier. Poloha
+bodu potom vznikla pridaním malého gaussovského šumu k zvolenému centru.
+Schematicky možno tento postup zapísať ako
+\begin{equation}
+c_k \sim \mathcal{U}([0,1]^2), \qquad k=1,\dots,4,
+\end{equation}
+\begin{equation}
+z_i \in \{1,\dots,4\}, \qquad
+(x_i,y_i)=c_{z_i}+\varepsilon_i,
+\qquad \varepsilon_i \sim \mathcal{N}(0,\sigma^2 I),
+\end{equation}
+pričom výsledné body boli po generovaní orezané do intervalu $[0,1]^2$.
+Týmto spôsobom vznikajú inštancie, v ktorých sa mestá prirodzene zoskupujú do
+lokálnych oblastí, čo mení charakter optimálnej trasy aj lokálnych rozhodnutí.
+
+\indent Rozdelenie \textit{ring} bolo navrhnuté tak, aby vytváralo body približne
+na kružnici alebo prstenci. Najskôr sa generoval náhodný uhol a následne polomer
+s malou odchýlkou okolo základnej hodnoty. Poloha bodu sa potom určovala ako
+\begin{equation}
+\theta_i \sim \mathcal{U}(0,2\pi), \qquad
+r_i = r_0 + \eta_i,
+\end{equation}
+\begin{equation}
+x_i = 0.5 + r_i \cos \theta_i, \qquad
+y_i = 0.5 + r_i \sin \theta_i,
+\end{equation}
+kde $\eta_i$ predstavuje malý náhodný šum. Tento typ inštancií je užitočný najmä
+preto, že optimálna trasa má pri ňom výraznejšiu globálnu štruktúru a nie je
+určovaná iba lokálnou hustotou bodov.
+
+\indent Posledným použitým variantom bolo rozdelenie \textit{grid\_jitter}. V
+tomto prípade sa najskôr vytvorila približne pravidelná mriežka bodov v
+jednotkovom štvorci a následne sa ku každej polohe pridal menší náhodný posun.
+Takto vznikajú inštancie, ktoré majú čiastočne pravidelnú geometriu, ale zároveň
+nie sú úplne deterministické. Z pohľadu učenia ide o zaujímavý medzistupeň medzi
+úplne náhodným a silno štruktúrovaným rozložením.
+
+\indent Pre zachovanie reprodukovateľnosti neboli jednotlivé inštancie
+generované iba pomocou jedného globálneho náhodného semena. Namiesto toho sa pre
+každú inštanciu vytváral deterministický seed odvodený od základného semena,
+veľkosti inštancie, názvu dátového splitu a poradového indexu danej úlohy. Takéto
+riešenie má praktickú výhodu v tom, že tréningová, validačná a testovacia množina
+zostávajú od seba jednoznačne oddelené aj v prípade, že sa indexovanie inštancií
+v jednotlivých splitoch začína od nuly. Zároveň je možné celý dataset znovu
+vytvoriť bez zmeny jeho obsahu.
+
+\indent Samotné súradnice bodov však ešte nepostačovali na učenie modelov.
+Pre každú inštanciu bolo potrebné vytvoriť aj referenčné riešenie, z ktorého sa
+neskôr odvodzovali cieľové štítky pre klasifikáciu hrán. V práci boli pripravené
+dva varianty syntetických datasetov. Prvý variant bol určený na rýchlejšie a
+výpočtovo menej náročné experimentovanie. Pri ňom sa referenčná trasa získavala
+kombináciou dostupného riešiča Elkai a heuristiky \textit{nearest neighbor}
+doplnenej o lokálne zlepšenie 2-opt. Konkrétne, pri režime \textit{auto} sa
+časť inštancií pokúšala vyriešiť pomocou Elkai a vo zvyšných prípadoch, prípadne
+pri neúspechu, sa použilo heuristické riešenie typu nearest-neighbor + 2-opt.
+Takto získané trasy nepredstavujú formálny dôkaz optimálnosti, ale poskytujú
+dostatočne kvalitný signál pre rozsiahlejšiu tvorbu tréningových dát.
+
+\indent Druhý variant syntetických datasetov bol založený na použití nástroja
+Concorde \parencite{concorde2003solver}. V tomto prípade sa súradnice najskôr
+preškálovali na celočíselnú reprezentáciu a následne sa každá inštancia
+exportovala do formátu TSPLIB s metrikou \texttt{EUC\_2D}. Na takto pripravený
+vstup bol spustený presný riešič Concorde, pričom v konfigurácii experimentu sa
+vyžadovalo aj potvrdenie optimálnosti riešenia. Tento variant bol výpočtovo
+náročnejší, ale poskytoval kvalitnejší etalón pre tvorbu štítkov, pretože
+referenčné trasy boli odvodené z riešení reprezentujúcich optimálny štandard.
+
+\indent Z metodologického hľadiska malo rozlíšenie medzi heuristicky získanými
+a presne získanými trasami dôležitý význam. Heuristický variant umožnil pripraviť
+väčší objem údajov pri rozumných výpočtových nárokoch, zatiaľ čo concordeový
+variant poskytol prísnejší referenčný základ pre overenie toho, či sa modely
+učia vzory blízke optimálnym riešeniam. V ďalších častiach práce sa preto s
+týmito dvoma vetvami pracuje oddelene.
+
+\indent Každá vygenerovaná inštancia bola nakoniec uložená vo formáte
+\texttt{.npz} spolu so základnými metadátami. Okrem samotných súradníc a
+referenčnej trasy sa ukladali aj informácie o veľkosti inštancie, použitej
+distribúcii bodov, zdroji referenčného riešenia a dĺžke trasy. Pri datasetoch
+vytvorených pomocou Concorde sa navyše evidovala aj pôvodná celočíselná verzia
+súradníc, dĺžka trasy v metrike TSPLIB a informácia o tom, či bola optimálnosť
+riešenia explicitne potvrdená.
+
+\indent Takto pripravené syntetické dáta vytvorili základ pre ďalšie etapy
+experimentu. Ich výhodou bola kombinácia objemu, geometrickej rôznorodosti,
+reprodukovateľnosti a možnosti pracovať s dvoma úrovňami kvality referenčných
+riešení. Vďaka tomu bolo možné v nasledujúcich krokoch systematicky prejsť od
+generovania surových inštancií k tvorbe grafových reprezentácií, trénovaniu
+modelov a ich následnému hodnoteniu.
+\subsection{Príprava benchmarkových inštancií TSPLIB}
+\indent Táto podkapitola sa zameria na prípravu štandardných benchmarkových inštancií z knižnice TSPLIB, ktoré boli použité na nezávislé hodnotenie modelov. Ich zaradenie do experimentu umožňuje posúdiť kvalitu navrhnutých prístupov na všeobecne uznávaných testovacích úlohách.
+
+\subsection{Reprezentácia inštancií ako úplného grafu a tvorba vstupných príznakov}
+\indent V tejto časti bude vysvetlené, ako boli jednotlivé inštancie reprezentované vo forme úplného grafu a aké vstupné príznaky boli vytvárané pre hrany medzi vrcholmi. Osobitná pozornosť bude venovaná tomu, ako sa z referenčných trás vytvárali cieľové štítky pre učenie modelov.
+
+\subsection{Použité modelové architektúry}
+\indent Táto podkapitola predstaví porovnávané architektúry využité v experimentoch. Pôjde najmä o modely založené na klasifikácii hrán, konkrétne viacvrstvové perceptróny, reziduálne MLP architektúry a transformerový model zohľadňujúci širší kontext celej inštancie.
+
+\subsection{Trénovanie modelov}
+\indent Tu bude opísaný samotný proces trénovania modelov vrátane výberu stratovej funkcie, optimalizačného algoritmu, validačného postupu, nastavenia hyperparametrov a mechanizmov na stabilizáciu učenia, ako sú scheduler učenia alebo early stopping.
+
+\subsection{Dekódovanie predikovaných hrán na výslednú trasu}
+\indent V tejto časti bude vysvetlené, ako sa z predikovaných skóre hrán zostavovala výsledná Hamiltonovská trasa. Súčasťou opisu bude aj použitie viacnásobného dekódovania a lokálneho zlepšovania riešenia pomocou heuristiky 2-opt.
+
+\subsection{Hodnotenie modelov a použité metriky}
+\indent Táto podkapitola vymedzí spôsob hodnotenia jednotlivých modelov. Hlavná pozornosť bude venovaná porovnaniu dĺžky získaných trás s referenčnými riešeniami a výpočtu ukazovateľov, ktoré umožňujú objektívne posúdiť kvalitu jednotlivých prístupov.
+
+\subsection{Analýza výsledkov a technické nástroje}
+\indent Na záver budú stručne uvedené nástroje použité pri implementácii experimentov, spracovaní výsledkov a ich vizualizácii. Zároveň bude naznačené, akým spôsobom sa z uskutočnených behov vytvárali súhrnné výstupy pre následnú interpretačnú časť práce.

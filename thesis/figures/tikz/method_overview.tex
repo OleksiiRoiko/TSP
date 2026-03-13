@@ -1,0 +1,63 @@
+\begin{tikzpicture}[
+    font=\small,
+    box/.style={
+        draw, rounded corners=4pt, align=center,
+        text width=2.7cm, minimum height=1.15cm,
+        inner sep=4pt, fill=white
+    },
+    arrow/.style={-{Latex[length=2.2mm]}, semithick},
+    group/.style={
+        draw, rounded corners=7pt,
+        inner xsep=14pt, inner ysep=10pt,
+        fill=gray!7
+    }
+]
+
+%% ── TRAINING NODES ───────────────────────────────
+\node[font=\bfseries]  (Thead)     at (2.8,  0.55) {Tréningová vetva};
+\node[box]             (synthetic) at (2.8, -0.45) {Synteticky\\generované\\inštancie};
+\node[box]             (heuristic) at (0.4, -2.55) {Heuristické\\referenčné\\trasy};
+\node[box]             (concorde)  at (5.2, -2.55) {Optimálne trasy\\pomocou Concorde};
+\node[box]             (labels)    at (2.8, -4.55) {Tvorba cieľových\\štítkov};
+\node[box]             (train)     at (2.8, -6.40) {Tréning\\a validácia\\modelov};
+
+%% ── SHARED / MIDDLE BLOCK ────────────────────────
+\node[box]             (predict)   at (6.9, -6.40) {Predikcia hrán,\\dekódovanie\\a 2-opt};
+
+%% ── BENCHMARK NODES ──────────────────────────────
+\node[font=\bfseries]  (Bhead)     at (10.6,  0.55) {Benchmarková vetva};
+\node[box]             (tsplib)    at (10.6, -0.45) {Benchmarkové\\inštancie\\TSPLIB};
+\node[box]             (eval)      at (10.6, -4.55) {Nezávislé\\hodnotenie\\na bench-markoch};
+
+%% ── BOTTOM BLOCK ─────────────────────────────────
+\node[box]             (analysis)  at (8.85,-8.35) {Analýza výsledkov\\a interpretácia};
+
+%% ── GROUP FRAMES (background, fit over header+nodes) ──
+\begin{scope}[on background layer]
+    \node[group, fit=(Thead)(synthetic)(heuristic)(concorde)(labels)(train)] {};
+    \node[group, fit=(Bhead)(tsplib)(eval)] {};
+\end{scope}
+
+%% ── ARROWS ───────────────────────────────────────
+% Synthetic → Heuristic / Concorde
+\draw[arrow] (synthetic.south) -- ++(0,-0.2) -| (heuristic.north);
+\draw[arrow] (synthetic.south) -- ++(0,-0.2) -| (concorde.north);
+
+% Heuristic / Concorde → Labels
+\draw[arrow] (heuristic.south) |- (labels.west);
+\draw[arrow] (concorde.south)  |- (labels.east);
+
+% Labels → Train → Predict
+\draw[arrow] (labels.south) -- (train.north);
+\draw[arrow] (train.east)   -- (predict.west);
+
+% TSPLIB → Eval
+\draw[arrow] (tsplib.south) -- (eval.north);
+
+% Predict → Eval (horizontal, then down into eval)
+\draw[arrow] (predict.east) -- (eval.west);
+
+% Eval + Predict → Analysis
+\draw[arrow] (eval.south)  |- (analysis.east);
+
+\end{tikzpicture}

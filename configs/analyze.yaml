@@ -7,3 +7,4 @@ analyze:
     - eval_tsplib_baseline.json
     - eval_tsplib_optimized.json
   primary_eval: eval_tsplib.json
+  baseline_summary_csv: runs/baselines/summary.csv

@@ -75,6 +75,59 @@ def two_opt(coords: np.ndarray, tour: np.ndarray, max_passes: int=20) -> np.ndar
     return T
 
 
+def nearest_neighbor_tour(coords: np.ndarray, start: int = 0) -> np.ndarray:
+    C = np.asarray(coords, dtype=np.float32)
+    n = int(C.shape[0])
+    if n < 2:
+        return np.arange(n, dtype=np.int64)
+
+    s = int(start) % n
+    D = C[:, None, :] - C[None, :, :]
+    dist = np.sqrt(np.sum(D * D, axis=2))
+
+    visited = np.zeros(n, dtype=bool)
+    tour = np.empty(n, dtype=np.int64)
+    cur = s
+    tour[0] = cur
+    visited[cur] = True
+
+    for k in range(1, n):
+        row = dist[cur].copy()
+        row[visited] = np.inf
+        nxt = int(np.argmin(row))
+        tour[k] = nxt
+        visited[nxt] = True
+        cur = nxt
+    return tour
+
+
+def nearest_neighbor_multistart(coords: np.ndarray, multistart: int = 1, seed: int = 0) -> np.ndarray:
+    C = np.asarray(coords, dtype=np.float32)
+    n = int(C.shape[0])
+    if n < 2:
+        return np.arange(n, dtype=np.int64)
+
+    starts_n = max(1, int(multistart))
+    rng = np.random.default_rng(int(seed))
+    candidates = rng.permutation(n).tolist()
+    starts = [0]
+    for s in candidates:
+        if int(s) != 0:
+            starts.append(int(s))
+        if len(starts) >= starts_n:
+            break
+
+    best = None
+    best_len = float("inf")
+    for s in starts:
+        t = nearest_neighbor_tour(C, start=s)
+        L = float(tour_length(C, t))
+        if L < best_len:
+            best_len = L
+            best = t
+    return np.asarray(best, dtype=np.int64)
+
+
 def decode_tour_from_edge_scores(
     coords: np.ndarray,
     edges: np.ndarray,

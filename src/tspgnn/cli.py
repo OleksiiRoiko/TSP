@@ -6,6 +6,7 @@ from .data.generate import run as cmd_generate
 from .data.tsplib import run as cmd_tsplib
 from .training.train import run as cmd_train
 from .eval.evaluate import run as cmd_eval, run_qa as cmd_qa
+from .eval.baselines import run as cmd_baseline
 from .viz.plot import run as cmd_visualize
 from .analysis.report import run as cmd_analyze
 
@@ -16,6 +17,7 @@ def main():
     sp.add_parser("generate")
     sp.add_parser("tsplib")
     sp.add_parser("eval")
+    sp.add_parser("baseline")
     sp.add_parser("visualize")
     sp.add_parser("qa")
     sp.add_parser("train")
@@ -36,6 +38,9 @@ def main():
     elif args.cmd == "eval":
         logger = setup_logger("eval", "runs/logs/eval.log")
         cmd_eval(cfg.eval, logger)
+    elif args.cmd == "baseline":
+        logger = setup_logger("baseline", "runs/logs/baseline.log")
+        cmd_baseline(cfg.baseline, logger)
     elif args.cmd == "visualize":
         logger = setup_logger("visualize", "runs/logs/visualize.log")
         cmd_visualize(cfg.visualize, logger)

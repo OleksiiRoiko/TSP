@@ -1,165 +1,360 @@
-﻿\chapter{Súčasný stav riešenej problematiky doma a v zahraničí}
+\chapter{Prehľad literatúry k riešenej problematike}
 
-V tejto kapitole sa zameriavame na teoretické a metodologické východiská symetrického problému obchodného cestujúceho a na hlavné smery jeho súčasného riešenia. Pozornosť venujeme najmä prechodu od klasických optimalizačných prístupov k dátovo riadeným metódam, ktoré využívajú neurónové siete a grafové reprezentácie. Keďže práca je orientovaná na modelovanie nad hranami úplného grafu, štruktúra kapitoly je prispôsobená práve tým aspektom problému, ktoré sú relevantné pre edge-based formuláciu, syntetické tréningové dáta, benchmarkové hodnotenie a interpretáciu výsledkov.
+V tejto kapitole sme sa zamerali na teoretické východiská symetrického problému
+obchodného cestujúceho a na tie smery súčasného výskumu, ktoré sú priamo
+relevantné pre riešenie tejto úlohy pomocou modelov strojového učenia.
+Pozornosť sme venovali najmä klasickým optimalizačným prístupom, významu
+presných a heuristických riešičov, formulácii úlohy pre dátovo riadené
+prístupy, grafovo orientovaným neurónovým metódam a benchmarkovým údajom
+používaným pri hodnotení kvality riešení
+\parencite{matai2010overview,bengio2021mlco,cappart2023gnnco}.
 
 \section{Teoretické východiská problému obchodného cestujúceho}
 
-Problém obchodného cestujúceho (Traveling Salesman Problem, TSP) patrí medzi najznámejšie úlohy kombinatorickej optimalizácie. V základnej formulácii je daná množina miest a náklady presunu medzi každou dvojicou miest, pričom cieľom je určiť takú uzavretú trasu, ktorá navštívi každé mesto práve raz a minimalizuje celkové náklady. Napriek relatívne jednoduchej formulácii ide o úlohu s vysokou výpočtovou náročnosťou, ktorá sa dlhodobo používa ako referenčný problém pri porovnávaní presných algoritmov, heuristík, metaheuristík aj moderných prístupov založených na strojovom učení.
+Problém obchodného cestujúceho (\textit{Traveling Salesman Problem}, TSP)
+patrí medzi najznámejšie úlohy kombinatorickej optimalizácie. V základnej
+formulácii je daná množina miest a náklady presunu medzi každou dvojicou miest,
+pričom cieľom je určiť takú uzavretú trasu, ktorá navštívi každé mesto práve raz
+a minimalizuje celkové náklady. Napriek jednoduchej formulácii ide o problém
+s vysokou výpočtovou náročnosťou, ktorý sa dlhodobo využíva ako referenčná úloha
+pri porovnávaní presných algoritmov, heuristík aj moderných prístupov
+založených na strojovom učení
+\parencite{matai2010overview,bengio2021mlco}.
 
-Takto formulovaný problém možno interpretovať ako úlohu na úplnom grafe $G=(V,E)$, v ktorom vrcholy reprezentujú mestá a hrany náklady alebo vzdialenosti medzi nimi. Hľadaným riešením je hamiltonovský cyklus s minimálnou celkovou cenou. Táto grafová interpretácia je dôležitá nielen z hľadiska matematickej formulácie, ale aj z pohľadu návrhu algoritmov, pretože umožňuje priamo pracovať so štruktúrou vrcholov, hrán a susedností.
+Z matematického hľadiska možno TSP interpretovať ako úlohu na úplnom grafe
+$G=(V,E)$, v ktorom vrcholy reprezentujú mestá a hrany vzdialenosti alebo
+náklady presunu medzi nimi. Hľadaným riešením je hamiltonovský cyklus
+s minimálnou celkovou cenou. Takéto grafové chápanie problému je dôležité nielen
+pre klasické optimalizačné metódy, ale aj pre súčasné modely strojového učenia,
+ktoré pracujú s vrcholmi, hranami a ich vzájomnými vzťahmi
+\parencite{matai2010overview,cappart2023gnnco}.
 
 \begin{figure}[htbp]
     \centering
     \input{figures/tikz/tsp_instance}
-    \caption{Ilustračná euklidovská inštancia symetrického problému obchodného cestujúceho s vyznačenou výslednou trasou.}
+    \caption{Ilustračná euklidovská inštancia symetrického problému obchodného
+             cestujúceho s vyznačenou výslednou trasou.}
     \label{fig:tsp_instance}
 \end{figure}
 
-Z tejto základnej formulácie vychádza viacero variantov problému TSP, ktoré sa odlišujú najmä vlastnosťami nákladovej matice, počtom obchodných cestujúcich alebo prítomnosťou dodatočných obmedzení. Medzi najčastejšie uvádzané varianty patria:
+Základná formulácia TSP má viacero variantov, ktoré sa odlišujú najmä
+vlastnosťami nákladovej matice, počtom obchodných cestujúcich alebo prítomnosťou
+ďalších obmedzení. Medzi najčastejšie uvádzané varianty patria:
 
 \begin{itemize}[leftmargin=1.5cm,itemsep=3pt,topsep=4pt]
-    \item \textbf{STSP (Symmetric Traveling Salesman Problem),} pri ktorom je náklad presunu z vrcholu $i$ do vrcholu $j$ rovnaký ako náklad v opačnom smere;
-    \item \textbf{ATSP (Asymmetric Traveling Salesman Problem),} v ktorom sa náklady presunu môžu líšiť podľa smeru pohybu;
-    \item \textbf{mTSP (Multiple Traveling Salesman Problem),} kde je úloha rozdelená medzi viacerých obchodných cestujúcich;
-    \item \textbf{TSPTW (Traveling Salesman Problem with Time Windows),} pri ktorom musia byť jednotlivé vrcholy navštívené v určených časových intervaloch;
-    \item \textbf{viackriteriálne varianty TSP,} v ktorých sa optimalizácia nevzťahuje iba na jednu cieľovú funkciu, ale súčasne napríklad na čas, náklady alebo riziko.
+    \item \textbf{STSP (symetrický problém obchodného cestujúceho),}
+          pri ktorom je náklad presunu z vrcholu $i$ do vrcholu $j$
+          rovnaký ako náklad v opačnom smere,
+    \item \textbf{ATSP (asymetrický problém obchodného cestujúceho),}
+          v ktorom sa náklady presunu môžu líšiť podľa smeru pohybu,
+    \item \textbf{mTSP,} kde sa úloha rozdeľuje medzi viacerých obchodných
+          cestujúcich,
+    \item \textbf{TSP s časovými oknami,} pri ktorom musia byť jednotlivé
+          vrcholy navštívené v určených časových intervaloch,
+    \item \textbf{viackriteriálne varianty TSP,} v ktorých sa optimalizácia
+          nevzťahuje iba na jednu cieľovú funkciu.
 \end{itemize}
 
-Jednotlivé varianty vznikli ako reakcia na praktické požiadavky v logistike, plánovaní výroby, skladovaní, rozvoze alebo v navigačných systémoch. Hoci sa medzi sebou líšia konkrétnymi obmedzeniami, všetky vychádzajú z rovnakého princípu: nájsť efektívne poradie návštevy viacerých bodov pri rešpektovaní definovaných pravidiel úlohy.
+V tejto práci sme sa sústredili na symetrický problém obchodného cestujúceho.
+Práve STSP predstavuje klasickú a metodologicky dobre preskúmanú formuláciu,
+ktorá sa často používa pri porovnávaní algoritmov, pri tvorbe syntetických
+tréningových dát aj pri hodnotení generalizácie modelov na štandardných
+testovacích inštanciách
+\parencite{matai2010overview,reinelt1991tsplib,joshi2022generalization}.
 
-V tejto práci sa zameriavame na symetrický problém obchodného cestujúceho. V tomto variante platí, že náklad presunu z vrcholu $i$ do vrcholu $j$ je rovnaký ako náklad presunu z vrcholu $j$ do vrcholu $i$. STSP predstavuje klasickú a metodologicky dobre preskúmanú formuláciu, ktorá sa často používa ako základ pri porovnávaní algoritmov, benchmarkových inštancií a metrík hodnotenia. Zároveň ide o variant, ktorý je vhodný aj pre experimentálne porovnávanie dátovo riadených modelov, keďže umožňuje pracovať s jednotnou a dobre interpretovateľnou štruktúrou úlohy.
-
-Význam TSP však nespočíva iba v jeho teoretickej elegancii. Problém má široké praktické uplatnenie v logistike, distribúcii, plánovaní servisných trás, sekvenovaní výrobných operácií, návrhu dosiek plošných spojov, bioinformatike či v konštrukcii testovacích úloh pre nové optimalizačné postupy. Práve spojenie jasnej matematickej definície, praktickej relevancie a vysokej výpočtovej náročnosti vysvetľuje, prečo TSP zostáva dlhodobo jednou z centrálnych úloh operačného výskumu.
+Význam TSP nespočíva iba v jeho teoretickej elegancii. Ide o úlohu
+s dlhodobým praktickým významom v logistike, rozvoze, sekvenovaní úloh,
+plánovaní trás, návrhu spojov či bioinformatike. Práve kombinácia jednoduchej
+definície, praktickej relevancie a vysokej výpočtovej náročnosti vysvetľuje,
+prečo TSP zostáva jednou z centrálnych úloh operačného výskumu aj v súčasnom
+výskume strojového učenia pre kombinatorickú optimalizáciu
+\parencite{matai2010overview,bengio2021mlco}.
 
 \section{Výpočtová náročnosť a klasické prístupy k riešeniu}
 
-Na riešenie problému obchodného cestujúceho bolo navrhnuté široké spektrum prístupov, ktoré sa postupne vyvíjali v závislosti od požiadaviek na presnosť, rýchlosť a praktickú použiteľnosť. V tejto časti sa zameriavame na vysvetlenie výpočtovej náročnosti problému a na hlavné skupiny klasických metód používaných pri jeho riešení.
+Problém obchodného cestujúceho patrí medzi výpočtovo náročné optimalizačné
+úlohy. Počet možných trás rastie s počtom vrcholov veľmi rýchlo, a preto už
+pri stredne veľkých inštanciách nie je možné úplne prehľadať priestor všetkých
+riešení v prijateľnom čase. V prípade symetrického TSP je počet rôznych cyklov
+rádovo $(n-1)!/2$, čo ilustruje, prečo sa problém s rastúcou veľkosťou inštancie
+stáva prakticky neriešiteľným úplným prehľadaním priestoru riešení
+\parencite{matai2010overview}.
 
-\noindent\textbf{Výpočtová náročnosť problému.}
+Táto vlastnosť mala zásadný vplyv na vývoj prístupov k riešeniu TSP.
+V literatúre sa postupne vyprofilovali dve hlavné línie. Prvú tvoria
+\textit{presné metódy}, ktoré pri dostatočných výpočtových zdrojoch umožňujú
+nájsť garantovane optimálne riešenie. Druhú tvoria \textit{heuristiky
+a metaheuristiky}, ktorých cieľom je dosiahnuť veľmi kvalitné riešenie
+v prijateľnom čase aj pri väčších inštanciách
+\parencite{matai2010overview,bengio2021mlco}.
 
-Problém obchodného cestujúceho patrí medzi výpočtovo náročné optimalizačné úlohy. Jednoducho povedané to znamená, že počet možných trás rastie s počtom vrcholov veľmi rýchlo, a preto už pri stredne veľkých inštanciách nie je možné ani efektívne, ani časovo prijateľné úplne prehľadať priestor všetkých riešení. V prípade symetrického TSP je počet rôznych cyklov rádovo $(n-1)!/2$, čo dobre ilustruje, prečo sa problém s rastúcim počtom miest stáva prakticky neriešiteľným úplným prehľadaním priestoru riešení.
+\noindent\textbf{Presné metódy.}
 
-Práve táto vlastnosť mala zásadný vplyv na vývoj metód riešenia. Ukázalo sa, že pri menších inštanciách možno hľadať optimálne riešenie pomocou presných algoritmov, no pri väčších úlohách je potrebné pracovať s prístupmi, ktoré uprednostňujú rýchlosť a praktickú použiteľnosť pred garanciou absolútneho optima. Z historického aj metodologického hľadiska sa preto vyprofilovali dve hlavné skupiny klasických prístupov: presné metódy a heuristické, resp. metaheuristické postupy.
+Medzi klasické presné prístupy patrili celočíselné formulácie, rezné roviny,
+vetvenie a medze či dynamické programovanie. Historicky významné práce
+predstavovali napríklad riešenie veľkej TSP inštancie pomocou lineárneho
+programovania a rezných rovín \parencite{dantzig1954large},
+dynamickoprogramovací prístup Helda a Karpa \parencite{held1962dp}
+a algoritmus vetvenia a medzí od autorov Little, Murty, Sweeney a Karel
+\parencite{little1963bnb}. Tieto práce vytvorili základ, z ktorého neskôr
+vyrástli moderné presné riešiče.
 
-\noindent\textbf{Presné metódy riešenia.}
+Medzi najznámejšie súčasné presné riešiče patrí Concorde, ktorý je určený
+pre symetrický problém obchodného cestujúceho a stal sa dôležitým referenčným
+nástrojom pri získavaní optimálnych riešení a pri overovaní výsledkov
+\parencite{concorde2003solver}. Význam presných riešičov je dnes dôležitý
+nielen z pohľadu samotnej optimalizácie, ale aj z pohľadu prípravy
+referenčných riešení pre dátovo riadené prístupy
+\parencite{joshi2022generalization,bengio2021mlco}.
 
-Presné metódy sú zamerané na nájdenie garantovane optimálneho riešenia. Medzi najdôležitejšie prístupy v tejto skupine patria celočíselné lineárne formulácie, vetvenie a medze, vetvenie s rezmi či dynamické programovanie. Ich spoločným znakom je to, že pri splnení výpočtových podmienok umožňujú určiť skutočne najlepšiu možnú trasu, a preto predstavujú dôležitý referenčný základ pri hodnotení kvality iných algoritmov.
+\noindent\textbf{Heuristiky a lokálne zlepšovanie.}
 
-Význam presných metód nespočíva iba v samotnom riešení menších alebo stredne veľkých inštancií. Ich výsledky zohrávajú dôležitú úlohu aj pri benchmarkingu, pretože poskytujú referenčné hodnoty, voči ktorým možno porovnávať približné a dátovo riadené prístupy. Zároveň slúžia ako zdroj kvalitných štítkov pri tvorbe trénovacích množín, keďže práve optimálne alebo takmer optimálne riešenia umožňujú učiť modely na spoľahlivých cieľových výstupoch.
+Pri väčších inštanciách však presné metódy narážajú na výpočtové limity,
+a preto sa v praxi presadili heuristické a metaheuristické postupy.
+Ich cieľom nebolo garantovať absolútne optimum, ale rýchlo konštruovať
+a následne zlepšovať kvalitné riešenia. V kontexte TSP získali mimoriadny
+význam techniky lokálneho zlepšovania typu $k$-opt, najmä 2-opt
+\parencite{croes1958twoopt}, heuristika Lin--Kernighan
+\parencite{lin1973lk} a jej výkonné implementácie typu LKH
+\parencite{helsgaun2000lkh}.
 
-Nevýhodou presných metód je ich vysoká výpočtová náročnosť, ktorá sa prejavuje najmä pri rastúcej veľkosti inštancie. V praxi sa preto využívajú najmä tam, kde je potrebná garancia optimálnosti, alebo tam, kde je možné akceptovať vyššie časové a výpočtové náklady výmenou za maximálnu presnosť výsledku.
-
-\noindent\textbf{Heuristiky a metaheuristiky.}
-
-V situáciách, keď presné riešenie nie je časovo alebo výpočtovo realistické, sa uplatňujú heuristiky a metaheuristiky. Heuristické metódy konštruujú riešenie pomocou relatívne jednoduchých rozhodovacích pravidiel, napríklad postupným výberom najbližšieho suseda alebo vkladaním ďalších vrcholov do už vytváranej trasy. Ich hlavnou výhodou je rýchlosť a implementačná jednoduchosť, no spravidla neposkytujú garanciu optimálnosti a bývajú citlivé na lokálne rozhodnutia urobené v počiatočných krokoch.
-
-Metaheuristiky predstavujú všeobecnejší rámec, v ktorom sa kombinuje konštrukcia riešenia s mechanizmami zlepšovania, diverzifikácie a vyhľadávania v priestore alternatívnych trás. Patria sem napríklad simulované žíhanie, tabu search, genetické algoritmy, mravčie kolónie alebo iteratívne lokálne prehľadávanie. Ich cieľom nie je nájsť garantované optimum, ale dosiahnuť čo najkvalitnejšie riešenie v prijateľnom čase.
-
-V kontexte symetrického TSP zohrávajú osobitnú úlohu lokálne zlepšovacie techniky typu $k$-opt a heuristika Lin--Kernighan. Práve tieto prístupy ukázali, že aj bez formálnej garancie optimálnosti možno v praxi dosahovať veľmi kvalitné riešenia, ktoré sú často dostatočné pre reálne aplikácie aj pre experimentálne porovnávanie algoritmov.
-
-\noindent\textbf{Význam klasických prístupov pre súčasný výskum.}
-
-Klasické metódy riešenia TSP dnes nepredstavujú iba historický základ výskumu, ale stále zohrávajú dôležitú úlohu aj v súčasných prístupoch. Presné algoritmy poskytujú referenčné riešenia a heuristiky a metaheuristiky ostávajú praktickými nástrojmi na riešenie väčších inštancií. Navyše sa ukazuje, že mnohé moderné dátovo riadené a neurónové modely tieto klasické postupy nenahrádzajú úplne, ale skôr na ne nadväzujú.
-
-V hybridných riešeniach sa napríklad model strojového učenia používa na predikciu sľubných hrán alebo na usmernenie prehľadávania, zatiaľ čo samotná výsledná trasa vzniká až pomocou heuristického dekódovania alebo následného lokálneho dolaďovania. Z toho vyplýva, že pochopenie klasických prístupov je nevyhnutné nielen pre teoretické uchopenie problému, ale aj pre správnu interpretáciu moderných výsledkov. Práve na tento vývoj prirodzene nadväzuje nasledujúca časť práce, ktorá sa venuje dátovo riadeným a neurónovým prístupom k riešeniu TSP.
+Klasické heuristiky zostávajú dôležité aj v súčasnom výskume založenom
+na strojovom učení. V mnohých prácach totiž neurónový model nenahrádza celé
+riešenie úlohy, ale poskytuje iba doplnkovú informáciu, ktorá sa následne
+využije pri zostavení alebo zlepšení trasy
+\parencite{hudson2022gls,xin2021neurolkh,bengio2021mlco}.
 
 \begin{figure}[htbp]
     \centering
     \input{figures/tikz/tsp_methods}
-    \caption{Prehľad hlavných skupín prístupov k riešeniu problému obchodného cestujúceho.}
+    \caption{Prehľad hlavných skupín prístupov k riešeniu problému obchodného
+             cestujúceho.}
     \label{fig:tsp_methods}
 \end{figure}
 
-\section{Formulácia problému TSP pre dátovo riadené modely}
+\section{Formulácia problému TSP pre dátovo riadené prístupy}
 
-Pri klasickom riešení problému obchodného cestujúceho sa optimálna trasa hľadá priamo pomocou optimalizačného algoritmu. V prípade dátovo riadených prístupov je však potrebné túto úlohu najskôr previesť do podoby, s ktorou môže pracovať model strojového učenia. To znamená, že problém už nie je chápaný iba ako hľadanie najlepšej trasy, ale aj ako úloha nad dátami, v ktorej treba definovať vstupné inštancie, cieľové výstupy a vhodnú reprezentáciu riešenia.
+Pri klasickom riešení problému obchodného cestujúceho sa pozornosť sústreďuje
+predovšetkým na hľadanie najkratšej trasy spájajúcej všetky vrcholy presne raz.
+Pri využití modelov strojového učenia však takáto formulácia sama osebe
+nepostačuje. Úlohu je potrebné previesť do podoby, v ktorej možno jasne určiť,
+čo tvorí vstup do modelu, aký typ výstupu sa od modelu očakáva, ako budú
+pripravené referenčné riešenia a podľa čoho sa bude hodnotiť kvalita výsledkov.
+V literatúre sa preto TSP pri dátovo riadených prístupoch neinterpretuje iba
+ako optimalizačný problém, ale aj ako problém reprezentácie inštancie,
+prípravy štítkov a voľby vhodného hodnotiaceho rámca
+\parencite{bengio2021mlco,joshi2022generalization}.
 
-Vstup do modelu zvyčajne tvorí množina vrcholov reprezentovaných súradnicami, maticou vzdialeností alebo odvodenými príznakmi hrán. Samotné vstupné inštancie však na učenie nestačia. Model potrebuje aj referenčné riešenia, na základe ktorých sa vytvoria cieľové štítky. V prípade TSP môže mať takýto štítok podobu celej optimálnej alebo približne optimálnej trasy, prípadne informácie o tom, ktoré hrany patria do referenčného riešenia.
+Základným krokom je výber reprezentácie vstupných údajov. Pri euklidovských
+inštanciách možno vychádzať priamo zo súradníc vrcholov, z matice vzdialeností
+alebo zo štruktúry úplného grafu, v ktorom sú vrcholy interpretované ako mestá
+a hrany ako možné spojenia medzi nimi. Takáto reprezentácia je dôležitá najmä
+pre modely, ktoré majú zachytiť nielen lokálne vlastnosti jednotlivých bodov,
+ale aj vzťahy medzi nimi v rámci celej inštancie. Z pohľadu súčasnej literatúry
+je práve prevod geometrickej alebo vzdialenostnej informácie do vhodnej dátovej
+podoby jedným z kľúčových predpokladov úspešného použitia modelov strojového
+učenia pri kombinatorickej optimalizácii
+\parencite{bengio2021mlco,cappart2023gnnco,joshi2022generalization}.
 
-Pri dátovo riadených prístupoch sa preto často využívajú synteticky generované inštancie, najmä euklidovské úlohy, pri ktorých sú vrcholy vytvorené náhodne v dvojrozmernom priestore. Výhodou takéhoto postupu je možnosť pripraviť veľké množstvo tréningových príkladov s kontrolovanou veľkosťou a štruktúrou. Zároveň však vzniká otázka kvality referenčných riešení. Presné riešiče poskytujú kvalitné štítky, ich použitie je však časovo a výpočtovo náročné. Aproximačné postupy sú rýchlejšie, no model sa pri nich učí z riešení, ktoré nemusia byť optimálne. Voľba medzi presnosťou štítkov a náročnosťou ich prípravy preto predstavuje dôležitý metodologický aspekt.
+Druhou dôležitou otázkou je tvorba referenčných riešení, z ktorých sa následne
+odvodzujú cieľové štítky pre učenie. Pri menších alebo synteticky generovaných
+euklidovských inštanciách možno tieto riešenia získať pomocou presných
+riešičov, pričom v praxi patrí medzi najvýznamnejšie nástroje Concorde
+\parencite{concorde2003solver}. Význam takto pripravených etalónnych trás je
+zásadný, pretože model sa v konečnom dôsledku učí rozpoznávať štruktúry, ktoré
+sa v kvalitných riešeniach opakujú. Ak sú referenčné riešenia nekvalitné alebo
+nekonzistentné, premieta sa to aj do kvality vytvorených štítkov a následne do
+výsledného správania modelu \parencite{joshi2022generalization,bengio2021mlco}.
 
-Pri návrhu modelu možno TSP formulovať viacerými spôsobmi. Jednou z možností je sekvenčné generovanie poradia vrcholov. Druhou, z pohľadu našej práce kľúčovou možnosťou, je formulácia problému ako predikcie hrán v úplnom grafe. V tomto prípade model nepredikuje priamo celé poradie miest, ale odhaduje, ktoré hrany sú dôležité pre výslednú trasu. Takáto formulácia je prirodzená preto, že samotný TSP je definovaný na grafe a riešenie možno chápať ako množinu hrán tvoriacich hamiltonovský cyklus.
+V dátovo riadených prístupoch preto nemožno oddeľovať samotný model od údajov,
+na ktorých je učený. Popri architektúre modelu zohráva významnú úlohu aj to,
+či sa používajú synteticky generované inštancie alebo štandardné benchmarky,
+aká je veľkosť tréningových úloh, ako sú konštruované cieľové štítky a do akej
+miery sú referenčné riešenia porovnateľné medzi jednotlivými experimentmi.
+Práve táto okolnosť je v literatúre opakovane zdôrazňovaná ako jeden
+z faktorov, ktoré komplikujú priame porovnanie výsledkov rôznych prác
+\parencite{bengio2021mlco,joshi2022generalization}.
 
-Výhodou predikcie hrán je, že umožňuje pracovať s grafovou štruktúrou úlohy a s príznakmi odvodenými zo vzdialeností, geometrie alebo lokálneho usporiadania vrcholov. Z pohľadu učenia sa každá hrana stáva samostatnou jednotkou predikcie, pre ktorú model odhaduje skóre, pravdepodobnosť alebo triedu. Výstupom ešte nie je finálna trasa, ale štruktúrovaná informácia o tom, ktoré spojenia sú pre kvalitné riešenie perspektívne.
+Z hľadiska samotnej formulácie výstupu možno rozlíšiť viacero prístupov.
+Model môže smerovať priamo ku konštrukcii celej trasy, no môže tiež poskytovať
+iba pomocnú informáciu o štruktúre riešenia. V druhom prípade nejde o priamu
+náhradu optimalizačného algoritmu, ale o vytvorenie takej predikcie, ktorú
+možno ďalej využiť pri zostavení alebo zlepšení finálneho riešenia.
+V odbornej literatúre ide o dôležitú líniu vývoja, pretože umožňuje spojiť
+schopnosť modelu zachytávať vzory v dátach s algoritmickými postupmi, ktoré
+zabezpečujú realizovateľnosť a kvalitu výslednej trasy
+\parencite{joshi2019gcn,hudson2022gls,xin2021neurolkh,joshi2022generalization}.
 
-Dôležitým špecifikom tohto prístupu je, že samotná predikcia ešte nezaručuje vznik realizovateľného riešenia. Model môže priradiť vysoké skóre hranám, ktoré spolu nevytvárajú uzavretý cyklus spĺňajúci všetky podmienky TSP. Preto je medzi výstupom modelu a finálnou trasou nevyhnutná dekódovacia fáza, ktorá prevedie predikované skóre na konkrétny hamiltonovský cyklus. Táto fáza môže byť doplnená aj o lokálne zlepšovanie, čo vedie k hybridnému pipeline spájajúcemu dátovo riadený model s klasickými algoritmickými postupmi.
+Pre problém obchodného cestujúceho je osobitne prirodzená taká formulácia,
+v ktorej sa riešenie chápe prostredníctvom hrán úplného grafu. Výsledná trasa
+totiž nevystupuje iba ako poradie miest, ale aj ako špecifická množina spojení
+tvoriacich hamiltonovský cyklus. Ak model dokáže odhadnúť, ktoré spojenia sú
+pre kvalitné riešenie dôležité, táto informácia môže byť využitá v ďalšom
+kroku pri vytváraní finálnej trasy alebo pri jej následnom zlepšovaní.
+Takýto spôsob formulácie je z pohľadu riešenej úlohy osobitne relevantný,
+pretože vytvára prirodzený most medzi grafovou reprezentáciou TSP, učením
+nad referenčnými riešeniami a ďalším algoritmickým spracovaním
+\parencite{joshi2019gcn,hudson2022gls,xin2021neurolkh}.
 
-Pre potreby tejto práce má takáto formulácia zásadný význam, keďže umožňuje prepájať grafovú štruktúru TSP, prípravu tréningových dát a výstup neurónových modelov v jednotnom experimentálnom rámci. Práve na tomto základe následne stojí aj nasledujúca časť kapitoly, ktorá sa venuje konkrétnym dátovo riadeným a neurónovým prístupom k riešeniu TSP.
+\section{Neurónové a kombinované prístupy}
 
-\section{Dátovo riadené a neurónové prístupy k riešeniu TSP}
+Výskum v oblasti strojového učenia pre kombinatorickú optimalizáciu sa
+v posledných rokoch výrazne rozšíril a TSP patrí medzi úlohy, na ktorých sa
+nové prístupy často overujú. V literatúre sa postupne vytvorilo viacero smerov,
+ktoré sa odlišujú najmä tým, akú úlohu má model v samotnom procese riešenia.
+Niektoré prístupy smerujú k tomu, aby model vytváral približné riešenie čo
+najpriamejšie. Iné prístupy ponechávajú rozhodujúcu úlohu klasickému algoritmu
+alebo heuristike a model využívajú iba ako zdroj doplnkovej informácie.
+Práve toto rozlíšenie je pri TSP dôležité, pretože ukazuje, že použitie
+neurónových sietí nemusí nevyhnutne znamenať úplné nahradenie tradičných
+optimalizačných postupov
+\parencite{bengio2021mlco,cappart2023gnnco}.
 
-V súčasnom výskume kombinatorickej optimalizácie sa čoraz väčšia pozornosť venuje prístupom, ktoré využívajú strojové učenie na odhad rozhodnutí vedúcich ku kvalitným riešeniam. Pri probléme obchodného cestujúceho to znamená, že model sa neučí priamo „riešiť“ úlohu v tradičnom zmysle, ale odhaduje štruktúrne vzory, ktoré možno následne využiť pri konštrukcii výslednej trasy. V našej práci sa zameriavame na taký typ dátovo riadených modelov, ktorý pracuje s hranami úplného grafu a hodnotí ich význam pre výsledné riešenie.
+Významnou líniou sú najmä prístupy, ktoré rešpektujú grafovú povahu problému.
+Pri TSP totiž výsledné riešenie prirodzene súvisí so štruktúrou úplného grafu,
+a preto sa ako sľubné ukázali modely, ktoré spracúvajú celú inštanciu naraz,
+nie iba ako jednoduchú postupnosť rozhodnutí. Takéto prístupy dokážu lepšie
+zachytiť vzťahy medzi vrcholmi a hranami, zohľadniť širší kontext celej úlohy
+a vytvoriť reprezentácie, ktoré sú vhodné pre ďalšie rozhodovanie
+\parencite{joshi2019gcn,cappart2023gnnco,joshi2022generalization}.
 
-\noindent\textbf{Edge-based prístup ako základ modelovania.}
+Grafovo orientované neurónové prístupy sú dôležité aj preto, že umožňujú
+pracovať s problémom v jeho prirodzenej štruktúre. Namiesto toho, aby model
+uvažoval iba o ďalšom kroku v poradí, môže posudzovať širšie vzťahy v rámci
+celej inštancie. Výstup takéhoto modelu nemusí mať podobu hotovej trasy, ale
+môže predstavovať informáciu o tom, ktoré časti grafu, ktoré spojenia alebo
+ktoré hrany majú pre kvalitné riešenie osobitný význam. Z pohľadu literatúry
+ide o dôležitý posun, pretože takýto prístup približuje modelovú reprezentáciu
+samotnej podstate TSP ako úlohy definovanej nad grafom
+\parencite{joshi2019gcn,joshi2022generalization}.
 
-Pri edge-based formulácii model nepredikuje celé poradie miest, ale priraďuje skóre jednotlivým hranám medzi vrcholmi. Takýto prístup prirodzene vychádza z grafovej povahy problému TSP, keďže výslednú trasu možno chápať ako špecifickú množinu hrán tvoriacich hamiltonovský cyklus. Výhodou tejto formulácie je, že umožňuje pracovať s explicitne pripravenými príznakmi hrán a zároveň porovnávať rôzne architektúry v jednotnom experimentálnom rámci.
+Osobitnú skupinu predstavujú kombinované prístupy, pri ktorých neurónová sieť
+nevystupuje ako samostatný riešič, ale ako súčasť širšieho riešiaceho postupu.
+V takom prípade model poskytuje pomocnú predikciu, ktorá sa následne využíva
+v heuristike, v lokálnom prehľadávaní alebo pri inom algoritmickom spracovaní.
+Praktický význam tohto smeru spočíva v tom, že sa spájajú dve odlišné
+schopnosti: model dokáže zachytiť vzory v údajoch, zatiaľ čo heuristika alebo
+prehľadávací postup zabezpečujú zostavenie realizovateľného a kvalitného
+riešenia. V literatúre sa tento smer ukazuje ako obzvlášť relevantný pri
+náročnejších inštanciách, kde samotná predikcia modelu ešte nepostačuje
+na vytvorenie kvalitnej finálnej trasy
+\parencite{hudson2022gls,xin2021neurolkh,bengio2021mlco}.
 
-Z metodologického hľadiska ide o úlohu, v ktorej model odhaduje, ktoré spojenia medzi vrcholmi sú perspektívne pre výslednú trasu. Výstupom preto nie je priamo hotový okruh, ale skóre alebo pravdepodobnosť priradená jednotlivým hranám. Takáto reprezentácia je vhodná najmä vtedy, keď chceme analyzovať, do akej miery samotná architektúra modelu ovplyvňuje kvalitu predikcie nad rovnakou množinou vstupných príznakov.
+Súčasné práce zároveň ukazujú, že pri neurónových a kombinovaných prístupoch
+nemožno výsledky interpretovať iba cez samotnú architektúru modelu. Rovnako
+dôležitú úlohu zohráva reprezentácia problému, kvalita referenčných riešení,
+spôsob vytvorenia pomocnej predikcie a napokon aj to, akým spôsobom sa táto
+predikcia premietne do konečného riešenia. Práve preto sa v novšej literatúre
+stále viac zdôrazňuje potreba posudzovať celý postup ako vzájomne prepojený
+systém, a nie iba izolovaný výkon modelu
+\parencite{joshi2022generalization,bengio2021mlco}.
 
-\noindent\textbf{Viacvrstvové perceptróny nad príznakmi hrán.}
+Pre riešenú úlohu je preto najbližší ten segment literatúry, ktorý spája
+grafovú reprezentáciu problému, učenie nad referenčnými riešeniami a následné
+algoritmické využitie pomocnej predikcie. Takto chápané neurónové a kombinované
+prístupy vytvárajú vhodný rámec pre porovnanie modelov, ktoré sa líšia mierou
+schopnosti zachytiť širší kontext celej inštancie, no zostávajú v rámci
+rovnakej formulácie úlohy a rovnakého spôsobu hodnotenia. Práve takýto smer je
+z pohľadu tejto práce najrelevantnejší, pretože umožňuje sledovať nielen výkon
+samotného modelu, ale aj to, ako sa jeho výstup premieta do kvality finálneho
+riešenia
+\parencite{joshi2019gcn,joshi2022generalization,hudson2022gls,xin2021neurolkh}.
 
-Najjednoduchšiu skupinu modelov v tomto rámci predstavujú viacvrstvové perceptróny, ktoré pracujú s pripravenými príznakmi hrán. Tieto modely posudzujú každú hranu na základe jej vstupnej reprezentácie a snažia sa odhadnúť, či je dané spojenie dôležité pre kvalitnú trasu. Ich výhodou je architektonická jednoduchosť, relatívne nízka výpočtová náročnosť a dobrá interpretovateľnosť. Zároveň poskytujú prirodzený základ na porovnanie s výkonnejšími architektúrami.
+\section{Benchmarkové dáta a hodnotenie riešení}
 
-V praktickej rovine sú takéto modely vhodné najmä ako baseline, pretože umožňujú relatívne priamo sledovať vplyv počtu vrstiev a šírky siete na výslednú kvalitu predikcie. Ak model pracuje iba s pripravenými príznakmi jednotlivých hrán, jeho schopnosť zachytiť zložitejšie globálne vzťahy v grafe je obmedzená, no práve preto predstavuje dôležitý referenčný bod pri porovnávaní s hlbšími a štruktúrne bohatšími architektúrami.
+Pri probléme obchodného cestujúceho zohrávajú benchmarkové údaje mimoriadne
+dôležitú úlohu. Keďže ide o klasickú optimalizačnú úlohu, pri ktorej sa nové
+prístupy pravidelne porovnávajú s existujúcimi algoritmami, je nevyhnutné
+vychádzať zo spoločného referenčného základu. Práve z tohto dôvodu má v oblasti
+TSP osobitné postavenie knižnica TSPLIB, ktorá patrí medzi najvýznamnejšie
+a najčastejšie používané benchmarky pre hodnotenie algoritmov zameraných
+na riešenie tejto úlohy \parencite{reinelt1991tsplib}.
 
-\noindent\textbf{Reziduálne siete pre hlbšiu reprezentáciu hrán.}
+Význam TSPLIB spočíva v tom, že zhromažďuje štandardné inštancie rôznych
+veľkostí a typov, ktoré sa dlhodobo používajú pri testovaní klasických aj
+novších prístupov. V odbornej literatúre preto plní úlohu spoločného
+porovnávacieho rámca. Ak sa nový algoritmus alebo model hodnotí na inštanciách
+z TSPLIB, jeho výsledky možno prirodzene porovnať s výsledkami, ktoré boli
+publikované v starších aj novších prácach. Z tohto pohľadu nejde iba o súbor
+testovacích údajov, ale o základný referenčný benchmark pre oblasť TSP
+\parencite{reinelt1991tsplib,joshi2022generalization}.
 
-Ďalšiu skupinu predstavujú reziduálne siete, ktoré rozširujú jednoduchšie MLP modely o reziduálne prepojenia medzi vrstvami. Ich význam spočíva najmä v tom, že umožňujú stabilnejšie učenie hlbších architektúr a znižujú riziko degradácie výkonu pri väčšom počte vrstiev. V kontexte predikcie hrán to znamená, že model môže vytvárať bohatšiu vnútornú reprezentáciu bez toho, aby sa tréning výrazne destabilizoval.
+Dôležitá je aj skutočnosť, že pri viacerých inštanciách z TSPLIB sú známe
+optimálne alebo najlepšie známe riešenia. To umožňuje hodnotiť kvalitu
+vypočítanej trasy voči spoľahlivému štandardu, čo je dôležité nielen pri
+klasických algoritmoch, ale aj pri dátovo riadených prístupoch
+\parencite{reinelt1991tsplib}. Pri overovaní alebo tvorbe takýchto etalónnych
+riešení sa v praxi využívajú aj presné riešiče, medzi ktorými má významné
+postavenie aj Concorde \parencite{concorde2003solver}.
 
-Reziduálny prístup je preto vhodný najmä v situáciách, keď jednoduchý perceptrón už nedokáže dostatočne zachytiť zložitejšie vzťahy medzi vstupnými príznakmi. Takýto model síce stále pracuje primárne nad edge features, no vďaka hlbšej transformácii môže lepšie využívať ich kombinácie a nelineárne vzťahy. V našom prípade preto predstavuje prirodzený medzistupeň medzi jednoduchým baseline modelom a štruktúrne uvedomelejším transformerovým prístupom.
+Popri štandardných benchmarkoch sa v literatúre často používajú aj synteticky
+generované euklidovské inštancie. Ich výhodou je možnosť pripraviť väčšie
+množstvo príkladov s kontrolovanou veľkosťou a štruktúrou. Takéto údaje sú
+vhodné najmä na učenie modelov a na experimentovanie. Na druhej strane,
+pri záverečnom hodnotení zostáva rozhodujúce overenie na štandardných
+benchmarkoch, pretože práve tie umožňujú porovnanie s existujúcou literatúrou
+a poskytujú realistickejší obraz o kvalite navrhnutého prístupu
+\parencite{joshi2022generalization,bengio2021mlco,reinelt1991tsplib}.
 
-\noindent\textbf{Transformerové modely so zohľadnením štruktúry grafu.}
+Pri práci s benchmarkmi je zároveň potrebné rešpektovať aj spôsob výpočtu
+vzdialeností v konkrétnej inštancii. Knižnica TSPLIB totiž zahŕňa úlohy
+s rôznymi metrikami, a preto musí byť hodnotenie výslednej trasy vždy v súlade
+s definíciou danej inštancie. Iba tak možno zabezpečiť, aby bolo porovnanie
+s inými prácami korektné a metodologicky správne
+\parencite{reinelt1991tsplib}.
 
-Najbohatšiu architektonickú skupinu v našej práci predstavujú modely využívajúce mechanizmy pozornosti. Na rozdiel od jednoduchších modelov, ktoré pracujú iba s izolovanými príznakmi hrán, tieto architektúry dokážu zohľadňovať aj širšie vzťahy medzi vrcholmi a hranami v celej inštancii. V našom prípade ide o prístup, v ktorom sa najskôr vytvára reprezentácia vrcholov na základe ich súradníc a následne sa skórujú jednotlivé hrany s využitím edge features aj kontextu odvodeného z uzlových reprezentácií.
-
-Takýto prístup je dôležitý najmä preto, že kvalita konkrétnej hrany v TSP nezávisí iba od jej lokálnych geometrických vlastností, ale aj od globálneho usporiadania celej inštancie. Transformerový model preto nepracuje len s lokálnym popisom hrany, ale zároveň zohľadňuje širšiu štruktúru grafu. Práve tým sa odlišuje od jednoduchších MLP a reziduálnych architektúr a predstavuje prirodzený krok smerom k grafovo uvedomelému modelovaniu.
-
-\begin{figure}[htbp]
-    \centering
-    \input{figures/tikz/edge_pipeline}
-    \caption{Schéma edge-based pipeline od vstupnej inštancie cez výpočet príznakov hrán a predikciu skóre až po dekódovanie výslednej trasy.}
-    \label{fig:edge_pipeline}
-\end{figure}
-
-\noindent\textbf{Dekódovanie a lokálna optimalizácia.}
-
-Spoločnou črtou uvedených modelov je, že ich výstupom nie je finálna realizovateľná trasa, ale iba skóre hrán. Z tohto dôvodu je nevyhnutná dekódovacia fáza, ktorá prevedie predikované hodnoty na konkrétny hamiltonovský cyklus. Bez tejto fázy by model mohol označiť ako perspektívne také hrany, ktoré spolu nevytvárajú platné riešenie.
-
-V praxi sa preto dátovo riadený model prepája s klasickými algoritmickými postupmi. Dekódovanie býva často doplnené aj o lokálne zlepšovanie, napríklad pomocou techník typu 2-opt, ktoré odstraňujú zjavne neefektívne prepojenia a zlepšujú výslednú trasu. Moderné neurónové prístupy k TSP tak zvyčajne nefungujú ako úplná náhrada klasických riešičov, ale ako súčasť hybridného pipeline, v ktorom sa spája predikcia založená na dátach s algoritmickou konštrukciou a dolaďovaním riešenia.
-
-\section{Benchmarkové dáta a metriky hodnotenia}
-
-\noindent\textbf{Referenčné benchmarky a syntetické dáta.}
-
-Objektívne porovnávanie metód riešenia TSP si vyžaduje štandardizované benchmarky. Za najvýznamnejší referenčný zdroj sa v tejto oblasti považuje knižnica TSPLIB, ktorá obsahuje široké spektrum symetrických aj asymetrických inštancií rôznych veľkostí a rôznych metrík vzdialenosti. TSPLIB predstavuje dlhodobo používaný etalón pri hodnotení kvality algoritmov a umožňuje porovnávať nové prístupy s výsledkami uvádzanými v odbornej literatúre.
-
-Jej význam nespočíva iba v samotnej dostupnosti testovacích inštancií, ale aj v tom, že pri mnohých úlohách sú k dispozícii optimálne alebo najlepšie známe referenčné riešenia. Práve táto vlastnosť robí z TSPLIB mimoriadne dôležitý nástroj na hodnotenie kvality navrhnutých modelov, pretože umožňuje porovnávať výsledné trasy voči spoľahlivému referenčnému štandardu. V kontexte tejto práce je to obzvlášť dôležité, keďže kvalita modelov nie je posudzovaná iba podľa samotnej predikcie hrán, ale najmä podľa kvality výslednej dekódovanej trasy.
-
-Pre dátovo riadené prístupy však samotná TSPLIB zvyčajne nestačí ako tréningový zdroj, pretože obsahuje relatívne obmedzený počet inštancií. Z tohto dôvodu sa pri učení modelov často využívajú synteticky generované euklidovské dáta, na ktorých možno pripraviť veľké množstvo označených príkladov s kontrolovanou distribúciou vrcholov a veľkosťou grafu. Zatiaľ čo syntetické inštancie slúžia predovšetkým na tréning a experimentovanie, TSPLIB plní úlohu nezávislého benchmarku na overenie generalizačnej schopnosti modelu a na porovnanie s existujúcimi riešeniami.
-
-Pri benchmarkoch je zároveň nevyhnutné rešpektovať konkrétnu metriku danej inštancie. TSPLIB obsahuje napríklad úlohy s metrikami \texttt{EUC\_2D}, \texttt{CEIL\_2D}, \texttt{ATT} alebo \texttt{GEO}, pričom každá z nich má vlastné pravidlá výpočtu dĺžky hrany. Pre korektné porovnanie výsledkov preto nestačí pracovať iba s normalizovanými súradnicami; konečné hodnotenie musí vychádzať z metricky správne vypočítanej dĺžky trasy podľa definície konkrétnej inštancie.
+Z pohľadu hodnotenia riešení zostáva najdôležitejším kritériom samotná dĺžka
+výslednej trasy. Popri nej sa v odbornej literatúre často sleduje aj relatívna
+odchýlka od referenčného riešenia, pretože tá umožňuje lepšie porovnávať
+výsledky medzi inštanciami rôznych veľkostí. Pri dátovo riadených a hybridných
+prístupoch je pritom dôležité hodnotiť predovšetkým kvalitu konečnej trasy,
+nie iba samotný medzivýstup modelu. Rozhodujúce je teda to, aké riešenie sa
+podarí získať po celom postupe, a nie iba kvalita čiastkovej predikcie
+\parencite{joshi2022generalization,hudson2022gls,xin2021neurolkh}.
 
 \begin{figure}[htbp]
     \centering
     \input{figures/tikz/benchmark_overview}
-    \caption{Prehľad hlavných zdrojov dát používaných pri tréningu a hodnotení modelov pre TSP.}
+    \caption{Prehľad hlavných zdrojov dát používaných pri hodnotení prístupov
+             k riešeniu TSP.}
     \label{fig:benchmarks}
 \end{figure}
 
-\noindent\textbf{Metriky porovnávania riešení.}
+\FloatBarrier
 
-Najzákladnejšou metrikou kvality riešenia je dĺžka výslednej trasy. Pri porovnávaní neurónových a heuristických prístupov sa však často používa aj optimalizačná odchýlka (optimality gap), ktorá vyjadruje relatívny rozdiel medzi dĺžkou predikovanej trasy a referenčnou hodnotou. Túto metriku možno zapísať v tvare
-\begin{equation}
-\mathrm{gap}(\%) = \frac{L_{\mathrm{pred}} - L_{\mathrm{ref}}}{L_{\mathrm{ref}}} \cdot 100,
-\end{equation}
-pričom $L_{\mathrm{ref}}$ zodpovedá optimálnej alebo najlepšej známej referenčnej trase.
+\section{Zhodnotenie literatúry a výskumná medzera}
 
-Výhodou optimalizačnej odchýlky je, že umožňuje zmysluplne porovnávať inštancie rôznych veľkostí a rôznych absolútnych dĺžok trás. Okrem priemernej odchýlky sa pri hodnotení sledujú aj ďalšie charakteristiky, napríklad medián, percentily, stabilita medzi opakovaniami, podiel platných riešení alebo čas inferencie. Pri edge-based prístupoch je navyše dôležité posudzovať nielen samotné skóre hrán, ale najmä kvalitu výslednej trasy po dekódovaní a prípadnej lokálnej optimalizácii.
+Z prehľadu literatúry vyplýva, že výskum problému obchodného cestujúceho je
+postavený na silnom základe klasických optimalizačných metód, heuristík
+a štandardných benchmarkov. Presné riešiče a výkonné heuristiky vytvorili
+referenčný rámec, voči ktorému sa posudzujú aj novšie prístupy založené
+na strojovom učení. Zároveň sa ukazuje, že pri TSP nemožno hodnotiť modely
+izolovane od spôsobu reprezentácie problému, kvality referenčných riešení
+a použitého benchmarku \parencite{bengio2021mlco,reinelt1991tsplib,
+joshi2022generalization}.
 
-\section{Zhodnotenie súčasného stavu a výskumná medzera}
+Súčasná literatúra zároveň naznačuje, že pri TSP získavajú význam najmä také
+prístupy, ktoré rešpektujú grafový charakter úlohy a ktoré dokážu spojiť
+predikciu modelu s ďalším algoritmickým spracovaním. Pri týchto prístupoch sa
+ukazuje, že výsledná kvalita nezávisí iba od samotnej architektúry modelu,
+ale aj od toho, ako sa pomocná informácia využije pri zostavení alebo zlepšení
+finálneho riešenia \parencite{joshi2019gcn,hudson2022gls,xin2021neurolkh}.
 
-Z prehľadu súčasného stavu riešenej problematiky vyplýva, že výskum TSP sa dnes opiera o tri vzájomne prepojené línie. Prvú tvoria presné metódy a silné heuristiky, ktoré zostávajú referenčným základom pri hodnotení kvality riešení. Druhú predstavuje formulácia problému pre dátovo riadené modely, v ktorej zohrávajú dôležitú úlohu syntetické inštancie, referenčné riešenia a vhodne definované cieľové štítky. Tretiu líniu tvoria samotné neurónové architektúry, ktoré sa snažia využiť pripravené dáta na odhad štrukturálnych vzorov vedúcich ku kvalitným trasám.
+Dôležitým zistením je aj to, že porovnanie výsledkov medzi jednotlivými prácami
+nie je vždy jednoduché. Jednotlivé štúdie sa totiž často líšia veľkosťou
+inštancií, typom tréningových údajov, spôsobom reprezentácie grafu aj tým,
+či model smeruje priamo ku konštrukcii trasy alebo iba poskytuje pomocnú
+informáciu pre ďalší algoritmický krok
+\parencite{joshi2022generalization,bengio2021mlco}. Práve z tohto dôvodu má
+význam opierať hodnotenie o štandardné benchmarky, predovšetkým o TSPLIB,
+ktorá umožňuje zasadiť výsledky do širšieho kontextu výskumu TSP
+\parencite{reinelt1991tsplib}.
 
-Napriek výraznému rozvoju tejto oblasti zostáva viacero otvorených otázok. Naďalej nie je jednoznačné, aký typ edge-based architektúry poskytuje najlepší kompromis medzi jednoduchosťou modelu, schopnosťou zachytiť štruktúru grafu a kvalitou výsledného riešenia. Rovnako dôležitou otázkou zostáva vplyv kvality referenčných štítkov a použitých dekódovacích postupov na finálny výkon modelu. Významnou výzvou je aj to, do akej miery sa výsledky dosiahnuté na syntetických dátach prenášajú na štandardné benchmarky typu TSPLIB.
-
-Za výskumnú medzeru preto možno považovať potrebu jednotného experimentálneho rámca, v ktorom by bolo možné transparentne porovnať viacero edge-based modelov pre symetrický TSP na rovnakých dátach, s rovnakou reprezentáciou príznakov, s porovnateľným dekódovaním a s jednotnou metrikou hodnotenia. Práve na túto medzeru nadväzuje aj naša práca. V nasledujúcej kapitole preto prejdeme od všeobecného teoretického rámca ku konkrétnej metodike, v ktorej opíšeme spôsob prípravy dát, návrh modelov, dekódovanie riešení a experimentálne nastavenie hodnotenia.
+Za relevantnú výskumnú medzeru preto možno považovať potrebu takého porovnania,
+ktoré bude vychádzať z rovnakej formulácie úlohy, z porovnateľných referenčných
+riešení a z jednotného spôsobu hodnotenia na štandardných benchmarkoch.
+Takto postavený prístup umožňuje lepšie posúdiť, ako sa mení kvalita riešenia
+pri modeloch, ktoré sa líšia schopnosťou zachytiť širší kontext celej inštancie,
+ale zostávajú v rámci rovnakej úlohy a rovnakého hodnotiaceho rámca
+\parencite{joshi2022generalization,reinelt1991tsplib,hudson2022gls,
+xin2021neurolkh}.

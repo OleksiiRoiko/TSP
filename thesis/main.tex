@@ -29,6 +29,7 @@
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{needspace}
+\usepackage[section]{placeins}
 \usepackage{amsmath,amssymb}
 \usepackage{csquotes}
 \usepackage{tikz}
@@ -61,6 +62,8 @@
 % Obsah v štýle vzoru (Príloha 4): "O B S A H" + "str." vpravo.
 \makeatletter
 \renewcommand{\contentsname}{O B S A H}
+\renewcommand{\listfigurename}{Zoznam ilustrácií}
+\renewcommand{\listtablename}{Zoznam tabuliek}
 \renewcommand{\tableofcontents}{%
   \chapter*{\contentsname\hfill str.}%
   \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}%
@@ -103,6 +106,19 @@
 
 \tableofcontents
 \clearpage
+
+% Voliteľné zoznamy podľa IS 1/2024.
+% Zoznam ilustrácií je vhodné zaradiť už teraz, keďže práca už obsahuje obrázky.
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\clearpage
+
+% Zoznam tabuliek zapneme po doplnení prvej tabuľky do práce.
+% \phantomsection
+% \addcontentsline{toc}{chapter}{\listtablename}
+% \listoftables
+% \clearpage
 
 % Od casti Uvod zapneme geometriu so zrkadlovymi okrajmi.
 \newgeometry{

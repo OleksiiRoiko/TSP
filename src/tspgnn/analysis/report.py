@@ -10,6 +10,7 @@ from typing import Any
 import numpy as np
 
 from ..config import AnalyzeCfg
+from ..utils.run_paths import dataset_tag
 
 
 def _safe_float(v: Any) -> float | None:
@@ -359,6 +360,17 @@ def _build_instance_matrix(rows: list[dict[str, Any]], primary_eval: str) -> tup
     return matrix_rows, ranking_rows
 
 
+def _load_baseline_summary(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    out: list[dict[str, Any]] = []
+    with path.open("r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            out.append(dict(row))
+    return out
+
+
 def run(cfg: AnalyzeCfg, logger):
     rows, eval_long_rows = _build_main_summary(cfg, logger)
     if not rows:
@@ -399,3 +411,40 @@ def run(cfg: AnalyzeCfg, logger):
         ranking_csv = out_dir / "model_ranking.csv"
         _write_csv(ranking_csv, ranking_rows, list(ranking_rows[0].keys()))
         logger.info(f"[analyze] wrote {ranking_csv}")
+
+    # Optional baseline-vs-models board.
+    baseline_csv_cfg = cfg.baseline_summary_csv
+    if baseline_csv_cfg and str(baseline_csv_cfg).lower() not in ("", "none", "null"):
+        baseline_rows = _load_baseline_summary(Path(str(baseline_csv_cfg)))
+        if baseline_rows:
+            board_rows: list[dict[str, Any]] = []
+            primary_key = f"{_sanitize_eval_key(cfg.primary_eval)}_gap_mean"
+            for r in rows:
+                g = _safe_float(r.get(primary_key))
+                if g is None:
+                    continue
+                board_rows.append(
+                    {
+                        "type": "model",
+                        "name": str(r.get("exp", "")),
+                        "dataset": dataset_tag(Path("runs/data/tsplib/processed")),
+                        "mean_gap_pct": g,
+                    }
+                )
+            for r in baseline_rows:
+                g = _safe_float(r.get("mean_gap_pct"))
+                if g is None:
+                    continue
+                board_rows.append(
+                    {
+                        "type": "baseline",
+                        "name": str(r.get("baseline", "")),
+                        "dataset": str(r.get("dataset", "")),
+                        "mean_gap_pct": g,
+                    }
+                )
+            if board_rows:
+                board_rows.sort(key=lambda x: float(x["mean_gap_pct"]))
+                board_csv = out_dir / "baseline_vs_models.csv"
+                _write_csv(board_csv, board_rows, list(board_rows[0].keys()))
+                logger.info(f"[analyze] wrote {board_csv}")
