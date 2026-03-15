@@ -58,12 +58,14 @@ def greedy_cycle_from_edges(n: int, E: np.ndarray, scores: np.ndarray) -> np.nda
         tour.append(cur)
     return np.asarray(tour, dtype=np.int64)
 
-def two_opt(coords: np.ndarray, tour: np.ndarray, max_passes: int=20) -> np.ndarray:
+def two_opt(coords: np.ndarray, tour: np.ndarray, max_passes: int = 20) -> np.ndarray:
     C = np.asarray(coords, dtype=np.float32)
     T = np.asarray(tour, dtype=np.int64).copy(); n=T.shape[0]
+    limit = None if int(max_passes) <= 0 else int(max_passes)
+
     def seg(a,b): return float(np.linalg.norm(C[a]-C[b]))
     improved=True; passes=0
-    while improved and passes<max_passes:
+    while improved and (limit is None or passes < limit):
         improved=False; passes+=1
         for i in range(n-1):
             for j in range(i+2, n if i>0 else n-1):
@@ -151,7 +153,7 @@ def decode_tour_from_edge_scores(
 
     n_starts = max(1, int(multistart))
     sigma = max(0.0, float(noise_std))
-    passes = max(1, int(twoopt_passes))
+    passes = int(twoopt_passes)
     rng = np.random.default_rng(int(seed))
 
     best_tour = None

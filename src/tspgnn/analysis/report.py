@@ -9,8 +9,9 @@ from typing import Any
 
 import numpy as np
 
-from ..config import AnalyzeCfg
+from ..config import AnalyzeCfg, load_config
 from ..utils.run_paths import dataset_tag
+from .report_plots import generate_analysis_plots
 
 
 def _safe_float(v: Any) -> float | None:
@@ -166,6 +167,50 @@ def _sanitize_eval_key(filename: str) -> str:
     return filename.replace(".json", "").replace(".", "_")
 
 
+def _infer_train_data_group(train_root: str) -> str:
+    root = str(train_root).replace("\\", "/").lower()
+    if "synthetic_concorde_v1" in root:
+        return "synthetic_concorde_exact"
+    if "synthetic" in root:
+        return "synthetic_heuristic"
+    if "tsplib" in root:
+        return "tsplib"
+    return "other"
+
+
+def _infer_eval_profile_label(eval_name: str) -> str:
+    name = str(eval_name).lower()
+    if "optimized" in name:
+        return "optimized"
+    if "baseline" in name:
+        return "baseline"
+    return "primary"
+
+
+def _eval_json_equal(a: Path, b: Path) -> bool:
+    if not a.exists() or not b.exists():
+        return False
+    if a.resolve() == b.resolve():
+        return True
+    da = _read_json(a)
+    db = _read_json(b)
+    return da == db and da is not None
+
+
+def _resolve_eval_profile_for_run(eval_dir: Path, primary_eval: str) -> str:
+    primary = eval_dir / primary_eval
+    base_label = _infer_eval_profile_label(primary_eval)
+    if not primary.exists():
+        return base_label
+    optimized = eval_dir / "eval_tsplib_optimized.json"
+    baseline = eval_dir / "eval_tsplib_baseline.json"
+    if primary.name != optimized.name and _eval_json_equal(primary, optimized):
+        return "optimized_alias"
+    if primary.name != baseline.name and _eval_json_equal(primary, baseline):
+        return "baseline_alias"
+    return base_label
+
+
 def _build_main_summary(cfg: AnalyzeCfg, logger) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     root = Path(cfg.experiments_root)
     if not root.exists():
@@ -201,6 +246,14 @@ def _build_main_summary(cfg: AnalyzeCfg, logger) -> tuple[list[dict[str, Any]], 
         if history_path is None:
             history_path = run_dir / "train_history.csv"
         hist = _load_history_stats(history_path)
+        train_root = ""
+        val_root = ""
+        try:
+            run_cfg = load_config(run_dir / "config.yaml")
+            train_root = str(run_cfg.train.train_root)
+            val_root = str(run_cfg.train.val_root)
+        except Exception:
+            pass
 
         row: dict[str, Any] = {
             "exp": exp_dir.name,
@@ -209,6 +262,11 @@ def _build_main_summary(cfg: AnalyzeCfg, logger) -> tuple[list[dict[str, Any]], 
             "model": model_name,
             "edge_feat_mode": edge_feat_mode,
             "checkpoint": str(_resolve_embedded_path(latest_path, latest.get("path")) or ""),
+            "train_root": train_root,
+            "val_root": val_root,
+            "train_data_group": _infer_train_data_group(train_root),
+            "primary_eval_file": cfg.primary_eval,
+            "primary_eval_profile": _resolve_eval_profile_for_run(run_dir / "evals", cfg.primary_eval),
             "epochs_run": hist["epochs_run"],
             "train_loss_first": hist["train_loss_first"],
             "train_loss_last": hist["train_loss_last"],
@@ -371,6 +429,64 @@ def _load_baseline_summary(path: Path) -> list[dict[str, Any]]:
     return out
 
 
+def _build_train_group_summary(rows: list[dict[str, Any]], primary_eval: str) -> list[dict[str, Any]]:
+    primary_key = f"{_sanitize_eval_key(primary_eval)}_gap_mean"
+    grouped: dict[tuple[str, str], list[float]] = defaultdict(list)
+    for row in rows:
+        g = _safe_float(row.get(primary_key))
+        if g is None:
+            continue
+        grouped[(str(row.get("train_data_group", "")), str(row.get("model", "")))].append(g)
+
+    out: list[dict[str, Any]] = []
+    for (train_group, model), vals in grouped.items():
+        arr = np.asarray(vals, dtype=np.float64)
+        out.append(
+            {
+                "train_data_group": train_group,
+                "model": model,
+                "experiments": int(arr.size),
+                "mean_gap_pct": float(np.mean(arr)),
+                "median_gap_pct": float(np.median(arr)),
+                "best_gap_pct": float(np.min(arr)),
+                "worst_gap_pct": float(np.max(arr)),
+            }
+        )
+    out.sort(key=lambda r: (str(r["train_data_group"]), float(r["mean_gap_pct"])))
+    return out
+
+
+def _build_data_quality_pairs(rows: list[dict[str, Any]], primary_eval: str) -> list[dict[str, Any]]:
+    primary_key = f"{_sanitize_eval_key(primary_eval)}_gap_mean"
+    by_exp = {str(row.get("exp", "")): row for row in rows}
+    out: list[dict[str, Any]] = []
+    for exp, row in sorted(by_exp.items()):
+        if exp.endswith("_ccv1"):
+            continue
+        paired_exp = f"{exp}_ccv1"
+        paired = by_exp.get(paired_exp)
+        if paired is None:
+            continue
+        gap_base = _safe_float(row.get(primary_key))
+        gap_ccv1 = _safe_float(paired.get(primary_key))
+        if gap_base is None or gap_ccv1 is None:
+            continue
+        out.append(
+            {
+                "base_exp": exp,
+                "ccv1_exp": paired_exp,
+                "model": str(row.get("model", "")),
+                "base_train_group": str(row.get("train_data_group", "")),
+                "ccv1_train_group": str(paired.get("train_data_group", "")),
+                "base_gap_pct": gap_base,
+                "ccv1_gap_pct": gap_ccv1,
+                "delta_gap_pct": gap_ccv1 - gap_base,
+            }
+        )
+    out.sort(key=lambda r: float(r["delta_gap_pct"]))
+    return out
+
+
 def run(cfg: AnalyzeCfg, logger):
     rows, eval_long_rows = _build_main_summary(cfg, logger)
     if not rows:
@@ -394,6 +510,7 @@ def run(cfg: AnalyzeCfg, logger):
         logger.info(f"[analyze] wrote {eval_csv}")
 
     # Baseline vs optimized comparison if both names are present.
+    prof_rows: list[dict[str, Any]] = []
     if "eval_tsplib_baseline.json" in cfg.eval_files and "eval_tsplib_optimized.json" in cfg.eval_files:
         prof_rows = _build_profile_compare(rows, "eval_tsplib_baseline.json", "eval_tsplib_optimized.json")
         if prof_rows:
@@ -412,12 +529,37 @@ def run(cfg: AnalyzeCfg, logger):
         _write_csv(ranking_csv, ranking_rows, list(ranking_rows[0].keys()))
         logger.info(f"[analyze] wrote {ranking_csv}")
 
+    train_group_rows = _build_train_group_summary(rows, cfg.primary_eval)
+    if train_group_rows:
+        train_group_csv = out_dir / "train_group_summary.csv"
+        _write_csv(train_group_csv, train_group_rows, list(train_group_rows[0].keys()))
+        logger.info(f"[analyze] wrote {train_group_csv}")
+
+    data_quality_rows = _build_data_quality_pairs(rows, cfg.primary_eval)
+    if data_quality_rows:
+        data_quality_csv = out_dir / "data_quality_pairs.csv"
+        _write_csv(data_quality_csv, data_quality_rows, list(data_quality_rows[0].keys()))
+        logger.info(f"[analyze] wrote {data_quality_csv}")
+
     # Optional baseline-vs-models board.
+    board_rows: list[dict[str, Any]] = []
     baseline_csv_cfg = cfg.baseline_summary_csv
     if baseline_csv_cfg and str(baseline_csv_cfg).lower() not in ("", "none", "null"):
         baseline_rows = _load_baseline_summary(Path(str(baseline_csv_cfg)))
         if baseline_rows:
-            board_rows: list[dict[str, Any]] = []
+            model_profile = _infer_eval_profile_label(cfg.primary_eval)
+            baseline_profiles = {
+                str(r.get("eval_profile", "")).strip().lower()
+                for r in baseline_rows
+                if str(r.get("eval_profile", "")).strip()
+            }
+            if baseline_profiles and (
+                len(baseline_profiles) != 1 or model_profile not in baseline_profiles
+            ):
+                logger.warning(
+                    "[analyze] baseline_vs_models mixes model primary eval "
+                    f"({cfg.primary_eval}) with baseline summary settings; compare decode settings before ranking."
+                )
             primary_key = f"{_sanitize_eval_key(cfg.primary_eval)}_gap_mean"
             for r in rows:
                 g = _safe_float(r.get(primary_key))
@@ -427,8 +569,17 @@ def run(cfg: AnalyzeCfg, logger):
                     {
                         "type": "model",
                         "name": str(r.get("exp", "")),
+                        "model": str(r.get("model", "")),
+                        "run": str(r.get("run", "")),
                         "dataset": dataset_tag(Path("runs/data/tsplib/processed")),
                         "mean_gap_pct": g,
+                        "eval_file": str(r.get("primary_eval_file", cfg.primary_eval)),
+                        "eval_profile": str(r.get("primary_eval_profile", _infer_eval_profile_label(cfg.primary_eval))),
+                        "run_twoopt": "",
+                        "decode_multistart": "",
+                        "decode_noise_std": "",
+                        "decode_twoopt_passes": "",
+                        "seed": "",
                     }
                 )
             for r in baseline_rows:
@@ -439,8 +590,17 @@ def run(cfg: AnalyzeCfg, logger):
                     {
                         "type": "baseline",
                         "name": str(r.get("baseline", "")),
+                        "model": "",
+                        "run": "",
                         "dataset": str(r.get("dataset", "")),
                         "mean_gap_pct": g,
+                        "eval_file": str(r.get("result_json", "")),
+                        "eval_profile": str(r.get("eval_profile", "baseline_cfg")),
+                        "run_twoopt": str(r.get("run_twoopt", "")),
+                        "decode_multistart": str(r.get("decode_multistart", "")),
+                        "decode_noise_std": str(r.get("decode_noise_std", "")),
+                        "decode_twoopt_passes": str(r.get("decode_twoopt_passes", "")),
+                        "seed": str(r.get("seed", "")),
                     }
                 )
             if board_rows:
@@ -448,3 +608,5 @@ def run(cfg: AnalyzeCfg, logger):
                 board_csv = out_dir / "baseline_vs_models.csv"
                 _write_csv(board_csv, board_rows, list(board_rows[0].keys()))
                 logger.info(f"[analyze] wrote {board_csv}")
+
+    generate_analysis_plots(cfg, logger, rows, ranking_rows, prof_rows, matrix_rows, board_rows)

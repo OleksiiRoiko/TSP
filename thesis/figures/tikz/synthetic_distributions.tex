@@ -1,0 +1,52 @@
+\begin{tikzpicture}[
+    font=\small,
+    panel/.style={draw, rounded corners=4pt, fill=gray!4},
+    pt/.style={circle, fill=black, inner sep=0.8pt},
+    title/.style={font=\bfseries, align=center, text width=3.4cm}
+]
+
+\begin{scope}[shift={(0,4.9)}]
+    \draw[panel] (0,0) rectangle (3.4,3.4);
+    \node[title] at (1.7,3.95) {Rovnomerné};
+    \foreach \x/\y in {
+        0.30/0.45, 0.55/1.10, 0.82/2.55, 1.05/0.85, 1.30/2.90,
+        1.52/1.75, 1.72/0.38, 1.95/2.15, 2.15/1.08, 2.32/2.82,
+        2.55/0.58, 2.78/1.92, 2.98/2.48, 0.78/1.92, 1.98/3.02,
+        2.88/0.98, 0.42/2.88, 3.00/1.60
+    } { \node[pt] at (\x,\y) {}; }
+\end{scope}
+
+\begin{scope}[shift={(4.8,4.9)}]
+    \draw[panel] (0,0) rectangle (3.4,3.4);
+    \node[title] at (1.7,3.95) {Zhlukové};
+    \foreach \x/\y in {
+        0.55/2.65, 0.78/2.88, 0.96/2.52, 0.66/2.30, 1.05/2.78,
+        2.48/2.78, 2.72/2.55, 2.86/2.90, 2.62/2.32, 2.95/2.58,
+        0.72/0.92, 0.96/0.70, 1.18/1.02, 0.58/0.58, 0.84/1.18,
+        2.36/0.86, 2.58/0.58, 2.84/0.94, 2.64/1.12, 2.98/0.72
+    } { \node[pt] at (\x,\y) {}; }
+\end{scope}
+
+\begin{scope}[shift={(0,0)}]
+    \draw[panel] (0,0) rectangle (3.4,3.4);
+    \node[title] at (1.7,3.95) {Prstencové};
+    \foreach \x/\y in {
+        1.70/3.00, 2.18/2.86, 2.62/2.52, 2.92/2.08, 3.02/1.62,
+        2.88/1.12, 2.54/0.68, 2.12/0.40, 1.66/0.28, 1.18/0.40,
+        0.76/0.72, 0.44/1.12, 0.34/1.64, 0.48/2.12, 0.84/2.54,
+        1.24/2.84, 1.68/2.92, 2.44/1.98
+    } { \node[pt] at (\x,\y) {}; }
+\end{scope}
+
+\begin{scope}[shift={(4.8,0)}]
+    \draw[panel] (0,0) rectangle (3.4,3.4);
+    \node[title] at (1.7,3.95) {Takmer mriežkové};
+    \foreach \x/\y in {
+        0.42/0.46, 1.18/0.38, 2.14/0.50, 2.92/0.44,
+        0.50/1.20, 1.26/1.08, 2.02/1.18, 2.88/1.12,
+        0.36/2.02, 1.10/1.92, 2.10/2.08, 2.98/1.96,
+        0.48/2.84, 1.22/2.72, 2.04/2.86, 2.84/2.78
+    } { \node[pt] at (\x,\y) {}; }
+\end{scope}
+
+\end{tikzpicture}

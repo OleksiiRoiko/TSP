@@ -20,6 +20,24 @@ from ..utils.tour import (
 )
 
 
+def _infer_eval_profile(cfg: BaselineEvalCfg) -> str:
+    if (
+        bool(cfg.run_twoopt)
+        and int(cfg.decode_multistart) == 1
+        and abs(float(cfg.decode_noise_std)) <= 1e-12
+        and int(cfg.decode_twoopt_passes) == 20
+    ):
+        return "baseline"
+    if (
+        bool(cfg.run_twoopt)
+        and int(cfg.decode_multistart) == 8
+        and abs(float(cfg.decode_noise_std) - 0.02) <= 1e-12
+        and int(cfg.decode_twoopt_passes) == 40
+    ):
+        return "optimized"
+    return "custom"
+
+
 def _compute_lengths_and_gap(d: dict, pred: np.ndarray, coords: np.ndarray) -> tuple[float, float, float, float, float]:
     gt = d.get("label_tour", None)
     gt = gt.astype(np.int64) if gt is not None else None
@@ -55,7 +73,7 @@ def _predict_baseline_tour(
     if baseline == "nn2opt":
         pred = nearest_neighbor_multistart(coords, multistart=max(1, int(multistart)), seed=int(seed))
         if run_twoopt:
-            pred = two_opt(coords, pred, max_passes=max(1, int(twoopt_passes)))
+            pred = two_opt(coords, pred, max_passes=int(twoopt_passes))
         return pred
 
     if baseline == "dist_greedy2opt":
@@ -70,7 +88,7 @@ def _predict_baseline_tour(
             E,
             scores,
             run_twoopt=bool(run_twoopt),
-            twoopt_passes=max(1, int(twoopt_passes)),
+            twoopt_passes=int(twoopt_passes),
             multistart=max(1, int(multistart)),
             noise_std=max(0.0, float(noise_std)),
             seed=int(seed),
@@ -86,6 +104,7 @@ def run(cfg: BaselineEvalCfg, logger):
 
     save_root = Path(cfg.save_root)
     save_root.mkdir(parents=True, exist_ok=True)
+    eval_profile = _infer_eval_profile(cfg)
 
     summary_rows: list[dict] = []
     for baseline in cfg.names:
@@ -142,6 +161,7 @@ def run(cfg: BaselineEvalCfg, logger):
             summary_rows.append(
                 {
                     "baseline": baseline,
+                    "eval_profile": eval_profile,
                     "dataset": tag,
                     "instances": len(results),
                     "mean_gap_pct": mean_gap,
@@ -162,5 +182,8 @@ def run(cfg: BaselineEvalCfg, logger):
             writer.writeheader()
             writer.writerows(summary_rows)
         else:
-            fh.write("baseline,dataset,instances,mean_gap_pct,median_gap_pct,run_twoopt,decode_multistart,decode_noise_std,decode_twoopt_passes,seed,result_json\n")
+            fh.write(
+                "baseline,eval_profile,dataset,instances,mean_gap_pct,median_gap_pct,"
+                "run_twoopt,decode_multistart,decode_noise_std,decode_twoopt_passes,seed,result_json\n"
+            )
     logger.info(f"[baseline] summary saved {summary_csv}")

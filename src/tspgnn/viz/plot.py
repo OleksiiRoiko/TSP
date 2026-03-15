@@ -1,8 +1,10 @@
 from __future__ import annotations
 from pathlib import Path
-import json
+from typing import cast
 import numpy as np
 import torch
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -10,9 +12,8 @@ from ..config import VisualizeCfg
 from ..utils.io import load_npz
 from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import decode_tour_from_edge_scores
-from ..utils.run_paths import resolve_model_path, infer_run_dir, dataset_tag
-from ..models.registry import build_model_from_state, load_weights_flex
-from ..models.inference import load_state_dict, predict_logits
+from ..utils.run_paths import infer_run_dir, dataset_tag
+from ..models.inference import load_model_for_inference, predict_logits
 
 
 def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
@@ -34,40 +35,6 @@ def _render(C, gt, pred, Ebg, out_path=None, figsize=(11.0, 5.5), dpi=150):
         plt.close(fig)
     else:
         plt.show()
-
-
-def _extract_model_overrides(meta_path: Path) -> tuple[str | None, dict | None]:
-    if not meta_path.exists():
-        return None, None
-    try:
-        data = json.loads(meta_path.read_text(encoding="utf-8"))
-    except Exception:
-        return None, None
-    if not isinstance(data, dict):
-        return None, None
-
-    model_params = data.get("model_params", None)
-    if not isinstance(model_params, dict):
-        return None, None
-
-    params = dict(model_params)
-    prefer_name_raw = params.pop("model_name", data.get("model", None))
-    prefer_name = str(prefer_name_raw).lower() if prefer_name_raw else None
-    return prefer_name, (params or None)
-
-
-def _model_overrides_from_metadata(model_path_cfg: Path, resolved_model_path: Path) -> tuple[str | None, dict | None]:
-    if model_path_cfg.suffix.lower() == ".json":
-        pref, ov = _extract_model_overrides(model_path_cfg)
-        if pref is not None or ov is not None:
-            return pref, ov
-
-    if resolved_model_path.exists():
-        pref, ov = _extract_model_overrides(resolved_model_path.parent / "meta.json")
-        if pref is not None or ov is not None:
-            return pref, ov
-
-    return None, None
 
 
 def run(cfg: VisualizeCfg, logger):
@@ -93,12 +60,8 @@ def run(cfg: VisualizeCfg, logger):
     run_dir = None
     if any(mode == "predict" for mode, _, _, _ in targets):
         model_path_cfg = Path(cfg.model)
-        mp = resolve_model_path(model_path_cfg)
-        state = load_state_dict(mp)
-        prefer_name, overrides = _model_overrides_from_metadata(model_path_cfg, mp)
-        model, mparams = build_model_from_state(state, prefer_name=prefer_name, overrides=overrides)
+        model, mparams, mp = load_model_for_inference(model_path_cfg, logger=logger, require_all_matched=True)
         logger.info(f"Viz model params: {mparams}")
-        load_weights_flex(model, state, logger=logger, require_all_matched=True)
         dev = torch.device("cpu" if cfg.device == "cpu" or not torch.cuda.is_available() else "cuda")
         model.to(dev).eval()
         run_dir = infer_run_dir(model_path_cfg, mp)
@@ -153,7 +116,8 @@ def run(cfg: VisualizeCfg, logger):
 
                 # always complete graph
                 Ebg = complete_edges(C.shape[0])
-                F = edge_features(C, Ebg, feature_dim=mparams["in_dim"])
+                in_dim = int(cast(int, mparams["in_dim"]))
+                F = edge_features(C, Ebg, feature_dim=in_dim)
                 with torch.no_grad():
                     s = predict_logits(model, F, C, dev)
                 pred = decode_tour_from_edge_scores(

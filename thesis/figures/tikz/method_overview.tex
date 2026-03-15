@@ -2,7 +2,12 @@
     font=\small,
     box/.style={
         draw, rounded corners=4pt, align=center,
-        text width=2.7cm, minimum height=1.15cm,
+        text width=2.75cm, minimum height=1.15cm,
+        inner sep=4pt, fill=white
+    },
+    widebox/.style={
+        draw, rounded corners=4pt, align=center,
+        text width=3.05cm, minimum height=1.15cm,
         inner sep=4pt, fill=white
     },
     arrow/.style={-{Latex[length=2.2mm]}, semithick},
@@ -14,23 +19,23 @@
 ]
 
 %% ── TRAINING NODES ───────────────────────────────
-\node[font=\bfseries]  (Thead)     at (2.8,  0.55) {Tréningová vetva};
-\node[box]             (synthetic) at (2.8, -0.45) {Synteticky\\generované\\inštancie};
-\node[box]             (heuristic) at (0.4, -2.55) {Heuristické\\referenčné\\trasy};
-\node[box]             (concorde)  at (5.2, -2.55) {Optimálne trasy\\pomocou Concorde};
-\node[box]             (labels)    at (2.8, -4.55) {Tvorba cieľových\\štítkov};
-\node[box]             (train)     at (2.8, -6.40) {Tréning\\a validácia\\modelov};
+\node[font=\bfseries]  (Thead)     at (3.0,  0.80) {Tréningová vetva};
+\node[box]             (synthetic) at (3.0, -0.55) {Synteticky\\generované\\inštancie};
+\node[box]             (heuristic) at (0.7, -3.15) {Približné\\referenčné\\trasy};
+\node[box]             (concorde)  at (5.3, -3.15) {Presné\\referenčné\\trasy};
+\node[box]             (labels)    at (3.0, -5.55) {Tvorba cieľových\\štítkov};
+\node[box]             (train)     at (3.0, -7.65) {Tréning\\a validácia\\modelov};
 
 %% ── SHARED / MIDDLE BLOCK ────────────────────────
-\node[box]             (predict)   at (6.9, -6.40) {Predikcia hrán,\\dekódovanie\\a 2-opt};
+\node[widebox]         (predict)   at (7.8, -7.65) {Predikcia hrán,\\dekódovanie\\a lokálne\\zlepšenie};
 
 %% ── BENCHMARK NODES ──────────────────────────────
-\node[font=\bfseries]  (Bhead)     at (10.6,  0.55) {Benchmarková vetva};
-\node[box]             (tsplib)    at (10.6, -0.45) {Benchmarkové\\inštancie\\TSPLIB};
-\node[box]             (eval)      at (10.6, -4.55) {Nezávislé\\hodnotenie\\na bench-markoch};
+\node[font=\bfseries]  (Bhead)     at (12.5,  0.80) {Vetva TSPLIB};
+\node[box]             (tsplib)    at (12.5, -0.55) {Referenčné\\inštancie\\TSPLIB};
+\node[widebox]         (eval)      at (12.5, -5.15) {Hodnotenie na\\inštanciách\\TSPLIB};
 
 %% ── BOTTOM BLOCK ─────────────────────────────────
-\node[box]             (analysis)  at (8.85,-8.35) {Analýza výsledkov\\a interpretácia};
+\node[widebox]         (analysis)  at (10.4,-10.55) {Analýza výsledkov\\a interpretácia};
 
 %% ── GROUP FRAMES (background, fit over header+nodes) ──
 \begin{scope}[on background layer]
@@ -40,8 +45,8 @@
 
 %% ── ARROWS ───────────────────────────────────────
 % Synthetic → Heuristic / Concorde
-\draw[arrow] (synthetic.south) -- ++(0,-0.2) -| (heuristic.north);
-\draw[arrow] (synthetic.south) -- ++(0,-0.2) -| (concorde.north);
+\draw[arrow] (synthetic.south) -- ++(0,-0.35) -| (heuristic.north);
+\draw[arrow] (synthetic.south) -- ++(0,-0.35) -| (concorde.north);
 
 % Heuristic / Concorde → Labels
 \draw[arrow] (heuristic.south) |- (labels.west);
@@ -54,10 +59,13 @@
 % TSPLIB → Eval
 \draw[arrow] (tsplib.south) -- (eval.north);
 
-% Predict → Eval (horizontal, then down into eval)
-\draw[arrow] (predict.east) -- (eval.west);
+% Predict → Eval
+\coordinate (pred_eval_turn) at ($(predict.east)+(0.75,0)$);
+\coordinate (eval_entry) at ([xshift=-0.35cm]eval.west);
+\draw[arrow] (predict.east) -- (pred_eval_turn) |- (eval_entry) -- (eval.west);
 
-% Eval + Predict → Analysis
-\draw[arrow] (eval.south)  |- (analysis.east);
+% Predict / Eval → Analysis
+\draw[arrow] (predict.south) -- ++(0,-0.55) |- (analysis.west);
+\draw[arrow] (eval.south)    -- ++(0,-0.65) |- (analysis.east);
 
 \end{tikzpicture}

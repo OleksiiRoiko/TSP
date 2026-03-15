@@ -25,8 +25,9 @@
 \usepackage{indentfirst}
 \setlength{\parindent}{1.25cm}
 \setlength{\parskip}{0pt}
-\usepackage{microtype}
+\usepackage[nopatch=footnote]{microtype}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{enumitem}
 \usepackage{needspace}
 \usepackage[section]{placeins}
@@ -59,6 +60,26 @@
 \titlespacing{\section}{0pt}{18pt}{8pt}
 \titlespacing{\subsection}{0pt}{14pt}{6pt}
 
+% Jednotné nastavenie zoznamov v celej práci.
+\setlist[itemize]{leftmargin=1.4cm,itemsep=4pt,topsep=5pt,parsep=0pt,partopsep=0pt}
+\setlist[enumerate]{leftmargin=1.5cm,itemsep=4pt,topsep=5pt,parsep=0pt,partopsep=0pt}
+
+% Kompaktný blok na vysvetlenie symbolov a skratiek po vzore "kde:".
+\newenvironment{symboltable}
+  {\begin{list}{}%
+    {\setlength{\leftmargin}{1.1cm}%
+     \setlength{\itemindent}{0pt}%
+     \setlength{\labelwidth}{0pt}%
+     \setlength{\labelsep}{0pt}%
+     \setlength{\itemsep}{1.5pt}%
+     \setlength{\topsep}{3pt}%
+     \setlength{\parsep}{0pt}%
+     \setlength{\partopsep}{0pt}}}
+  {\end{list}}
+\newcommand{\symbolitem}[2]{%
+  \item \textendash\enspace #1\ #2
+}
+
 % Obsah v štýle vzoru (Príloha 4): "O B S A H" + "str." vpravo.
 \makeatletter
 \renewcommand{\contentsname}{O B S A H}
@@ -76,6 +97,7 @@
 \input{metadata.tex}
 
 \begin{document}
+\raggedbottom
 
 % Číslovanie začína od titulného listu, ale zobrazí sa až od časti Úvod.
 \pagenumbering{arabic}

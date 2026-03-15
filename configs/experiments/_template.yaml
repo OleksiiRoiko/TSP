@@ -35,7 +35,7 @@ eval:
   # Decode options (defaults keep old behavior):
   # decode_multistart: 1
   # decode_noise_std: 0.0
-  # decode_twoopt_passes: 20
+  # decode_twoopt_passes: 20   # 0 -> until no further improvement
   data_roots:
     - runs/data/tsplib/processed
 
@@ -45,7 +45,7 @@ visualize:
   # Decode options for predict-mode figures:
   # decode_multistart: 1
   # decode_noise_std: 0.0
-  # decode_twoopt_passes: 20
+  # decode_twoopt_passes: 20   # 0 -> until no further improvement
   targets:
     - npz_dir: runs/data/tsplib/processed
       limit: 0

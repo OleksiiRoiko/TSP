@@ -171,7 +171,7 @@ class EvalCfg(BaseModel):
     run_twoopt: bool = True
     decode_multistart: int = 1
     decode_noise_std: float = 0.0
-    decode_twoopt_passes: int = 20
+    decode_twoopt_passes: int = 20  # 0 -> run until no further improvement
     seed: int = 0
 
     @field_validator("decode_multistart")
@@ -192,8 +192,8 @@ class EvalCfg(BaseModel):
     @field_validator("decode_twoopt_passes")
     @classmethod
     def _twoopt_passes_ok(cls, v: int) -> int:
-        if int(v) < 1:
-            raise ValueError("decode_twoopt_passes must be >= 1")
+        if int(v) < 0:
+            raise ValueError("decode_twoopt_passes must be >= 0")
         return int(v)
 
 
@@ -212,7 +212,7 @@ class VisualizeCfg(BaseModel):
     device: str = "cpu"
     decode_multistart: int = 1
     decode_noise_std: float = 0.0
-    decode_twoopt_passes: int = 20
+    decode_twoopt_passes: int = 20  # 0 -> run until no further improvement
     seed: int = 0
     targets: List[VisualizeTargetCfg] = []
 
@@ -234,8 +234,8 @@ class VisualizeCfg(BaseModel):
     @field_validator("decode_twoopt_passes")
     @classmethod
     def _viz_twoopt_passes_ok(cls, v: int) -> int:
-        if int(v) < 1:
-            raise ValueError("visualize.decode_twoopt_passes must be >= 1")
+        if int(v) < 0:
+            raise ValueError("visualize.decode_twoopt_passes must be >= 0")
         return int(v)
 
 
@@ -257,6 +257,9 @@ class QACfg(BaseModel):
 class AnalyzeCfg(BaseModel):
     experiments_root: str = "runs/experiments"
     out_dir: str = "runs/analysis"
+    plots_dir: Optional[str] = None
+    make_plots: bool = True
+    heatmap_top_k: int = 8
     exp_glob: str = "exp_edge_*"
     eval_files: List[str] = [
         "eval_tsplib.json",
@@ -286,6 +289,14 @@ class AnalyzeCfg(BaseModel):
             raise ValueError("analyze.primary_eval must be a .json file")
         return vv
 
+    @field_validator("heatmap_top_k")
+    @classmethod
+    def _heatmap_top_k_ok(cls, v: int) -> int:
+        vv = int(v)
+        if vv <= 0:
+            raise ValueError("analyze.heatmap_top_k must be positive")
+        return vv
+
 
 class BaselineEvalCfg(BaseModel):
     data_roots: List[str] = ["runs/data/tsplib/processed"]
@@ -294,7 +305,7 @@ class BaselineEvalCfg(BaseModel):
     run_twoopt: bool = True
     decode_multistart: int = 1
     decode_noise_std: float = 0.0
-    decode_twoopt_passes: int = 20
+    decode_twoopt_passes: int = 20  # 0 -> run until no further improvement
     seed: int = 0
 
     @field_validator("names")
@@ -327,8 +338,8 @@ class BaselineEvalCfg(BaseModel):
     @field_validator("decode_twoopt_passes")
     @classmethod
     def _twoopt_passes_ok(cls, v: int) -> int:
-        if int(v) < 1:
-            raise ValueError("baseline.decode_twoopt_passes must be >= 1")
+        if int(v) < 0:
+            raise ValueError("baseline.decode_twoopt_passes must be >= 0")
         return int(v)
 
 

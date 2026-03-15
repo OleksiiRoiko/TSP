@@ -1,0 +1,12 @@
+baseline:
+  data_roots:
+    - runs/data/tsplib/processed
+  names:
+    - nn2opt
+    - dist_greedy2opt
+  save_root: runs/baselines/fair_optimized
+  run_twoopt: true
+  decode_multistart: 8
+  decode_noise_std: 0.02
+  decode_twoopt_passes: 40
+  seed: 0

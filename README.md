@@ -11,64 +11,59 @@ $env:PYTHONPATH = "$PWD/src"
 
 2) Generate Concorde-labeled synthetic data:
 ```
-python -m tspgnn.cli --config configs/generate_concorde.yaml generate
+python -m tspgnn.cli --config configs/data/generate_concorde.yaml generate
 ```
 
 3) (Optional) Generate regular synthetic data:
 ```
-python -m tspgnn.cli --config configs/generate_synthetic.yaml generate
+python -m tspgnn.cli --config configs/data/generate_synthetic.yaml generate
 ```
 
 4) Download/process TSPLIB:
 ```
-python -m tspgnn.cli --config configs/tsplib.yaml tsplib
+python -m tspgnn.cli --config configs/data/tsplib.yaml tsplib
 ```
 
 5) QA all datasets:
 ```
-python -m tspgnn.cli --config configs/qa.yaml qa
+python -m tspgnn.cli --config configs/data/qa.yaml qa
 ```
 Strict Concorde QA:
 ```
-python -m tspgnn.cli --config configs/qa_concorde.yaml qa
+python -m tspgnn.cli --config configs/data/qa_concorde.yaml qa
 ```
 (`qa_concorde.yaml` also checks `concorde_optimal_proved` when present.)
 
 6) Train:
 ```
-python -m tspgnn.cli --config configs/exp_edge_res_h256_d4_ccv1.yaml train
+python -m tspgnn.cli --config configs/experiments/exp_edge_res_h256_d4_ccv1.yaml train
 ```
 
 7) Evaluate / visualize:
 ```
-python -m tspgnn.cli --config configs/exp_edge_res_h256_d4_ccv1.yaml eval
-python -m tspgnn.cli --config configs/exp_edge_res_h256_d4_ccv1.yaml visualize
+python -m tspgnn.cli --config configs/experiments/exp_edge_res_h256_d4_ccv1.yaml eval
+python -m tspgnn.cli --config configs/experiments/exp_edge_res_h256_d4_ccv1.yaml visualize
 ```
 
 ## Configs
 
 Root `config.yaml` is not part of the workflow. Pass `--config <file>` explicitly for each command.
 
-Data/QA configs:
-- `configs/generate_concorde.yaml`
-- `configs/generate_synthetic.yaml`
-- `configs/tsplib.yaml`
-- `configs/qa.yaml`
-- `configs/qa_concorde.yaml` (strict Concorde checks)
+Config layout:
+- `configs/data/` -> generation, TSPLIB import, QA
+- `configs/experiments/` -> frozen experiment/train specs
+- `configs/benchmark/` -> eval profiles, fair baselines, fair analysis
+- `configs/lists/` -> local config lists
+- `kaggle/kernel/configs_to_run.txt` -> Kaggle config list
 
-Experiment configs:
-- `configs/exp_*.yaml`
-- `configs/_template.yaml`
-- `configs/local_configs_to_run.txt` (4 local configs)
-- `kaggle/kernel/configs_to_run.txt` (6 Kaggle configs)
-
-Active experiment set is reduced to 10 configs (5 synthetic + 5 ccv1) with simple defaults
+Core MLP/Res experiment set is reduced to 10 configs (5 synthetic + 5 ccv1) with simple defaults
 (`epochs: 10`, `val_every: 1`, `lr_scheduler: plateau`, `lr_patience: 2`,
-`early_stop: true`, `early_patience: 2`).
+`early_stop: true`, `early_patience: 2`). Transformer configs are kept as separate
+graph-aware experiments in `configs/experiments/`.
 
 Run an experiment:
 ```
-python -m tspgnn.cli --config configs/exp_edge_mlp_h128_d2_ccv1.yaml train
+python -m tspgnn.cli --config configs/experiments/exp_edge_mlp_h128_d2_ccv1.yaml train
 ```
 
 ## Outputs

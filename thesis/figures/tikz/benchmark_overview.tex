@@ -13,12 +13,12 @@
 \node[box] (data) {Dátové zdroje\\ pre hodnotenie};
 
 \node[box, below left=of data] (synthetic) {Syntetické\\ inštancie};
-\node[box, below right=of data] (tsplib) {TSPLIB\\ benchmarky};
+\node[box, below right=of data] (tsplib) {Inštancie\\ TSPLIB};
 
 \node[box, below=of synthetic] (train) {Tréning a\\ experimentovanie};
 \node[box, below=of tsplib] (eval) {Nezávislé\\ hodnotenie};
 
-\node[box, below=1.7cm of $(train)!0.5!(eval)$] (ref) {Referenčné riešenia\\ a optimality gap};
+\node[box, below=1.7cm of $(train)!0.5!(eval)$] (ref) {Referenčné riešenia\\ a relatívna odchýlka};
 
 \draw[arrow] (data) -- (synthetic);
 \draw[arrow] (data) -- (tsplib);

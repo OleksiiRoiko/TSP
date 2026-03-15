@@ -1,0 +1,5 @@
+# Local split: 4 lighter configs.
+configs/experiments/exp_edge_mlp_h128_d2.yaml
+configs/experiments/exp_edge_res_h128_d4.yaml
+configs/experiments/exp_edge_mlp_h128_d2_ccv1.yaml
+configs/experiments/exp_edge_res_h128_d4_ccv1.yaml

@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import json
 import hashlib
+from typing import cast
 import numpy as np
 import torch
 from tqdm import tqdm
@@ -11,9 +12,8 @@ from ..config import EvalCfg, QACfg
 from ..utils.io import load_npz
 from ..utils.geom import complete_edges, edge_features
 from ..utils.tour import decode_tour_from_edge_scores, tour_length, verify_tour, tour_length_tsplib
-from ..utils.run_paths import resolve_model_path, infer_run_dir, dataset_tag
-from ..models.registry import build_model_from_state, load_weights_flex
-from ..models.inference import load_state_dict, predict_logits
+from ..utils.run_paths import infer_run_dir, dataset_tag
+from ..models.inference import load_model_for_inference, predict_logits
 
 
 def _eval_files(
@@ -108,57 +108,13 @@ def _resolve_save_path(save_cfg: str | None, tag: str, run_dir: Path | None, mul
     return p
 
 
-def _extract_model_overrides(meta_path: Path) -> tuple[str | None, dict | None]:
-    if not meta_path.exists():
-        return None, None
-    try:
-        data = json.loads(meta_path.read_text(encoding="utf-8"))
-    except Exception:
-        return None, None
-    if not isinstance(data, dict):
-        return None, None
-
-    model_params = data.get("model_params", None)
-    if not isinstance(model_params, dict):
-        return None, None
-
-    params = dict(model_params)
-    prefer_name_raw = params.pop("model_name", data.get("model", None))
-    prefer_name = str(prefer_name_raw).lower() if prefer_name_raw else None
-    return prefer_name, (params or None)
-
-
-def _model_overrides_from_metadata(model_path_cfg: Path, resolved_model_path: Path) -> tuple[str | None, dict | None]:
-    # Preferred: explicit latest.json in config.
-    if model_path_cfg.suffix.lower() == ".json":
-        pref, ov = _extract_model_overrides(model_path_cfg)
-        if pref is not None or ov is not None:
-            return pref, ov
-
-    # Fallback: run-local meta.json next to best.pt.
-    if resolved_model_path.exists():
-        pref, ov = _extract_model_overrides(resolved_model_path.parent / "meta.json")
-        if pref is not None or ov is not None:
-            return pref, ov
-
-    return None, None
-
-
 def run(cfg: EvalCfg, logger):
     model_path_cfg = Path(cfg.model_path)
-    mp = resolve_model_path(model_path_cfg)
-    if not mp.exists():
-        raise FileNotFoundError("eval: model_path invalid")
-
     torch.manual_seed(int(cfg.seed))
     np.random.seed(int(cfg.seed))
 
-    # Build model from checkpoint (auto infer), optionally override input dim
-    state = load_state_dict(mp)
-    prefer_name, overrides = _model_overrides_from_metadata(model_path_cfg, mp)
-    model, mparams = build_model_from_state(state, prefer_name=prefer_name, overrides=overrides)
+    model, mparams, mp = load_model_for_inference(model_path_cfg, logger=logger, require_all_matched=True)
     logger.info(f"Eval model params: {mparams}")
-    load_weights_flex(model, state, logger=logger, require_all_matched=True)
 
     dev = torch.device(cfg.device if cfg.device == "cpu" or torch.cuda.is_available() else "cpu")
     model.to(dev).eval()
@@ -180,11 +136,12 @@ def run(cfg: EvalCfg, logger):
             continue
         logger.info(f"Evaluating {len(files)} instances from {dr}...")
 
+        in_dim = int(cast(int, mparams["in_dim"]))
         results = _eval_files(
             files,
             model,
             dev,
-            mparams["in_dim"],
+            in_dim,
             cfg.run_twoopt,
             int(getattr(cfg, "decode_multistart", 1)),
             float(getattr(cfg, "decode_noise_std", 0.0)),

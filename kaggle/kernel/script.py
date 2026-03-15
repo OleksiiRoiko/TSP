@@ -239,13 +239,13 @@ def resolve_configs() -> list[str]:
     if single:
         return [single]
 
-    default = WORK_ROOT / "configs" / "exp_edge_res_h128_d4_ccv1.yaml"
+    default = WORK_ROOT / "configs" / "experiments" / "exp_edge_res_h128_d4_ccv1.yaml"
     if default.exists():
         return [str(default)]
 
-    cfg_paths = sorted((WORK_ROOT / "configs").glob("*.yaml"))
+    cfg_paths = sorted((WORK_ROOT / "configs" / "experiments").glob("*.yaml"))
     if not cfg_paths:
-        raise FileNotFoundError("No configs found in configs/")
+        raise FileNotFoundError("No experiment configs found in configs/experiments/")
     return [str(cfg_paths[0])]
 
 

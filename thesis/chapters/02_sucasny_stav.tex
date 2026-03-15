@@ -1,17 +1,17 @@
-\chapter{Prehľad literatúry k riešenej problematike}
+\chapter{Súčasný stav riešenej problematiky}
 
 V tejto kapitole sme sa zamerali na teoretické východiská symetrického problému
 obchodného cestujúceho a na tie smery súčasného výskumu, ktoré sú priamo
 relevantné pre riešenie tejto úlohy pomocou modelov strojového učenia.
 Pozornosť sme venovali najmä klasickým optimalizačným prístupom, významu
 presných a heuristických riešičov, formulácii úlohy pre dátovo riadené
-prístupy, grafovo orientovaným neurónovým metódam a benchmarkovým údajom
-používaným pri hodnotení kvality riešení
+prístupy, grafovo orientovaným neurónovým metódam a štandardným testovacím
+inštanciám používaným pri hodnotení kvality riešení
 \parencite{matai2010overview,bengio2021mlco,cappart2023gnnco}.
 
 \section{Teoretické východiská problému obchodného cestujúceho}
 
-Problém obchodného cestujúceho (\textit{Traveling Salesman Problem}, TSP)
+Problém obchodného cestujúceho (TSP)
 patrí medzi najznámejšie úlohy kombinatorickej optimalizácie. V základnej
 formulácii je daná množina miest a náklady presunu medzi každou dvojicou miest,
 pričom cieľom je určiť takú uzavretú trasu, ktorá navštívi každé mesto práve raz
@@ -29,7 +29,7 @@ pre klasické optimalizačné metódy, ale aj pre súčasné modely strojového 
 ktoré pracujú s vrcholmi, hranami a ich vzájomnými vzťahmi
 \parencite{matai2010overview,cappart2023gnnco}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \input{figures/tikz/tsp_instance}
     \caption{Ilustračná euklidovská inštancia symetrického problému obchodného
@@ -82,9 +82,9 @@ stáva prakticky neriešiteľným úplným prehľadaním priestoru riešení
 
 Táto vlastnosť mala zásadný vplyv na vývoj prístupov k riešeniu TSP.
 V literatúre sa postupne vyprofilovali dve hlavné línie. Prvú tvoria
-\textit{presné metódy}, ktoré pri dostatočných výpočtových zdrojoch umožňujú
-nájsť garantovane optimálne riešenie. Druhú tvoria \textit{heuristiky
-a metaheuristiky}, ktorých cieľom je dosiahnuť veľmi kvalitné riešenie
+presné metódy, ktoré pri dostatočných výpočtových zdrojoch umožňujú
+nájsť garantovane optimálne riešenie. Druhú tvoria heuristiky
+a metaheuristiky, ktorých cieľom je dosiahnuť veľmi kvalitné riešenie
 v prijateľnom čase aj pri väčších inštanciách
 \parencite{matai2010overview,bengio2021mlco}.
 
@@ -124,7 +124,7 @@ riešenie úlohy, ale poskytuje iba doplnkovú informáciu, ktorá sa následne
 využije pri zostavení alebo zlepšení trasy
 \parencite{hudson2022gls,xin2021neurolkh,bengio2021mlco}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \input{figures/tikz/tsp_methods}
     \caption{Prehľad hlavných skupín prístupov k riešeniu problému obchodného
@@ -147,12 +147,12 @@ prípravy štítkov a voľby vhodného hodnotiaceho rámca
 
 Základným krokom je výber reprezentácie vstupných údajov. Pri euklidovských
 inštanciách možno vychádzať priamo zo súradníc vrcholov, z matice vzdialeností
-alebo zo štruktúry úplného grafu, v ktorom sú vrcholy interpretované ako mestá
+alebo z reprezentácie úplného grafu. V ňom sú vrcholy interpretované ako mestá
 a hrany ako možné spojenia medzi nimi. Takáto reprezentácia je dôležitá najmä
 pre modely, ktoré majú zachytiť nielen lokálne vlastnosti jednotlivých bodov,
-ale aj vzťahy medzi nimi v rámci celej inštancie. Z pohľadu súčasnej literatúry
-je práve prevod geometrickej alebo vzdialenostnej informácie do vhodnej dátovej
-podoby jedným z kľúčových predpokladov úspešného použitia modelov strojového
+ale aj ich vzťahy v rámci celej inštancie. Z pohľadu súčasnej literatúry je
+prevedenie geometrickej alebo vzdialenostnej informácie do vhodnej dátovej
+podoby jedným z kľúčových predpokladov úspešného využitia modelov strojového
 učenia pri kombinatorickej optimalizácii
 \parencite{bengio2021mlco,cappart2023gnnco,joshi2022generalization}.
 
@@ -168,7 +168,8 @@ výsledného správania modelu \parencite{joshi2022generalization,bengio2021mlco
 
 V dátovo riadených prístupoch preto nemožno oddeľovať samotný model od údajov,
 na ktorých je učený. Popri architektúre modelu zohráva významnú úlohu aj to,
-či sa používajú synteticky generované inštancie alebo štandardné benchmarky,
+či sa používajú synteticky generované inštancie alebo štandardné referenčné
+zbierky inštancií,
 aká je veľkosť tréningových úloh, ako sú konštruované cieľové štítky a do akej
 miery sú referenčné riešenia porovnateľné medzi jednotlivými experimentmi.
 Práve táto okolnosť je v literatúre opakovane zdôrazňovaná ako jeden
@@ -260,48 +261,41 @@ samotného modelu, ale aj to, ako sa jeho výstup premieta do kvality finálneho
 riešenia
 \parencite{joshi2019gcn,joshi2022generalization,hudson2022gls,xin2021neurolkh}.
 
-\section{Benchmarkové dáta a hodnotenie riešení}
+\section{Štandardné testovacie inštancie a hodnotenie riešení}
 
-Pri probléme obchodného cestujúceho zohrávajú benchmarkové údaje mimoriadne
-dôležitú úlohu. Keďže ide o klasickú optimalizačnú úlohu, pri ktorej sa nové
-prístupy pravidelne porovnávajú s existujúcimi algoritmami, je nevyhnutné
-vychádzať zo spoločného referenčného základu. Práve z tohto dôvodu má v oblasti
-TSP osobitné postavenie knižnica TSPLIB, ktorá patrí medzi najvýznamnejšie
-a najčastejšie používané benchmarky pre hodnotenie algoritmov zameraných
-na riešenie tejto úlohy \parencite{reinelt1991tsplib}.
+Pri probléme obchodného cestujúceho zohrávajú štandardné testovacie inštancie
+mimoriadne dôležitú úlohu. Keďže ide o klasickú optimalizačnú úlohu, pri ktorej
+sa nové prístupy pravidelne porovnávajú s existujúcimi algoritmami, je
+nevyhnutné vychádzať zo spoločného referenčného základu. Práve z tohto dôvodu
+má v oblasti TSP osobitné postavenie knižnica TSPLIB, ktorá zhromažďuje
+štandardné inštancie rôznych veľkostí a typov a dlhodobo slúži ako spoločný
+porovnávací rámec \parencite{reinelt1991tsplib,joshi2022generalization}.
 
-Význam TSPLIB spočíva v tom, že zhromažďuje štandardné inštancie rôznych
-veľkostí a typov, ktoré sa dlhodobo používajú pri testovaní klasických aj
-novších prístupov. V odbornej literatúre preto plní úlohu spoločného
-porovnávacieho rámca. Ak sa nový algoritmus alebo model hodnotí na inštanciách
-z TSPLIB, jeho výsledky možno prirodzene porovnať s výsledkami, ktoré boli
-publikované v starších aj novších prácach. Z tohto pohľadu nejde iba o súbor
-testovacích údajov, ale o základný referenčný benchmark pre oblasť TSP
-\parencite{reinelt1991tsplib,joshi2022generalization}.
+Ak sa nový algoritmus alebo model hodnotí na inštanciách z TSPLIB, jeho
+výsledky možno prirodzene porovnať s výsledkami publikovanými v starších aj
+novších prácach. Význam tejto knižnice nespočíva iba v dostupnosti testovacích
+úloh, ale aj v tom, že pri viacerých inštanciách sú známe optimálne alebo
+najlepšie známe riešenia. To umožňuje hodnotiť kvalitu vypočítanej trasy voči
+spoľahlivému štandardu, čo je dôležité nielen pri klasických algoritmoch, ale
+aj pri dátovo riadených prístupoch \parencite{reinelt1991tsplib}. Pri overovaní
+alebo tvorbe takýchto etalónnych riešení sa v praxi využívajú aj presné
+riešiče, medzi ktorými má významné postavenie aj Concorde
+\parencite{concorde2003solver}.
 
-Dôležitá je aj skutočnosť, že pri viacerých inštanciách z TSPLIB sú známe
-optimálne alebo najlepšie známe riešenia. To umožňuje hodnotiť kvalitu
-vypočítanej trasy voči spoľahlivému štandardu, čo je dôležité nielen pri
-klasických algoritmoch, ale aj pri dátovo riadených prístupoch
-\parencite{reinelt1991tsplib}. Pri overovaní alebo tvorbe takýchto etalónnych
-riešení sa v praxi využívajú aj presné riešiče, medzi ktorými má významné
-postavenie aj Concorde \parencite{concorde2003solver}.
-
-Popri štandardných benchmarkoch sa v literatúre často používajú aj synteticky
-generované euklidovské inštancie. Ich výhodou je možnosť pripraviť väčšie
-množstvo príkladov s kontrolovanou veľkosťou a štruktúrou. Takéto údaje sú
-vhodné najmä na učenie modelov a na experimentovanie. Na druhej strane,
-pri záverečnom hodnotení zostáva rozhodujúce overenie na štandardných
-benchmarkoch, pretože práve tie umožňujú porovnanie s existujúcou literatúrou
-a poskytujú realistickejší obraz o kvalite navrhnutého prístupu
+Popri štandardných testovacích inštanciách sa v literatúre často používajú aj
+synteticky generované euklidovské úlohy. Ich výhodou je možnosť pripraviť
+väčšie množstvo príkladov s kontrolovanou veľkosťou a štruktúrou. Takéto údaje
+sú vhodné najmä na učenie modelov a na experimentovanie. Pri záverečnom
+hodnotení však zostáva rozhodujúce overenie na štandardných inštanciách, pretože
+práve tie umožňujú porovnanie s existujúcou literatúrou a poskytujú
+realistickejší obraz o kvalite navrhnutého prístupu
 \parencite{joshi2022generalization,bengio2021mlco,reinelt1991tsplib}.
 
-Pri práci s benchmarkmi je zároveň potrebné rešpektovať aj spôsob výpočtu
-vzdialeností v konkrétnej inštancii. Knižnica TSPLIB totiž zahŕňa úlohy
-s rôznymi metrikami, a preto musí byť hodnotenie výslednej trasy vždy v súlade
-s definíciou danej inštancie. Iba tak možno zabezpečiť, aby bolo porovnanie
-s inými prácami korektné a metodologicky správne
-\parencite{reinelt1991tsplib}.
+Pri práci s TSPLIB je zároveň potrebné rešpektovať aj spôsob výpočtu vzdialeností
+v konkrétnej inštancii. Knižnica totiž zahŕňa úlohy s rôznymi metrikami, a
+preto musí byť hodnotenie výslednej trasy vždy v súlade s definíciou danej
+inštancie. Iba tak možno zabezpečiť, aby bolo porovnanie s inými prácami
+korektné a metodologicky správne \parencite{reinelt1991tsplib}.
 
 Z pohľadu hodnotenia riešení zostáva najdôležitejším kritériom samotná dĺžka
 výslednej trasy. Popri nej sa v odbornej literatúre často sleduje aj relatívna
@@ -312,7 +306,7 @@ nie iba samotný medzivýstup modelu. Rozhodujúce je teda to, aké riešenie sa
 podarí získať po celom postupe, a nie iba kvalita čiastkovej predikcie
 \parencite{joshi2022generalization,hudson2022gls,xin2021neurolkh}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \input{figures/tikz/benchmark_overview}
     \caption{Prehľad hlavných zdrojov dát používaných pri hodnotení prístupov
@@ -326,11 +320,11 @@ podarí získať po celom postupe, a nie iba kvalita čiastkovej predikcie
 
 Z prehľadu literatúry vyplýva, že výskum problému obchodného cestujúceho je
 postavený na silnom základe klasických optimalizačných metód, heuristík
-a štandardných benchmarkov. Presné riešiče a výkonné heuristiky vytvorili
+a štandardných testovacích inštancií. Presné riešiče a výkonné heuristiky vytvorili
 referenčný rámec, voči ktorému sa posudzujú aj novšie prístupy založené
 na strojovom učení. Zároveň sa ukazuje, že pri TSP nemožno hodnotiť modely
 izolovane od spôsobu reprezentácie problému, kvality referenčných riešení
-a použitého benchmarku \parencite{bengio2021mlco,reinelt1991tsplib,
+a použitej referenčnej zbierky inštancií \parencite{bengio2021mlco,reinelt1991tsplib,
 joshi2022generalization}.
 
 Súčasná literatúra zároveň naznačuje, že pri TSP získavajú význam najmä také
@@ -346,13 +340,13 @@ inštancií, typom tréningových údajov, spôsobom reprezentácie grafu aj tý
 či model smeruje priamo ku konštrukcii trasy alebo iba poskytuje pomocnú
 informáciu pre ďalší algoritmický krok
 \parencite{joshi2022generalization,bengio2021mlco}. Práve z tohto dôvodu má
-význam opierať hodnotenie o štandardné benchmarky, predovšetkým o TSPLIB,
+význam opierať hodnotenie o štandardné testovacie inštancie, predovšetkým o TSPLIB,
 ktorá umožňuje zasadiť výsledky do širšieho kontextu výskumu TSP
 \parencite{reinelt1991tsplib}.
 
 Za relevantnú výskumnú medzeru preto možno považovať potrebu takého porovnania,
 ktoré bude vychádzať z rovnakej formulácie úlohy, z porovnateľných referenčných
-riešení a z jednotného spôsobu hodnotenia na štandardných benchmarkoch.
+riešení a z jednotného spôsobu hodnotenia na štandardných testovacích inštanciách.
 Takto postavený prístup umožňuje lepšie posúdiť, ako sa mení kvalita riešenia
 pri modeloch, ktoré sa líšia schopnosťou zachytiť širší kontext celej inštancie,
 ale zostávajú v rámci rovnakej úlohy a rovnakého hodnotiaceho rámca

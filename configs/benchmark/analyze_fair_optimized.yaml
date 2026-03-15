@@ -1,0 +1,11 @@
+analyze:
+  experiments_root: runs/experiments
+  out_dir: runs/analysis/fair_optimized
+  plots_dir: runs/analysis/fair_optimized/plots
+  make_plots: true
+  heatmap_top_k: 8
+  exp_glob: exp_edge_*
+  eval_files:
+    - eval_tsplib_optimized.json
+  primary_eval: eval_tsplib_optimized.json
+  baseline_summary_csv: runs/baselines/fair_optimized/summary.csv

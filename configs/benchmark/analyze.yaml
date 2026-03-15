@@ -1,6 +1,9 @@
 analyze:
   experiments_root: runs/experiments
   out_dir: runs/analysis
+  plots_dir: runs/analysis/plots
+  make_plots: true
+  heatmap_top_k: 8
   exp_glob: exp_edge_*
   eval_files:
     - eval_tsplib.json

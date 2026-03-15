@@ -1,10 +1,138 @@
 \chapter{Výsledky práce a diskusia}
 
 \section{Prezentácia výsledkov}
-\indent \textit{Sem doplňte text.}
+\indent V tejto kapitole sme zhrnuli výsledky dosiahnuté pri porovnaní troch
+rodín modelov nad rovnakou hranovou formuláciou problému. Hodnotenie sa
+vykonalo nad štrnástimi štandardnými inštanciami TSPLIB a do finálneho
+porovnania vstúpilo osemnásť natrénovaných behov. Okrem modelov sme do
+porovnania zaradili aj dve heuristické bázy, aby bolo možné posúdiť, či sa
+modelový prístup dokázal presadiť aj voči jednoduchším klasickým postupom.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Súhrn výsledkov podľa rodiny modelov na inštanciách TSPLIB.}
+    \label{tab:family_results}
+    \begin{tabular}{|p{5.2cm}|p{1.6cm}|p{3.0cm}|p{3.0cm}|}
+        \hline
+        Rodina modelov alebo prístup & \shortstack{Počet\\behov} & \shortstack{Priemerná\\odchýlka [\%]} & \shortstack{Najlepší\\výsledok [\%]} \\
+        \hline
+        Edge transformer & 8 & 9,00 & 7,59 \\
+        \hline
+        Hlbšie MLP nad hranami & 2 & 11,73 & 11,37 \\
+        \hline
+        Základné MLP nad hranami & 4 & 12,35 & 11,60 \\
+        \hline
+        Reziduálne MLP nad hranami & 4 & 13,15 & 12,38 \\
+        \hline
+        \texttt{dist\_greedy2opt} & 1 & 12,29 & 12,29 \\
+        \hline
+        \texttt{nn2opt} & 1 & 12,94 & 12,94 \\
+        \hline
+    \end{tabular}
+    \normalsize
+\end{table}
+
+\indent Výsledky ukázali výraznú prevahu transformerových architektúr. Najlepší
+model s označením \texttt{tf\_h128\_d3\_ccv1} dosiahol priemernú odchýlku
+7,59\,\%, čo bolo o 4,70 percentuálneho bodu menej než pri najlepšej
+heuristickej báze \texttt{dist\_greedy2opt} s hodnotou 12,29\,\%. Dôležité je,
+že všetkých osem transformerových behov prekonalo aj najlepšiu heuristickú
+bázu. Najlepší ne-transformerový model, konkrétne hlbší MLP variant s
+konfiguráciou h256 d3 ccv1, dosiahol priemernú odchýlku 11,37\,\%.
+Reziduálne MLP modely zostali v priemere najslabšou modelovou rodinou, keď ich
+priemerná odchýlka dosiahla 13,15\,\%.
+
+\indent Samostatne sme vyhodnotili aj vplyv optimalizovaného dekódovania pri
+transformerových modeloch. Priemerné zlepšenie oproti základnému dekódovaciemu
+profilu dosiahlo 2,28 percentuálneho bodu, pričom najmenší zaznamenaný prínos
+bol 1,77 bodu a najväčší 2,98 bodu. Tento výsledok ukázal, že samotné
+predikované skóre hrán už obsahovali kvalitný signál, no až spojenie
+konštrukčného dekódovania, viacnásobných pokusov a lokálneho zlepšenia ho
+dokázalo pretaviť do kratšej finálnej trasy.
+
+\indent Z pohľadu jednotlivých inštancií sa ako najnáročnejšie ukázali najmä
+úlohy lin105 a kroA100. Vo zvýšenej miere sa náročnosť prejavila aj pri
+inštanciách kroD100, ulysses22 a kroC100. Naopak najnižšie priemerné odchýlky
+sa dosahovali pri inštanciách eil51, rd100, st70, gr96 a eil76. Takéto
+rozdelenie naznačilo, že pri väčších alebo štruktúrne
+náročnejších úlohách sa rozdiely medzi modelmi zvýrazňovali, zatiaľ čo pri
+jednoduchších euklidovských inštanciách sa viaceré prístupy približovali k
+referenčnému riešeniu podstatne tesnejšie.
+
+\indent Užitočnú doplnkovú informáciu priniesol aj priebeh učenia najlepšieho
+modelu. V jeho prípade sa najnižšia validačná strata dosiahla už v druhej
+epoche, pričom tréning sa ukončil po štyroch epochách. Prakticky to znamenalo,
+že model sa naučil základný vzor pomerne rýchlo a ďalšie trénovanie už skôr
+zvyšovalo riziko preučenia než ďalšieho zlepšenia generalizácie.
 
 \section{Diskusia výsledkov}
-\indent \textit{Sem doplňte text.}
+\indent Dosiahnuté výsledky podporili predpoklad, že pri formulácii založenej na
+predikcii hrán je rozhodujúca schopnosť modelu využiť širší kontext celej
+inštancie. Jednoduché MLP architektúry spracúvali každú hranu samostatne, a
+preto boli odkázané najmä na lokálne geometrické príznaky. To sa ukázalo ako
+nedostatočné najmä pri zložitejších inštanciách, kde o vhodnosti hrany
+nerozhoduje iba jej lokálna dĺžka alebo orientácia, ale aj jej úloha v globálnej
+štruktúre budúceho Hamiltonovského cyklu.
+
+\indent Transformerové modely mali oproti tomu prístup ku kontextovým
+reprezentáciám vrcholov, a tým aj k širším vzťahom v celej úlohe. Výsledky
+ukázali, že práve tento dodatočný kontext bol v riešenej úlohe kľúčový.
+Zároveň sa ukázalo, že samotná architektúra modelu nebola jediným rozhodujúcim
+faktorom. Veľmi výrazný vplyv mal aj spôsob dekódovania predikovaných hrán.
+Keby sme modely hodnotili iba na základe základného dekódovacieho profilu,
+výsledný obraz o ich kvalite by bol citeľne slabší. Praktická hodnota práce
+preto nespočívala len v návrhu modelov, ale aj v konzistentnom spojení modelu,
+dekódovania a lokálneho zlepšenia do jedného spoločného postupu.
+
+\indent Zaujímavým zistením bolo aj to, že reziduálne MLP modely napriek vyššej
+kapacite neprekonali hlbší základný MLP variant. Naznačilo to, že samotné
+prehlbovanie hranového modelu bez explicitného mechanizmu globálneho kontextu
+nemusí viesť k lepšiemu správaniu na TSP. Naopak, experimenty skôr ukázali, že
+po prekročení určitej hranice sa dodatočná kapacita môže využiť neefektívne,
+pokiaľ model stále pracuje len s lokálnym opisom jednej hrany.
+
+\indent Pri interpretácii výsledkov bolo potrebné zohľadniť aj obmedzenia práce.
+Počet TSPLIB inštancií síce pokrýval viacero veľkostí a metrík, stále však išlo
+o pomerne malý konečný súbor úloh. Rovnako bolo potrebné mať na pamäti, že
+modely sa trénovali na syntetických údajoch a až následne sa hodnotili na
+štandardných inštanciách. Práve preto mala osobitný význam analýza po
+jednotlivých inštanciách, ktorá ukázala, že generalizácia bola výrazne lepšia
+na pravidelnejších a menších úlohách než na zložitejších problémoch typu
+\texttt{lin105} alebo \texttt{kroA100}.
+
+\indent Z metodologického hľadiska považujeme za dôležité aj to, že sa podarilo
+vybudovať plne reprodukovateľný experimentálny postup. Výsledky neboli
+odprezentované iba ako izolované finálne čísla, ale ako výstup celého reťazca:
+príprava údajov, tvorba štítkov, trénovanie, dekódovanie, lokálne zlepšenie,
+vyhodnotenie a následná agregovaná analýza. To zvyšuje presvedčivosť zistení a
+zároveň uľahčuje ich ďalšie rozšírenie v nadväzujúcom výskume.
 
 \section{Prínos práce}
-\indent \textit{Sem doplňte text.}
+\indent Za hlavný prínos práce považujeme vytvorenie uceleného a technicky
+reprodukovateľného rámca na skúmanie modelov strojového učenia pre symetrický
+problém obchodného cestujúceho. Tento rámec zahŕňal generovanie syntetických
+údajov, prípravu štandardných testovacích inštancií, jednotnú grafovú
+reprezentáciu úlohy, porovnanie viacerých modelových architektúr, dekódovanie
+predikovaných hrán a systematické vyhodnotenie výsledkov.
+
+\indent Druhým významným prínosom bolo samotné experimentálne porovnanie troch
+rodín modelov pri zachovaní rovnakých vstupných príznakov a rovnakého
+hodnotiaceho rámca. Vďaka tomu bolo možné pomerne čisto oddeliť vplyv
+architektúry od vplyvu ostatných častí riešiteľského postupu. Výsledky pritom
+ukázali, že modely pracujúce s globálnym kontextom celej inštancie majú v tejto
+úlohe zreteľnú výhodu.
+
+\indent Tretím prínosom bolo preukázanie významu dekódovacej a zlepšovacej fázy.
+Práca ukázala, že samotná predikcia hrán ešte nepredstavuje finálne riešenie,
+ale skôr medzikrok, ktorého kvalita sa naplno prejaví až po vhodnom
+algoritmickom spracovaní. Tým sa potvrdilo, že pri kombinatorickej optimalizácii
+má zmysel chápať model a následné heuristické kroky ako spoločný systém, nie
+ako dve oddelené časti.
+
+\indent Praktickým prínosom práce je aj to, že projekt obsahuje automatizované
+výstupy pre ďalšiu analýzu experimentov. Súčasťou implementácie sú súhrnné CSV
+tabuľky aj grafické výstupy, ktoré umožňujú rýchlo porovnávať modely, sledovať
+vplyv dekódovania a identifikovať problematické inštancie. Tieto artefakty sú
+užitočné nielen pre potreby tejto práce, ale aj ako základ pre ďalšie
+experimenty a budúce rozšírenia navrhnutého riešenia.
