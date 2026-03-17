@@ -1,0 +1,14 @@
+2026-02-10 12:30:28,306 INFO - Device: cuda
+2026-02-10 12:44:08,219 INFO - Train graphs: 45000 | Val graphs: 9000 | workers: 8
+2026-02-10 12:44:08,361 INFO - Model: edge_mlp | Params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-02-10 12:44:10,049 INFO - Optimizer: AdamW(fused=True)
+2026-02-10 12:56:50,906 INFO - Early stop at epoch 7 (no improvement for 2 validation checks).
+2026-02-10 12:56:50,917 INFO - Best Val 0.012523 @ epoch 5
+Saved: runs\experiments\exp_edge_mlp_h128_d2\20260210-124410\best.pt
+2026-02-10 17:57:42,340 INFO - Device: cuda
+2026-02-10 17:57:44,162 INFO - Train graphs: 45000 | Val graphs: 9000 | workers: 8
+2026-02-10 17:57:44,252 INFO - Model: edge_mlp | Params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-02-10 17:57:45,790 INFO - Optimizer: AdamW(fused=True)
+2026-02-10 18:09:00,509 INFO - Early stop at epoch 7 (no improvement for 2 validation checks).
+2026-02-10 18:09:00,519 INFO - Best Val 0.012523 @ epoch 5
+Saved: runs\experiments\exp_edge_mlp_h128_d2\20260210-175745\best.pt

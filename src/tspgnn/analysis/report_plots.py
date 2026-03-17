@@ -154,7 +154,7 @@ def _plot_decode_profile(plot_dir: Path, prof_rows: list[dict[str, Any]], logger
     ax.set_yticklabels(labels, fontsize=9)
     ax.invert_yaxis()
     ax.set_xlabel("Mean gap [%]")
-    ax.set_title("Effect of optimized decoding on transformer models")
+    ax.set_title("Effect of optimized decoding across experiments")
     ax.grid(axis="x", linestyle=":", alpha=0.35)
     ax.legend(loc="lower right", frameon=False)
     ax.set_axisbelow(True)

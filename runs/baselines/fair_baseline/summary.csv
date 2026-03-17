@@ -1,0 +1,3 @@
+baseline,eval_profile,dataset,instances,mean_gap_pct,median_gap_pct,run_twoopt,decode_multistart,decode_noise_std,decode_twoopt_passes,seed,result_json
+nn2opt,baseline,tsplib,14,12.941164771697698,12.183397045167256,True,1,0.0,20,0,runs\baselines\fair_baseline\nn2opt\eval_tsplib.json
+dist_greedy2opt,baseline,tsplib,14,12.294271156036842,10.90305805907106,True,1,0.0,20,0,runs\baselines\fair_baseline\dist_greedy2opt\eval_tsplib.json

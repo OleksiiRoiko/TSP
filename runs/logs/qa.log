@@ -1,0 +1,73 @@
+2026-02-09 19:15:35,825 INFO - QA on 14 files
+2026-02-09 19:15:35,971 INFO - [check_gt] OK
+2026-02-09 19:15:35,972 INFO - [lengths] OK
+2026-02-09 19:15:35,972 INFO - [concorde] OK
+2026-02-09 19:15:35,972 INFO - [split_overlap] skipped (no train/val/test paths under qa.root)
+2026-02-09 19:15:35,972 INFO - [sizes] {16: 1, 22: 1, 48: 1, 51: 1, 52: 1, 70: 1, 76: 2, 96: 1, 100: 4, 105: 1}
+2026-02-09 19:15:35,972 INFO - [sources] {'tsplib': 14}
+2026-02-09 19:15:35,972 INFO - [label_sources] {'opt.tour': 14}
+2026-02-09 19:15:35,973 INFO - [csv] wrote runs\qa_report.csv
+2026-02-09 20:51:06,461 INFO - QA on 63000 files
+2026-02-09 20:52:45,511 INFO - [check_gt] OK
+2026-02-09 20:52:45,512 INFO - [lengths] OK
+2026-02-09 20:52:45,512 INFO - [concorde] OK
+2026-02-09 20:52:45,514 INFO - [optimal_proof] OK
+2026-02-09 20:52:45,514 INFO - [label_source] OK
+2026-02-09 20:52:45,518 INFO - [split_overlap] OK
+2026-02-09 20:52:45,519 INFO - [distributions] {'clustered': 12743, 'grid_jitter': 18922, 'ring': 12564, 'uniform': 18771}
+2026-02-09 20:52:45,519 INFO - [sizes] {20: 7000, 30: 7000, 40: 7000, 50: 7000, 60: 7000, 70: 7000, 80: 7000, 90: 7000, 100: 7000}
+2026-02-09 20:52:45,519 INFO - [sources] {'synthetic': 63000}
+2026-02-09 20:52:45,519 INFO - [label_sources] {'concorde': 63000}
+2026-02-09 20:52:45,782 INFO - [csv] wrote runs\qa_report_concorde.csv
+2026-02-09 22:45:10,564 INFO - QA on 126014 files
+2026-02-09 22:58:55,483 INFO - [check_gt] OK
+2026-02-09 22:58:55,483 INFO - [lengths] OK
+2026-02-09 22:58:55,483 INFO - [concorde] OK
+2026-02-09 22:58:55,488 INFO - [split_overlap] OK
+2026-02-09 22:58:55,488 INFO - [distributions] {'clustered': 25486, 'grid_jitter': 37844, 'ring': 25128, 'uniform': 37542}
+2026-02-09 22:58:55,488 INFO - [sizes] {16: 1, 20: 14000, 22: 1, 30: 14000, 40: 14000, 48: 1, 50: 14000, 51: 1, 52: 1, 60: 14000, 70: 14001, 76: 2, 80: 14000, 90: 14000, 96: 1, 100: 14004, 105: 1}
+2026-02-09 22:58:55,488 INFO - [sources] {'synthetic': 126000, 'tsplib': 14}
+2026-02-09 22:58:55,489 INFO - [label_sources] {'concorde': 63000, 'elkai': 12561, 'nn2opt': 50439, 'opt.tour': 14}
+2026-02-09 22:58:55,942 INFO - [csv] wrote runs\qa_report.csv
+2026-02-10 23:01:15,105 INFO - QA on 126014 files
+2026-02-10 23:23:05,648 INFO - [check_gt] OK
+2026-02-10 23:23:05,648 INFO - [lengths] OK
+2026-02-10 23:23:05,648 INFO - [concorde] OK
+2026-02-10 23:23:05,652 INFO - [split_overlap] OK
+2026-02-10 23:23:05,652 INFO - [distributions] {'clustered': 25486, 'grid_jitter': 37844, 'ring': 25128, 'uniform': 37542}
+2026-02-10 23:23:05,652 INFO - [sizes] {16: 1, 20: 14000, 22: 1, 30: 14000, 40: 14000, 48: 1, 50: 14000, 51: 1, 52: 1, 60: 14000, 70: 14001, 76: 2, 80: 14000, 90: 14000, 96: 1, 100: 14004, 105: 1}
+2026-02-10 23:23:05,653 INFO - [sources] {'synthetic': 126000, 'tsplib': 14}
+2026-02-10 23:23:05,653 INFO - [label_sources] {'concorde': 63000, 'elkai': 12561, 'nn2opt': 50439, 'opt.tour': 14}
+2026-02-10 23:23:06,118 INFO - [csv] wrote runs\qa_report.csv
+2026-02-10 23:46:41,726 INFO - QA on 126014 files
+2026-02-10 23:50:14,446 INFO - [check_gt] OK
+2026-02-10 23:50:14,446 INFO - [lengths] OK
+2026-02-10 23:50:14,446 INFO - [concorde] OK
+2026-02-10 23:50:14,452 INFO - [split_overlap] OK
+2026-02-10 23:50:14,452 INFO - [distributions] {'clustered': 25486, 'grid_jitter': 37844, 'ring': 25128, 'uniform': 37542}
+2026-02-10 23:50:14,452 INFO - [sizes] {16: 1, 20: 14000, 22: 1, 30: 14000, 40: 14000, 48: 1, 50: 14000, 51: 1, 52: 1, 60: 14000, 70: 14001, 76: 2, 80: 14000, 90: 14000, 96: 1, 100: 14004, 105: 1}
+2026-02-10 23:50:14,452 INFO - [sources] {'synthetic': 126000, 'tsplib': 14}
+2026-02-10 23:50:14,452 INFO - [label_sources] {'concorde': 63000, 'elkai': 12561, 'nn2opt': 50439, 'opt.tour': 14}
+2026-02-10 23:50:14,962 INFO - [csv] wrote runs\qa_report.csv
+2026-03-15 18:12:13,912 INFO - QA on 126014 files
+2026-03-15 18:30:26,285 INFO - [check_gt] OK
+2026-03-15 18:30:26,285 INFO - [lengths] OK
+2026-03-15 18:30:26,285 INFO - [concorde] OK
+2026-03-15 18:30:26,290 INFO - [split_overlap] OK
+2026-03-15 18:30:26,291 INFO - [distributions] {'clustered': 25486, 'grid_jitter': 37844, 'ring': 25128, 'uniform': 37542}
+2026-03-15 18:30:26,291 INFO - [sizes] {16: 1, 20: 14000, 22: 1, 30: 14000, 40: 14000, 48: 1, 50: 14000, 51: 1, 52: 1, 60: 14000, 70: 14001, 76: 2, 80: 14000, 90: 14000, 96: 1, 100: 14004, 105: 1}
+2026-03-15 18:30:26,291 INFO - [sources] {'synthetic': 126000, 'tsplib': 14}
+2026-03-15 18:30:26,291 INFO - [label_sources] {'concorde': 63000, 'elkai': 12561, 'nn2opt': 50439, 'opt.tour': 14}
+2026-03-15 18:30:26,810 INFO - [csv] wrote runs\qa_report.csv
+2026-03-15 18:30:31,781 INFO - QA on 63000 files
+2026-03-15 18:32:42,514 INFO - [check_gt] OK
+2026-03-15 18:32:42,514 INFO - [lengths] OK
+2026-03-15 18:32:42,515 INFO - [concorde] OK
+2026-03-15 18:32:42,515 INFO - [optimal_proof] OK
+2026-03-15 18:32:42,515 INFO - [label_source] OK
+2026-03-15 18:32:42,522 INFO - [split_overlap] OK
+2026-03-15 18:32:42,522 INFO - [distributions] {'clustered': 12743, 'grid_jitter': 18922, 'ring': 12564, 'uniform': 18771}
+2026-03-15 18:32:42,522 INFO - [sizes] {20: 7000, 30: 7000, 40: 7000, 50: 7000, 60: 7000, 70: 7000, 80: 7000, 90: 7000, 100: 7000}
+2026-03-15 18:32:42,522 INFO - [sources] {'synthetic': 63000}
+2026-03-15 18:32:42,523 INFO - [label_sources] {'concorde': 63000}
+2026-03-15 18:32:42,792 INFO - [csv] wrote runs\qa_report_concorde.csv

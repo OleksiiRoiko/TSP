@@ -1,0 +1,25 @@
+train:
+  exp_id: exp_edge_mlp_h256_d3
+  model_name: edge_mlp_deep
+  batch_size: 64
+  hidden: 256
+  dropout: 0.1
+  depth: 3
+  lr: 0.0006
+  weight_decay: 0.0001
+  train_root: runs/data/synthetic/train
+  val_root: runs/data/synthetic/val
+eval:
+  device: cuda
+  model_path: runs/experiments/exp_edge_mlp_h256_d3/latest.json
+  data_roots:
+  - runs/data/tsplib/processed
+  - runs/data/synthetic/test
+visualize:
+  model: runs/experiments/exp_edge_mlp_h256_d3/latest.json
+  targets:
+  - npz_dir: runs/data/tsplib/processed
+    limit: 0
+  - npz_dir: runs/data/synthetic/test
+    limit: 5
+  out_dir: auto

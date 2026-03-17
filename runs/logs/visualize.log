@@ -1,0 +1,1935 @@
+2026-02-10 22:15:55,844 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-02-10 22:15:55,845 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-02-10 22:17:18,682 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-02-10 22:17:18,682 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-02-10 22:18:39,013 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-02-10 22:18:39,013 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-02-10 22:20:03,118 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-02-10 22:20:03,119 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-02-10 23:40:39,888 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-02-10 23:40:39,889 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-02-10 23:41:19,154 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-02-10 23:41:19,154 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-02-10 23:41:22,601 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-02-10 23:41:22,602 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-02-10 23:41:26,204 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-02-10 23:41:26,204 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-02-10 23:41:29,267 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-02-10 23:41:29,267 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-02-10 23:41:32,384 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-02-10 23:41:32,384 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-02-10 23:43:47,278 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-02-10 23:43:47,278 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-02-10 23:45:15,112 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-02-10 23:45:15,113 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-02-10 23:46:48,416 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-02-10 23:46:48,417 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-02-10 23:48:27,756 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-02-10 23:48:27,757 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-02-10 23:50:00,459 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-02-10 23:50:00,460 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-02-10 23:51:28,379 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-02-10 23:51:28,380 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-02-11 18:59:30,027 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4}
+2026-02-11 18:59:30,028 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-11 19:00:47,640 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 4, 'ff_mult': 4}
+2026-02-11 19:00:47,641 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 14:53:59,253 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 14:53:59,253 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 14:55:22,250 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 14:55:22,251 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 14:56:49,212 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 14:56:49,213 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 20:42:08,879 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:42:08,880 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 22:18:47,975 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 22:18:47,975 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 22:20:14,194 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 22:20:14,194 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 22:21:40,562 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 22:21:40,563 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 22:23:15,896 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 22:23:15,896 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 22:25:00,252 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 22:25:00,253 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 22:26:44,830 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 22:26:44,830 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 22:28:33,752 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 22:28:33,752 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 22:30:22,566 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 22:30:22,566 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:16:34,234 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:16:34,237 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 19:17:54,860 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:17:54,863 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 19:19:19,112 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 19:19:19,115 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 19:35:20,063 INFO - [regen-viz-tsplib] exp_edge_mlp_h128_d2
+2026-03-15 19:35:20,070 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:35:20,070 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:35:20,344 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:20,422 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:20,571 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:20,709 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:21,146 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:21,414 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:22,129 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:22,931 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:23,737 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:24,047 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:24,740 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,031 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,038 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,058 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,060 INFO - [regen-viz-tsplib] exp_edge_mlp_h128_d2_ccv1
+2026-03-15 19:35:25,063 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:35:25,063 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:35:25,243 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,387 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,522 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:25,768 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:26,569 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:27,002 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:27,380 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:28,114 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:28,817 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:29,089 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:29,775 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:29,921 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:29,928 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:29,943 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:29,947 INFO - [regen-viz-tsplib] exp_edge_mlp_h256_d2
+2026-03-15 19:35:29,955 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:35:29,955 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:35:30,113 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:30,204 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:30,368 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:30,584 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:31,010 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:31,323 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:32,074 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:32,522 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:33,065 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:33,375 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:33,992 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,151 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,164 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,189 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,194 INFO - [regen-viz-tsplib] exp_edge_mlp_h256_d2_ccv1
+2026-03-15 19:35:34,198 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:35:34,199 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:35:34,372 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,532 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,684 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:34,898 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:35,330 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:35,575 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:36,062 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:36,754 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:37,505 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:37,933 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:38,464 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:38,752 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:38,761 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:38,776 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:38,779 INFO - [regen-viz-tsplib] exp_edge_mlp_h256_d3
+2026-03-15 19:35:38,786 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 19:35:38,786 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 19:35:38,852 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:39,008 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:39,126 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:39,455 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:39,943 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:40,313 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:40,925 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:41,596 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:42,514 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:42,824 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,194 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,473 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,479 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,495 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,500 INFO - [regen-viz-tsplib] exp_edge_mlp_h256_d3_ccv1
+2026-03-15 19:35:43,506 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 19:35:43,506 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 19:35:43,647 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,792 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:43,901 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:44,159 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:44,818 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:45,273 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:45,887 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:46,640 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,042 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,316 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,511 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,871 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,877 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,891 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:47,894 INFO - [regen-viz-tsplib] exp_edge_res_h128_d4
+2026-03-15 19:35:47,903 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:35:47,904 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:35:48,008 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:48,145 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:48,227 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:48,560 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:48,963 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:49,782 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:50,374 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:51,099 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:51,786 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:52,030 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:52,766 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,001 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,012 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,030 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,036 INFO - [regen-viz-tsplib] exp_edge_res_h128_d4_ccv1
+2026-03-15 19:35:53,045 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:35:53,046 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:35:53,171 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,356 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,418 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:53,626 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:54,220 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:54,777 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:55,353 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:55,963 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:56,718 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:57,173 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:57,924 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,094 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,102 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,130 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,135 INFO - [regen-viz-tsplib] exp_edge_res_h256_d4
+2026-03-15 19:35:58,148 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:35:58,149 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:35:58,316 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,463 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,598 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,746 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:58,995 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:35:59,641 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:00,326 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:00,506 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:01,454 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:01,950 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:02,377 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:02,748 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:02,756 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:02,776 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:02,781 INFO - [regen-viz-tsplib] exp_edge_res_h256_d4_ccv1
+2026-03-15 19:36:02,793 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:36:02,794 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:36:02,922 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:03,042 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:03,186 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:03,567 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:04,146 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:04,428 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:05,051 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:05,238 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:06,195 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:06,435 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:07,106 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:07,514 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:07,520 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:07,550 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:07,554 INFO - [regen-viz-tsplib] exp_edge_tf_h128_d3_ccv1
+2026-03-15 19:36:07,567 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:36:07,568 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 19:36:07,711 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:07,827 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:08,008 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:08,244 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:08,528 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:09,193 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:09,749 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:10,065 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:10,629 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:10,875 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:11,327 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:11,619 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:11,627 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:11,643 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:11,646 INFO - [regen-viz-tsplib] exp_edge_tf_h128_d3_relv2_ms_ccv1
+2026-03-15 19:36:11,661 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:36:11,662 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 19:36:12,421 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:13,161 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:13,765 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:14,987 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:19,279 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:24,170 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:26,789 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:31,844 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:35,790 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:37,708 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:39,166 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,018 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,054 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,110 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,116 INFO - [regen-viz-tsplib] exp_edge_tf_h192_d4_relsc_ccv1
+2026-03-15 19:36:41,139 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:36:41,141 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 19:36:41,313 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,410 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,468 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:41,599 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:42,077 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:42,472 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:43,296 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:43,837 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:44,316 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:44,538 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:44,850 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,108 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,119 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,130 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,133 INFO - [regen-viz-tsplib] exp_edge_tf_h256_d4_ccv1
+2026-03-15 19:36:45,161 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:36:45,164 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 19:36:45,270 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,364 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,452 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,636 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:45,847 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:46,399 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:46,981 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:47,450 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:48,033 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:48,374 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:48,766 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:49,003 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:49,011 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:49,029 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:49,035 INFO - [regen-viz-tsplib] exp_edge_tf_h256_d4_relv2_ms_ccv1
+2026-03-15 19:36:49,061 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:36:49,065 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 19:36:49,909 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:50,846 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:51,684 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:53,801 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:56,424 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:36:59,718 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:03,163 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:08,160 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:13,445 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:15,601 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:21,646 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:23,726 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:23,746 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:23,843 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:23,849 INFO - [regen-viz-tsplib] exp_edge_tf_h256_d5_relsc_ccv1
+2026-03-15 19:37:23,884 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 19:37:23,889 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 19:37:24,004 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:24,150 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:24,347 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:24,603 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:25,096 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:25,735 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:26,298 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:26,979 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:27,561 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:27,978 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:28,464 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:28,880 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:28,892 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:28,905 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:28,908 INFO - [regen-viz-tsplib] exp_edge_tf_h256_d5_relv2_ms_ccv1
+2026-03-15 19:37:28,943 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 19:37:28,946 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 19:37:29,557 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:30,279 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:31,517 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:34,303 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:37,814 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:39,478 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:43,650 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:46,123 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:50,978 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:54,236 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:57,929 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,186 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,226 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,286 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,293 INFO - [regen-viz-tsplib] exp_edge_tf_h320_d3_relsc_ccv1
+2026-03-15 19:37:59,320 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:37:59,324 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 19:37:59,497 ERROR - [att48.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,579 ERROR - [berlin52.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,673 ERROR - [eil51.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:37:59,902 ERROR - [eil76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:00,362 ERROR - [gr96.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:01,055 ERROR - [kroA100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:01,917 ERROR - [kroC100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:02,249 ERROR - [kroD100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:02,743 ERROR - [lin105.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:02,977 ERROR - [pr76.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:03,534 ERROR - [rd100.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:03,699 ERROR - [st70.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:03,711 ERROR - [ulysses16.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:03,726 ERROR - [ulysses22.npz] Can't find a usable init.tcl in the following directories: 
+    {C:\Users\ralex\AppData\Local\Programs\Python\Python313\tcl\tcl8.6}
+
+
+
+This probably means that Tcl wasn't installed properly.
+
+2026-03-15 19:38:54,717 INFO - [regen-viz-tsplib-headless] exp_edge_mlp_h128_d2
+2026-03-15 19:38:54,724 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:38:54,724 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:39:49,655 INFO - [regen-viz-tsplib-headless] exp_edge_mlp_h128_d2_ccv1
+2026-03-15 19:39:49,660 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:39:49,660 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:40:43,751 INFO - [regen-viz-tsplib-headless] exp_edge_mlp_h256_d2
+2026-03-15 19:40:43,754 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:40:43,754 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:41:36,756 INFO - [regen-viz-tsplib-headless] exp_edge_mlp_h256_d2_ccv1
+2026-03-15 19:41:36,759 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 19:41:36,760 INFO - Viz model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 19:42:30,388 INFO - [regen-viz-tsplib-headless] exp_edge_mlp_h256_d3
+2026-03-15 19:42:30,392 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 19:42:30,393 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 19:43:21,486 INFO - [regen-viz-tsplib-tail] exp_edge_mlp_h256_d3
+2026-03-15 19:43:21,493 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 19:43:21,495 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 19:44:26,321 INFO - [regen-viz-tsplib-tail] exp_edge_mlp_h256_d3_ccv1
+2026-03-15 19:44:26,327 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 19:44:26,327 INFO - Viz model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 19:45:44,503 INFO - [regen-viz-tsplib-tail] exp_edge_res_h128_d4
+2026-03-15 19:45:44,514 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:45:44,516 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:47:01,684 INFO - [regen-viz-tsplib-tail] exp_edge_res_h128_d4_ccv1
+2026-03-15 19:47:01,695 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:47:01,697 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:48:22,580 INFO - [regen-viz-tsplib-tail] exp_edge_res_h256_d4
+2026-03-15 19:48:22,594 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:48:22,595 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:49:39,301 INFO - [regen-viz-tsplib-tail] exp_edge_res_h256_d4_ccv1
+2026-03-15 19:49:39,313 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 19:49:39,315 INFO - Viz model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 19:50:54,731 INFO - [regen-viz-tsplib-tail] exp_edge_tf_h128_d3_ccv1
+2026-03-15 19:50:54,748 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:50:54,751 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 19:52:11,594 INFO - [regen-viz-tsplib-tail] exp_edge_tf_h192_d4_relsc_ccv1
+2026-03-15 19:52:11,627 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:52:11,632 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 19:53:55,469 INFO - [regen-viz-tsplib-final] exp_edge_tf_h192_d4_relsc_ccv1
+2026-03-15 19:53:55,511 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:53:55,516 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 19:55:08,890 INFO - [regen-viz-tsplib-final] exp_edge_tf_h256_d4_ccv1
+2026-03-15 19:55:08,928 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 19:55:08,933 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 19:56:25,843 INFO - [regen-viz-tsplib-final] exp_edge_tf_h256_d5_relsc_ccv1
+2026-03-15 19:56:25,897 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 19:56:25,904 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 19:57:42,865 INFO - [regen-viz-tsplib-final] exp_edge_tf_h320_d3_relsc_ccv1
+2026-03-15 19:57:42,906 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 19:57:42,912 INFO - Viz model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}

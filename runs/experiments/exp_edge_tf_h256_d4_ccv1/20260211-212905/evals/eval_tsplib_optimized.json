@@ -1,0 +1,128 @@
+[
+  {
+    "instance": "att48.npz",
+    "n": 48,
+    "pred_len_norm": 5.789095534011722,
+    "gt_len_norm": 5.473164984956384,
+    "pred_len_tsplib": 12322.0,
+    "gt_len_tsplib": 10628.0,
+    "gap_pct": 15.939028980052692
+  },
+  {
+    "instance": "berlin52.npz",
+    "n": 52,
+    "pred_len_norm": 5.627885967493057,
+    "gt_len_norm": 5.577064175158739,
+    "pred_len_tsplib": 8026.0,
+    "gt_len_tsplib": 7542.0,
+    "gap_pct": 6.417395916202599
+  },
+  {
+    "instance": "eil51.npz",
+    "n": 51,
+    "pred_len_norm": 7.217148367315531,
+    "gt_len_norm": 7.159821394830942,
+    "pred_len_tsplib": 435.0,
+    "gt_len_tsplib": 426.0,
+    "gap_pct": 2.112676056338028
+  },
+  {
+    "instance": "eil76.npz",
+    "n": 76,
+    "pred_len_norm": 8.177060209214687,
+    "gt_len_norm": 8.035722084343433,
+    "pred_len_tsplib": 550.0,
+    "gt_len_tsplib": 538.0,
+    "gap_pct": 2.2304832713754648
+  },
+  {
+    "instance": "gr96.npz",
+    "n": 96,
+    "pred_len_norm": 6.85986340008094,
+    "gt_len_norm": 6.642182770738145,
+    "pred_len_tsplib": 57361.0,
+    "gt_len_tsplib": 55209.0,
+    "gap_pct": 3.8979151949863247
+  },
+  {
+    "instance": "kroA100.npz",
+    "n": 100,
+    "pred_len_norm": 8.431748873088509,
+    "gt_len_norm": 8.76091173896566,
+    "pred_len_tsplib": 24830.0,
+    "gt_len_tsplib": 21282.0,
+    "gap_pct": 16.671365473169814
+  },
+  {
+    "instance": "kroC100.npz",
+    "n": 100,
+    "pred_len_norm": 8.108334612566978,
+    "gt_len_norm": 8.261912206653506,
+    "pred_len_tsplib": 24393.0,
+    "gt_len_tsplib": 20749.0,
+    "gap_pct": 17.56229215865825
+  },
+  {
+    "instance": "kroD100.npz",
+    "n": 100,
+    "pred_len_norm": 7.9744758596643806,
+    "gt_len_norm": 8.75327415112406,
+    "pred_len_tsplib": 22735.0,
+    "gt_len_tsplib": 21294.0,
+    "gap_pct": 6.767164459472151
+  },
+  {
+    "instance": "lin105.npz",
+    "n": 105,
+    "pred_len_norm": 7.644907528534532,
+    "gt_len_norm": 7.815087513998151,
+    "pred_len_tsplib": 17178.0,
+    "gt_len_tsplib": 14379.0,
+    "gap_pct": 19.465887752973085
+  },
+  {
+    "instance": "pr76.npz",
+    "n": 76,
+    "pred_len_norm": 7.367408286780119,
+    "gt_len_norm": 6.966856837272644,
+    "pred_len_tsplib": 117833.0,
+    "gt_len_tsplib": 108159.0,
+    "gap_pct": 8.944239499255726
+  },
+  {
+    "instance": "rd100.npz",
+    "n": 100,
+    "pred_len_norm": 8.228604460600764,
+    "gt_len_norm": 8.092277873773128,
+    "pred_len_tsplib": 8039.0,
+    "gt_len_tsplib": 7910.0,
+    "gap_pct": 1.6308470290771178
+  },
+  {
+    "instance": "st70.npz",
+    "n": 70,
+    "pred_len_norm": 7.341952724382281,
+    "gt_len_norm": 7.0989855621010065,
+    "pred_len_tsplib": 701.0,
+    "gt_len_tsplib": 675.0,
+    "gap_pct": 3.851851851851852
+  },
+  {
+    "instance": "ulysses16.npz",
+    "n": 16,
+    "pred_len_norm": 3.7801574170589447,
+    "gt_len_norm": 3.9917614981532097,
+    "pred_len_tsplib": 7685.0,
+    "gt_len_tsplib": 6859.0,
+    "gap_pct": 12.042571803469894
+  },
+  {
+    "instance": "ulysses22.npz",
+    "n": 22,
+    "pred_len_norm": 4.067860789131373,
+    "gt_len_norm": 4.078235508408397,
+    "pred_len_tsplib": 7405.0,
+    "gt_len_tsplib": 7013.0,
+    "gap_pct": 5.589619278482818
+  }
+]

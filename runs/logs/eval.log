@@ -1,0 +1,550 @@
+2026-02-12 19:00:42,638 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-12 19:00:42,638 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-12 19:00:42,763 INFO - Evaluating 14 instances from runs/data/tsplib/processed...
+2026-02-12 19:01:17,501 INFO - saved /kaggle/working/TSP/runs/experiments/exp_edge_tf_h128_d3_relv2_ms_ccv1/20260212-183537/evals/eval_tsplib.json
+2026-02-12 19:32:25,775 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-12 19:32:25,775 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-12 19:32:25,909 INFO - Evaluating 14 instances from runs/data/tsplib/processed...
+2026-02-12 19:33:06,228 INFO - saved /kaggle/working/TSP/runs/experiments/exp_edge_tf_h256_d4_relv2_ms_ccv1/20260212-190122/evals/eval_tsplib.json
+2026-02-12 20:00:52,139 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-12 20:00:52,140 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-12 20:00:52,274 INFO - Evaluating 14 instances from runs/data/tsplib/processed...
+2026-02-12 20:01:27,115 INFO - saved /kaggle/working/TSP/runs/experiments/exp_edge_tf_h256_d5_relv2_ms_ccv1/20260212-193311/evals/eval_tsplib.json
+2026-02-14 20:11:37,310 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:11:37,310 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:11:37,526 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:11:38,836 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_p10.json
+2026-02-14 20:11:42,345 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:11:42,346 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:11:42,465 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:11:46,149 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_p20.json
+2026-02-14 20:11:49,945 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:11:49,945 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:11:50,058 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:11:56,233 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_p40.json
+2026-02-14 20:11:59,636 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:11:59,636 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:11:59,745 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:01,047 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_005_p10.json
+2026-02-14 20:12:04,528 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:04,528 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:04,634 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:08,351 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_005_p20.json
+2026-02-14 20:12:12,031 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:12,031 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:12,164 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:18,197 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_005_p40.json
+2026-02-14 20:12:21,629 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:21,630 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:21,735 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:22,975 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_01_p10.json
+2026-02-14 20:12:26,496 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:26,497 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:26,616 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:30,443 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_01_p20.json
+2026-02-14 20:12:34,128 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:34,128 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:34,242 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:40,313 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_01_p40.json
+2026-02-14 20:12:43,754 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:43,755 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:43,867 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:45,118 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_02_p10.json
+2026-02-14 20:12:48,514 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:48,514 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:48,629 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:12:52,464 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_02_p20.json
+2026-02-14 20:12:55,890 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:12:55,890 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:12:56,005 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:13:01,926 INFO - saved runs\evals\sweep\eval_h128_full_ms1_n0_02_p40.json
+2026-02-14 20:13:17,195 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:13:17,196 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:13:17,301 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:13:21,536 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_p10.json
+2026-02-14 20:13:25,185 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:13:25,186 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:13:25,297 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:13:39,281 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_p20.json
+2026-02-14 20:13:42,671 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:13:42,671 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:13:42,783 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:14:06,745 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_p40.json
+2026-02-14 20:14:10,149 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:14:10,150 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:14:10,258 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:14:14,673 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_005_p10.json
+2026-02-14 20:14:18,125 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:14:18,125 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:14:18,230 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:14:32,439 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_005_p20.json
+2026-02-14 20:14:35,853 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:14:35,854 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:14:35,965 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:15:00,010 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_005_p40.json
+2026-02-14 20:15:03,391 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:15:03,392 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:15:03,495 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:15:08,011 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_01_p10.json
+2026-02-14 20:15:11,432 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:15:11,432 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:15:11,548 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:15:25,489 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_01_p20.json
+2026-02-14 20:15:29,015 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:15:29,016 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:15:29,123 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:15:52,997 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_01_p40.json
+2026-02-14 20:15:56,460 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:15:56,461 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:15:56,576 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:16:00,715 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_02_p10.json
+2026-02-14 20:16:04,150 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:16:04,151 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:16:04,262 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:16:18,633 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_02_p20.json
+2026-02-14 20:16:22,104 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:16:22,105 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:16:22,214 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:16:46,396 INFO - saved runs\evals\sweep\eval_h128_full_ms4_n0_02_p40.json
+2026-02-14 20:17:00,315 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:17:00,316 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:17:00,416 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:17:08,669 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_p10.json
+2026-02-14 20:17:12,169 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:17:12,169 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:17:12,284 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:17:40,164 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_p20.json
+2026-02-14 20:17:43,655 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:17:43,655 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:17:43,765 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:18:30,672 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_p40.json
+2026-02-14 20:18:34,135 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:18:34,135 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:18:34,254 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:18:42,417 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_005_p10.json
+2026-02-14 20:18:45,784 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:18:45,786 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:18:45,904 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:19:14,657 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_005_p20.json
+2026-02-14 20:19:18,076 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:19:18,077 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:19:18,189 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:20:05,792 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_005_p40.json
+2026-02-14 20:20:09,242 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:20:09,243 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:20:09,364 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:20:17,989 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_01_p10.json
+2026-02-14 20:20:21,473 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:20:21,473 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:20:21,594 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:20:49,449 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_01_p20.json
+2026-02-14 20:20:52,847 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:20:52,848 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:20:52,968 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:21:40,951 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_01_p40.json
+2026-02-14 20:21:44,448 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:21:44,449 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:21:44,562 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:21:53,600 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_02_p10.json
+2026-02-14 20:21:57,021 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:21:57,022 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:21:57,132 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:22:25,878 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_02_p20.json
+2026-02-14 20:22:29,539 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:22:29,544 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:22:29,656 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:23:16,426 INFO - saved runs\evals\sweep\eval_h128_full_ms8_n0_02_p40.json
+2026-02-14 20:23:31,024 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:23:31,025 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:23:31,135 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:23:48,511 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_p10.json
+2026-02-14 20:23:52,056 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:23:52,057 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:23:52,172 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:24:50,105 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_p20.json
+2026-02-14 20:24:53,577 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:24:53,577 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:24:53,682 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:26:27,988 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_p40.json
+2026-02-14 20:26:31,439 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:26:31,439 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:26:31,555 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:26:48,082 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_005_p10.json
+2026-02-14 20:26:51,605 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:26:51,606 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:26:51,717 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:27:48,229 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_005_p20.json
+2026-02-14 20:27:51,636 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:27:51,639 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:27:51,752 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:29:24,373 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_005_p40.json
+2026-02-14 20:29:27,814 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:29:27,815 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:29:27,920 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:29:45,085 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_01_p10.json
+2026-02-14 20:29:48,499 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:29:48,499 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:29:48,607 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:30:44,518 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_01_p20.json
+2026-02-14 20:30:48,015 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:30:48,016 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:30:48,125 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:32:21,178 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_01_p40.json
+2026-02-14 20:32:24,581 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:32:24,581 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:32:24,690 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:32:42,751 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_02_p10.json
+2026-02-14 20:32:46,140 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:32:46,141 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:32:46,245 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:33:44,543 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_02_p20.json
+2026-02-14 20:33:47,974 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:33:47,974 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:33:48,092 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:35:15,148 INFO - saved runs\evals\sweep\eval_h128_full_ms16_n0_02_p40.json
+2026-02-14 20:41:07,609 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 20:41:07,609 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 20:41:07,711 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 20:41:50,146 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib.json
+2026-02-14 21:14:26,014 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:14:26,015 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:14:26,152 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:14:29,312 INFO - saved runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib_baseline.json
+2026-02-14 21:14:32,740 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:14:32,741 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:14:32,838 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:15:12,993 INFO - saved runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib_optimized.json
+2026-02-14 21:15:15,936 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:15:15,936 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:15:16,032 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:15:19,433 INFO - saved runs\experiments\exp_edge_tf_h128_d3_relv2_ms_ccv1\20260212-183537\evals\eval_tsplib_baseline.json
+2026-02-14 21:15:22,384 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:15:22,385 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:15:22,474 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:16:03,376 INFO - saved runs\experiments\exp_edge_tf_h128_d3_relv2_ms_ccv1\20260212-183537\evals\eval_tsplib_optimized.json
+2026-02-14 21:16:06,349 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:16:06,350 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:16:06,449 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:16:09,638 INFO - saved runs\experiments\exp_edge_tf_h192_d4_relsc_ccv1\20260211-215800\evals\eval_tsplib_baseline.json
+2026-02-14 21:16:12,818 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:16:12,819 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:16:12,925 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:16:55,016 INFO - saved runs\experiments\exp_edge_tf_h192_d4_relsc_ccv1\20260211-215800\evals\eval_tsplib_optimized.json
+2026-02-14 21:16:58,035 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:16:58,035 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:16:58,138 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:17:01,100 INFO - saved runs\experiments\exp_edge_tf_h256_d4_ccv1\20260211-212905\evals\eval_tsplib_baseline.json
+2026-02-14 21:17:04,138 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:17:04,139 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:17:04,240 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:17:45,080 INFO - saved runs\experiments\exp_edge_tf_h256_d4_ccv1\20260211-212905\evals\eval_tsplib_optimized.json
+2026-02-14 21:17:48,218 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:17:48,218 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:17:48,329 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:17:52,282 INFO - saved runs\experiments\exp_edge_tf_h256_d4_relv2_ms_ccv1\20260212-190122\evals\eval_tsplib_baseline.json
+2026-02-14 21:17:55,342 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:17:55,342 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:17:55,448 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:18:37,815 INFO - saved runs\experiments\exp_edge_tf_h256_d4_relv2_ms_ccv1\20260212-190122\evals\eval_tsplib_optimized.json
+2026-02-14 21:18:40,972 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:18:40,973 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:18:41,089 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:18:45,381 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relsc_ccv1\20260211-223953\evals\eval_tsplib_baseline.json
+2026-02-14 21:18:48,536 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:18:48,537 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:18:48,663 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:19:33,633 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relsc_ccv1\20260211-223953\evals\eval_tsplib_optimized.json
+2026-02-14 21:19:37,006 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:19:37,007 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:19:37,126 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:19:40,818 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_baseline.json
+2026-02-14 21:19:44,025 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:19:44,025 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:19:44,131 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:19:54,001 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:19:54,002 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:19:54,153 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:19:57,634 INFO - saved runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:00,901 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:20:00,902 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:20:01,009 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:04,678 INFO - saved runs\experiments\exp_edge_tf_h128_d3_relv2_ms_ccv1\20260212-183537\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:08,641 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:20:08,642 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:20:08,779 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:12,866 INFO - saved runs\experiments\exp_edge_tf_h192_d4_relsc_ccv1\20260211-215800\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:16,768 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:20:16,768 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:20:16,884 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:20,712 INFO - saved runs\experiments\exp_edge_tf_h256_d4_ccv1\20260211-212905\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:24,452 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:20:24,452 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:20:24,567 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:29,498 INFO - saved runs\experiments\exp_edge_tf_h256_d4_relv2_ms_ccv1\20260212-190122\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:33,332 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:20:33,333 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:20:33,462 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:36,851 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_optimized.json
+2026-02-14 21:20:38,159 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relsc_ccv1\20260211-223953\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:40,441 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:20:40,441 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:20:40,566 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:41,750 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:20:41,751 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:20:41,852 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:44,886 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:46,333 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:49,202 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:20:49,203 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:20:49,317 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:50,546 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:20:50,546 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:20:50,748 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:20:54,315 INFO - saved runs\experiments\exp_edge_tf_h320_d3_relsc_ccv1\20260211-232057\evals\eval_tsplib_baseline.json
+2026-02-14 21:20:55,608 INFO - saved runs\experiments\exp_edge_tf_h320_d3_relsc_ccv1\20260211-232057\evals\eval_tsplib_baseline.json
+2026-02-14 21:23:21,126 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:23:21,126 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:23:21,228 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:24:06,929 INFO - saved runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib_optimized.json
+2026-02-14 21:24:10,386 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:24:10,386 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:24:10,491 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:24:57,771 INFO - saved runs\experiments\exp_edge_tf_h128_d3_relv2_ms_ccv1\20260212-183537\evals\eval_tsplib_optimized.json
+2026-02-14 21:25:01,268 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:25:01,268 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:25:01,389 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:25:51,406 INFO - saved runs\experiments\exp_edge_tf_h192_d4_relsc_ccv1\20260211-215800\evals\eval_tsplib_optimized.json
+2026-02-14 21:25:54,971 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-02-14 21:25:54,971 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:25:55,109 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:26:42,650 INFO - saved runs\experiments\exp_edge_tf_h256_d4_ccv1\20260211-212905\evals\eval_tsplib_optimized.json
+2026-02-14 21:26:46,148 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:26:46,148 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-02-14 21:26:46,271 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:27:37,341 INFO - saved runs\experiments\exp_edge_tf_h256_d4_relv2_ms_ccv1\20260212-190122\evals\eval_tsplib_optimized.json
+2026-02-14 21:27:40,371 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:27:40,371 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:27:40,485 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:28:23,469 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relsc_ccv1\20260211-223953\evals\eval_tsplib_optimized.json
+2026-02-14 21:28:26,474 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-02-14 21:28:26,475 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-02-14 21:28:26,590 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:29:10,361 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_optimized.json
+2026-02-14 21:29:13,351 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-14 21:29:13,351 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-02-14 21:29:13,451 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-02-14 21:30:01,030 INFO - saved runs\experiments\exp_edge_tf_h320_d3_relsc_ccv1\20260211-232057\evals\eval_tsplib_optimized.json
+2026-03-15 15:08:51,545 INFO - [regen-eval] primary exp_edge_mlp_h128_d2
+2026-03-15 15:08:51,653 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 15:08:51,656 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 15:08:51,962 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 15:08:57,554 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h128_d2\20260210-175745\evals\eval_tsplib.json
+2026-03-15 15:08:57,962 INFO - Evaluating 9000 instances from runs\data\synthetic\test...
+2026-03-15 15:43:11,552 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h128_d2\20260210-175745\evals\eval_synthetic_test.json
+2026-03-15 15:43:11,561 INFO - [regen-eval] primary exp_edge_mlp_h128_d2_ccv1
+2026-03-15 15:43:11,569 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 15:43:11,569 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 15:43:11,572 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 15:43:15,611 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h128_d2_ccv1\20260210-185558\evals\eval_tsplib.json
+2026-03-15 15:43:15,884 INFO - Evaluating 9000 instances from runs\data\synthetic_concorde_v1\test...
+2026-03-15 16:12:13,099 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h128_d2_ccv1\20260210-185558\evals\eval_synthetic_test.json
+2026-03-15 16:12:13,106 INFO - [regen-eval] primary exp_edge_mlp_h256_d2
+2026-03-15 16:12:13,113 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 16:12:13,115 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 16:12:13,118 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 16:12:16,624 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h256_d2\20260210-171914\evals\eval_tsplib.json
+2026-03-15 16:12:16,683 INFO - Evaluating 9000 instances from runs\data\synthetic\test...
+2026-03-15 16:38:30,039 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h256_d2\20260210-171914\evals\eval_synthetic_test.json
+2026-03-15 16:38:30,044 INFO - [regen-eval] primary exp_edge_mlp_h256_d2_ccv1
+2026-03-15 16:38:30,051 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 16:38:30,052 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 16:38:30,054 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 16:38:33,818 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h256_d2_ccv1\20260210-191744\evals\eval_tsplib.json
+2026-03-15 16:38:33,875 INFO - Evaluating 9000 instances from runs\data\synthetic_concorde_v1\test...
+2026-03-15 17:08:03,641 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h256_d2_ccv1\20260210-191744\evals\eval_synthetic_test.json
+2026-03-15 17:08:03,649 INFO - [regen-eval] primary exp_edge_mlp_h256_d3
+2026-03-15 17:08:03,657 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 17:08:03,658 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 17:08:03,660 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 17:08:08,928 INFO - saved C:\Users\ralex\TSP\runs\experiments\exp_edge_mlp_h256_d3\20260210-175524\evals\eval_tsplib.json
+2026-03-15 17:08:09,057 INFO - Evaluating 9000 instances from runs\data\synthetic\test...
+2026-03-15 18:39:31,899 INFO - [fair-baseline] exp_edge_mlp_h128_d2
+2026-03-15 18:39:31,916 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:39:31,917 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:39:32,014 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:39:36,478 INFO - saved runs\experiments\exp_edge_mlp_h128_d2\20260210-175745\evals\eval_tsplib_baseline.json
+2026-03-15 18:39:36,480 INFO - [fair-baseline] exp_edge_mlp_h128_d2_ccv1
+2026-03-15 18:39:36,484 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:39:36,484 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:39:36,485 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:39:40,800 INFO - saved runs\experiments\exp_edge_mlp_h128_d2_ccv1\20260210-185558\evals\eval_tsplib_baseline.json
+2026-03-15 18:39:40,803 INFO - [fair-baseline] exp_edge_mlp_h256_d2
+2026-03-15 18:39:40,809 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:39:40,810 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:39:40,821 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:39:44,515 INFO - saved runs\experiments\exp_edge_mlp_h256_d2\20260210-171914\evals\eval_tsplib_baseline.json
+2026-03-15 18:39:44,518 INFO - [fair-baseline] exp_edge_mlp_h256_d2_ccv1
+2026-03-15 18:39:44,521 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:39:44,522 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:39:44,524 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:39:48,597 INFO - saved runs\experiments\exp_edge_mlp_h256_d2_ccv1\20260210-191744\evals\eval_tsplib_baseline.json
+2026-03-15 18:39:48,600 INFO - [fair-baseline] exp_edge_mlp_h256_d3
+2026-03-15 18:39:48,605 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 18:39:48,611 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 18:39:48,615 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:39:53,145 INFO - saved runs\experiments\exp_edge_mlp_h256_d3\20260210-175524\evals\eval_tsplib_baseline.json
+2026-03-15 18:39:53,147 INFO - [fair-baseline] exp_edge_mlp_h256_d3_ccv1
+2026-03-15 18:39:53,155 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 18:39:53,155 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 18:39:53,159 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:39:57,077 INFO - saved runs\experiments\exp_edge_mlp_h256_d3_ccv1\20260210-195752\evals\eval_tsplib_baseline.json
+2026-03-15 18:39:57,080 INFO - [fair-baseline] exp_edge_res_h128_d4
+2026-03-15 18:39:57,097 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:39:57,098 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:39:57,102 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:01,933 INFO - saved runs\experiments\exp_edge_res_h128_d4\20260210-180915\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:01,936 INFO - [fair-baseline] exp_edge_res_h128_d4_ccv1
+2026-03-15 18:40:01,950 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:40:01,951 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:40:01,955 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:06,836 INFO - saved runs\experiments\exp_edge_res_h128_d4_ccv1\20260210-191322\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:06,839 INFO - [fair-baseline] exp_edge_res_h256_d4
+2026-03-15 18:40:06,855 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:40:06,856 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:40:06,881 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:11,086 INFO - saved runs\experiments\exp_edge_res_h256_d4\20260210-183210\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:11,088 INFO - [fair-baseline] exp_edge_res_h256_d4_ccv1
+2026-03-15 18:40:11,106 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:40:11,108 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:40:11,134 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:15,275 INFO - saved runs\experiments\exp_edge_res_h256_d4_ccv1\20260210-203342\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:15,277 INFO - [fair-baseline] exp_edge_tf_h128_d3_ccv1
+2026-03-15 18:40:15,300 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 18:40:15,301 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 18:40:15,317 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:19,014 INFO - saved runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:19,017 INFO - [fair-baseline] exp_edge_tf_h128_d3_relv2_ms_ccv1
+2026-03-15 18:40:19,037 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 18:40:19,039 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 18:40:19,095 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:22,854 INFO - saved runs\experiments\exp_edge_tf_h128_d3_relv2_ms_ccv1\20260212-183537\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:22,857 INFO - [fair-baseline] exp_edge_tf_h192_d4_relsc_ccv1
+2026-03-15 18:40:22,892 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 18:40:22,895 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 18:40:22,934 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:26,515 INFO - saved runs\experiments\exp_edge_tf_h192_d4_relsc_ccv1\20260211-215800\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:26,518 INFO - [fair-baseline] exp_edge_tf_h256_d4_ccv1
+2026-03-15 18:40:26,558 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 18:40:26,562 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 18:40:26,600 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:30,001 INFO - saved runs\experiments\exp_edge_tf_h256_d4_ccv1\20260211-212905\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:30,004 INFO - [fair-baseline] exp_edge_tf_h256_d4_relv2_ms_ccv1
+2026-03-15 18:40:30,045 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 18:40:30,049 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 18:40:30,063 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:35,014 INFO - saved runs\experiments\exp_edge_tf_h256_d4_relv2_ms_ccv1\20260212-190122\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:35,017 INFO - [fair-baseline] exp_edge_tf_h256_d5_relsc_ccv1
+2026-03-15 18:40:35,061 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 18:40:35,064 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 18:40:35,101 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:40,058 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relsc_ccv1\20260211-223953\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:40,061 INFO - [fair-baseline] exp_edge_tf_h256_d5_relv2_ms_ccv1
+2026-03-15 18:40:40,107 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 18:40:40,111 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 18:40:40,122 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:44,353 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_baseline.json
+2026-03-15 18:40:44,355 INFO - [fair-baseline] exp_edge_tf_h320_d3_relsc_ccv1
+2026-03-15 18:40:44,391 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 18:40:44,394 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 18:40:44,403 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:40:48,115 INFO - saved runs\experiments\exp_edge_tf_h320_d3_relsc_ccv1\20260211-232057\evals\eval_tsplib_baseline.json
+2026-03-15 18:41:49,948 INFO - [fair-optimized] exp_edge_mlp_h128_d2
+2026-03-15 18:41:49,967 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:41:49,968 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:41:50,060 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:42:40,943 INFO - saved runs\experiments\exp_edge_mlp_h128_d2\20260210-175745\evals\eval_tsplib_optimized.json
+2026-03-15 18:42:40,946 INFO - [fair-optimized] exp_edge_mlp_h128_d2_ccv1
+2026-03-15 18:42:40,949 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:42:40,949 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:42:40,952 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:43:32,245 INFO - saved runs\experiments\exp_edge_mlp_h128_d2_ccv1\20260210-185558\evals\eval_tsplib_optimized.json
+2026-03-15 18:43:32,247 INFO - [fair-optimized] exp_edge_mlp_h256_d2
+2026-03-15 18:43:32,250 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:43:32,252 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:43:32,255 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:44:24,524 INFO - saved runs\experiments\exp_edge_mlp_h256_d2\20260210-171914\evals\eval_tsplib_optimized.json
+2026-03-15 18:44:24,526 INFO - [fair-optimized] exp_edge_mlp_h256_d2_ccv1
+2026-03-15 18:44:24,529 INFO - Loading 6/6 tensors (filtered by name+shape).
+2026-03-15 18:44:24,530 INFO - Eval model params: {'model_name': 'edge_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.0, 'depth': 2}
+2026-03-15 18:44:24,533 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:45:17,305 INFO - saved runs\experiments\exp_edge_mlp_h256_d2_ccv1\20260210-191744\evals\eval_tsplib_optimized.json
+2026-03-15 18:45:17,308 INFO - [fair-optimized] exp_edge_mlp_h256_d3
+2026-03-15 18:45:17,311 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 18:45:17,312 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 18:45:17,315 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:46:05,637 INFO - saved runs\experiments\exp_edge_mlp_h256_d3\20260210-175524\evals\eval_tsplib_optimized.json
+2026-03-15 18:46:05,640 INFO - [fair-optimized] exp_edge_mlp_h256_d3_ccv1
+2026-03-15 18:46:05,643 INFO - Loading 8/8 tensors (filtered by name+shape).
+2026-03-15 18:46:05,644 INFO - Eval model params: {'model_name': 'edge_mlp_deep', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 3}
+2026-03-15 18:46:05,647 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:46:56,569 INFO - saved runs\experiments\exp_edge_mlp_h256_d3_ccv1\20260210-195752\evals\eval_tsplib_optimized.json
+2026-03-15 18:46:56,572 INFO - [fair-optimized] exp_edge_res_h128_d4
+2026-03-15 18:46:56,579 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:46:56,580 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:46:56,584 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:47:53,306 INFO - saved runs\experiments\exp_edge_res_h128_d4\20260210-180915\evals\eval_tsplib_optimized.json
+2026-03-15 18:47:53,308 INFO - [fair-optimized] exp_edge_res_h128_d4_ccv1
+2026-03-15 18:47:53,316 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:47:53,317 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:47:53,321 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:48:55,368 INFO - saved runs\experiments\exp_edge_res_h128_d4_ccv1\20260210-191322\evals\eval_tsplib_optimized.json
+2026-03-15 18:48:55,370 INFO - [fair-optimized] exp_edge_res_h256_d4
+2026-03-15 18:48:55,381 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:48:55,383 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:48:55,423 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:49:48,112 INFO - saved runs\experiments\exp_edge_res_h256_d4\20260210-183210\evals\eval_tsplib_optimized.json
+2026-03-15 18:49:48,115 INFO - [fair-optimized] exp_edge_res_h256_d4_ccv1
+2026-03-15 18:49:48,124 INFO - Loading 30/30 tensors (filtered by name+shape).
+2026-03-15 18:49:48,126 INFO - Eval model params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4}
+2026-03-15 18:49:48,135 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:50:40,081 INFO - saved runs\experiments\exp_edge_res_h256_d4_ccv1\20260210-203342\evals\eval_tsplib_optimized.json
+2026-03-15 18:50:40,083 INFO - [fair-optimized] exp_edge_tf_h128_d3_ccv1
+2026-03-15 18:50:40,098 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 18:50:40,099 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 18:50:40,155 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:51:24,911 INFO - saved runs\experiments\exp_edge_tf_h128_d3_ccv1\20260211-210533\evals\eval_tsplib_optimized.json
+2026-03-15 18:51:24,914 INFO - [fair-optimized] exp_edge_tf_h128_d3_relv2_ms_ccv1
+2026-03-15 18:51:24,929 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 18:51:24,930 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 128, 'dropout': 0.1, 'depth': 3, 'n_heads': 4, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 18:51:24,983 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:52:10,429 INFO - saved runs\experiments\exp_edge_tf_h128_d3_relv2_ms_ccv1\20260212-183537\evals\eval_tsplib_optimized.json
+2026-03-15 18:52:10,431 INFO - [fair-optimized] exp_edge_tf_h192_d4_relsc_ccv1
+2026-03-15 18:52:10,449 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 18:52:10,451 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 192, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 18:52:10,458 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:53:01,268 INFO - saved runs\experiments\exp_edge_tf_h192_d4_relsc_ccv1\20260211-215800\evals\eval_tsplib_optimized.json
+2026-03-15 18:53:01,270 INFO - [fair-optimized] exp_edge_tf_h256_d4_ccv1
+2026-03-15 18:53:01,295 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 18:53:01,299 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'full'}
+2026-03-15 18:53:01,308 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:53:50,619 INFO - saved runs\experiments\exp_edge_tf_h256_d4_ccv1\20260211-212905\evals\eval_tsplib_optimized.json
+2026-03-15 18:53:50,621 INFO - [fair-optimized] exp_edge_tf_h256_d4_relv2_ms_ccv1
+2026-03-15 18:53:50,647 INFO - Loading 54/54 tensors (filtered by name+shape).
+2026-03-15 18:53:50,651 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.1, 'depth': 4, 'n_heads': 8, 'ff_mult': 4, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 18:53:50,674 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:54:42,118 INFO - saved runs\experiments\exp_edge_tf_h256_d4_relv2_ms_ccv1\20260212-190122\evals\eval_tsplib_optimized.json
+2026-03-15 18:54:42,120 INFO - [fair-optimized] exp_edge_tf_h256_d5_relsc_ccv1
+2026-03-15 18:54:42,148 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 18:54:42,151 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 18:54:42,164 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:55:34,336 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relsc_ccv1\20260211-223953\evals\eval_tsplib_optimized.json
+2026-03-15 18:55:34,339 INFO - [fair-optimized] exp_edge_tf_h256_d5_relv2_ms_ccv1
+2026-03-15 18:55:34,366 INFO - Loading 66/66 tensors (filtered by name+shape).
+2026-03-15 18:55:34,370 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos_v2'}
+2026-03-15 18:55:34,394 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:56:27,865 INFO - saved runs\experiments\exp_edge_tf_h256_d5_relv2_ms_ccv1\20260212-193311\evals\eval_tsplib_optimized.json
+2026-03-15 18:56:27,868 INFO - [fair-optimized] exp_edge_tf_h320_d3_relsc_ccv1
+2026-03-15 18:56:27,897 INFO - Loading 42/42 tensors (filtered by name+shape).
+2026-03-15 18:56:27,904 INFO - Eval model params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 320, 'dropout': 0.12, 'depth': 3, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-03-15 18:56:27,923 INFO - Evaluating 14 instances from runs\data\tsplib\processed...
+2026-03-15 18:57:27,171 INFO - saved runs\experiments\exp_edge_tf_h320_d3_relsc_ccv1\20260211-232057\evals\eval_tsplib_optimized.json

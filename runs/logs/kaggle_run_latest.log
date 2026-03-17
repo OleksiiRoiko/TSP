@@ -1,0 +1,12 @@
+Project root: /kaggle/input/tsp-code
+/usr/bin/python3 -m pip install -r /kaggle/working/TSP/requirements.txt
+Using dataset: /kaggle/input/tsp-data-v3
+Copying dataset from /kaggle/input/tsp-data-v3/data to /kaggle/working/TSP/runs/data
+/usr/bin/python3 -m tspgnn.cli --config /kaggle/working/TSP/configs/exp_edge_tf_h128_d3_relv2_ms_ccv1.yaml train
+/usr/bin/python3 -m tspgnn.cli --config /kaggle/working/TSP/configs/exp_edge_tf_h128_d3_relv2_ms_ccv1.yaml eval
+/usr/bin/python3 -m tspgnn.cli --config /kaggle/working/TSP/configs/exp_edge_tf_h256_d4_relv2_ms_ccv1.yaml train
+/usr/bin/python3 -m tspgnn.cli --config /kaggle/working/TSP/configs/exp_edge_tf_h256_d4_relv2_ms_ccv1.yaml eval
+/usr/bin/python3 -m tspgnn.cli --config /kaggle/working/TSP/configs/exp_edge_tf_h256_d5_relv2_ms_ccv1.yaml train
+/usr/bin/python3 -m tspgnn.cli --config /kaggle/working/TSP/configs/exp_edge_tf_h256_d5_relv2_ms_ccv1.yaml eval
+Pruning output artifact: /kaggle/working/TSP/runs/data
+Pruning output artifact: /kaggle/working/TSP/runs/cache

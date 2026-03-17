@@ -1,0 +1,204 @@
+2026-02-14 22:53:11,257 INFO - [analyze] matched experiments: 18
+2026-02-14 22:53:11,345 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-02-14 22:53:11,346 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-02-14 22:53:11,348 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-02-14 22:53:11,353 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-02-14 22:53:11,354 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-02-14 22:54:28,013 INFO - [analyze] matched experiments: 18
+2026-02-14 22:54:28,045 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-02-14 22:54:28,046 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-02-14 22:54:28,047 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-02-14 22:54:28,053 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-02-14 22:54:28,054 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-02-14 22:59:14,016 INFO - [analyze] matched experiments: 18
+2026-02-14 22:59:14,049 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-02-14 22:59:14,050 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-02-14 22:59:14,051 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-02-14 22:59:14,056 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-02-14 22:59:14,057 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-09 19:43:06,926 INFO - [analyze] matched experiments: 18
+2026-03-09 19:43:07,508 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-03-09 19:43:07,510 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-03-09 19:43:07,511 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-03-09 19:43:07,517 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-03-09 19:43:07,518 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-09 19:43:07,527 INFO - [analyze] wrote runs\analysis\baseline_vs_models.csv
+2026-03-15 13:54:44,389 INFO - [analyze] matched experiments: 18
+2026-03-15 13:54:44,452 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-03-15 13:54:44,453 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-03-15 13:54:44,454 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-03-15 13:54:44,463 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-03-15 13:54:44,464 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-15 13:54:44,466 INFO - [analyze] wrote runs\analysis\baseline_vs_models.csv
+2026-03-15 13:55:06,271 INFO - [analyze] matched experiments: 18
+2026-03-15 13:55:06,328 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-03-15 13:55:06,330 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-03-15 13:55:06,331 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-03-15 13:55:06,340 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-03-15 13:55:06,341 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-15 13:55:06,343 INFO - [analyze] wrote runs\analysis\baseline_vs_models.csv
+2026-03-15 13:55:06,772 INFO - [analyze] wrote runs\analysis\plots\primary_gap_ranking.png
+2026-03-15 13:55:07,133 INFO - [analyze] wrote runs\analysis\plots\baseline_vs_models.png
+2026-03-15 13:55:07,378 INFO - [analyze] wrote runs\analysis\plots\decode_profile_compare.png
+2026-03-15 13:55:07,906 INFO - [analyze] wrote runs\analysis\plots\instance_gap_heatmap_top_models.png
+2026-03-15 13:55:08,120 INFO - [analyze] wrote runs\analysis\plots\best_model_history.png
+2026-03-15 13:56:02,171 INFO - [analyze] matched experiments: 18
+2026-03-15 13:56:02,229 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-03-15 13:56:02,231 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-03-15 13:56:02,233 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-03-15 13:56:02,241 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-03-15 13:56:02,243 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-15 13:56:02,247 INFO - [analyze] wrote runs\analysis\baseline_vs_models.csv
+2026-03-15 13:56:02,658 INFO - [analyze] wrote runs\analysis\plots\primary_gap_ranking.png
+2026-03-15 13:56:03,080 INFO - [analyze] wrote runs\analysis\plots\baseline_vs_models.png
+2026-03-15 13:56:03,327 INFO - [analyze] wrote runs\analysis\plots\decode_profile_compare.png
+2026-03-15 13:56:03,857 INFO - [analyze] wrote runs\analysis\plots\instance_gap_heatmap_top_models.png
+2026-03-15 13:56:04,088 INFO - [analyze] wrote runs\analysis\plots\best_model_history.png
+2026-03-15 14:41:03,094 INFO - [analyze] matched experiments: 18
+2026-03-15 14:41:03,145 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-03-15 14:41:03,146 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-03-15 14:41:03,147 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-03-15 14:41:03,154 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-03-15 14:41:03,154 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-15 14:41:03,166 WARNING - [analyze] baseline_vs_models mixes model primary eval (eval_tsplib.json) with baseline summary settings; compare decode settings before ranking.
+2026-03-15 14:41:03,167 INFO - [analyze] wrote runs\analysis\baseline_vs_models.csv
+2026-03-15 14:41:03,536 INFO - [analyze] wrote runs\analysis\plots\primary_gap_ranking.png
+2026-03-15 14:41:03,910 INFO - [analyze] wrote runs\analysis\plots\baseline_vs_models.png
+2026-03-15 14:41:04,146 INFO - [analyze] wrote runs\analysis\plots\decode_profile_compare.png
+2026-03-15 14:41:04,597 INFO - [analyze] wrote runs\analysis\plots\instance_gap_heatmap_top_models.png
+2026-03-15 14:41:04,804 INFO - [analyze] wrote runs\analysis\plots\best_model_history.png
+2026-03-15 14:43:46,099 INFO - [analyze] matched experiments: 18
+2026-03-15 14:43:46,159 INFO - [analyze] wrote runs\analysis\experiments_summary.csv
+2026-03-15 14:43:46,160 INFO - [analyze] wrote runs\analysis\eval_summary_long.csv
+2026-03-15 14:43:46,161 INFO - [analyze] wrote runs\analysis\eval_profile_compare.csv
+2026-03-15 14:43:46,168 INFO - [analyze] wrote runs\analysis\instance_gap_matrix.csv
+2026-03-15 14:43:46,170 INFO - [analyze] wrote runs\analysis\model_ranking.csv
+2026-03-15 14:43:46,170 WARNING - [analyze] baseline_vs_models mixes model primary eval (eval_tsplib.json) with baseline summary settings; compare decode settings before ranking.
+2026-03-15 14:43:46,172 INFO - [analyze] wrote runs\analysis\baseline_vs_models.csv
+2026-03-15 14:43:46,556 INFO - [analyze] wrote runs\analysis\plots\primary_gap_ranking.png
+2026-03-15 14:43:46,933 INFO - [analyze] wrote runs\analysis\plots\baseline_vs_models.png
+2026-03-15 14:43:47,197 INFO - [analyze] wrote runs\analysis\plots\decode_profile_compare.png
+2026-03-15 14:43:47,669 INFO - [analyze] wrote runs\analysis\plots\instance_gap_heatmap_top_models.png
+2026-03-15 14:43:47,856 INFO - [analyze] wrote runs\analysis\plots\best_model_history.png
+2026-03-15 19:02:42,391 INFO - [analyze] matched experiments: 18
+2026-03-15 19:02:42,528 INFO - [analyze] wrote runs\analysis\fair_baseline\experiments_summary.csv
+2026-03-15 19:02:42,531 INFO - [analyze] wrote runs\analysis\fair_baseline\eval_summary_long.csv
+2026-03-15 19:02:42,546 INFO - [analyze] wrote runs\analysis\fair_baseline\instance_gap_matrix.csv
+2026-03-15 19:02:42,548 INFO - [analyze] wrote runs\analysis\fair_baseline\model_ranking.csv
+2026-03-15 19:02:42,552 INFO - [analyze] wrote runs\analysis\fair_baseline\train_group_summary.csv
+2026-03-15 19:02:42,555 INFO - [analyze] wrote runs\analysis\fair_baseline\data_quality_pairs.csv
+2026-03-15 19:02:42,558 INFO - [analyze] wrote runs\analysis\fair_baseline\baseline_vs_models.csv
+2026-03-15 19:02:43,023 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\primary_gap_ranking.png
+2026-03-15 19:02:43,449 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\baseline_vs_models.png
+2026-03-15 19:02:44,278 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\instance_gap_heatmap_top_models.png
+2026-03-15 19:02:44,558 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\best_model_history.png
+2026-03-15 19:02:50,181 INFO - [analyze] matched experiments: 18
+2026-03-15 19:02:50,403 INFO - [analyze] wrote runs\analysis\fair_optimized\experiments_summary.csv
+2026-03-15 19:02:50,404 INFO - [analyze] wrote runs\analysis\fair_optimized\eval_summary_long.csv
+2026-03-15 19:02:50,414 INFO - [analyze] wrote runs\analysis\fair_optimized\instance_gap_matrix.csv
+2026-03-15 19:02:50,417 INFO - [analyze] wrote runs\analysis\fair_optimized\model_ranking.csv
+2026-03-15 19:02:50,419 INFO - [analyze] wrote runs\analysis\fair_optimized\train_group_summary.csv
+2026-03-15 19:02:50,422 INFO - [analyze] wrote runs\analysis\fair_optimized\data_quality_pairs.csv
+2026-03-15 19:02:50,424 WARNING - [analyze] baseline_vs_models mixes model primary eval (eval_tsplib_optimized.json) with baseline summary settings; compare decode settings before ranking.
+2026-03-15 19:02:50,426 INFO - [analyze] wrote runs\analysis\fair_optimized\baseline_vs_models.csv
+2026-03-15 19:02:50,861 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\primary_gap_ranking.png
+2026-03-15 19:02:51,338 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\baseline_vs_models.png
+2026-03-15 19:02:51,907 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\instance_gap_heatmap_top_models.png
+2026-03-15 19:02:52,148 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\best_model_history.png
+2026-03-15 19:25:58,539 INFO - [analyze] matched experiments: 18
+2026-03-15 19:25:58,580 INFO - [analyze] matched experiments: 18
+2026-03-15 19:25:58,621 INFO - [analyze] wrote runs\analysis\fair_optimized\experiments_summary.csv
+2026-03-15 19:25:58,622 INFO - [analyze] wrote runs\analysis\fair_optimized\eval_summary_long.csv
+2026-03-15 19:25:58,629 INFO - [analyze] wrote runs\analysis\fair_optimized\instance_gap_matrix.csv
+2026-03-15 19:25:58,629 INFO - [analyze] wrote runs\analysis\fair_optimized\model_ranking.csv
+2026-03-15 19:25:58,630 INFO - [analyze] wrote runs\analysis\fair_optimized\train_group_summary.csv
+2026-03-15 19:25:58,631 INFO - [analyze] wrote runs\analysis\fair_optimized\data_quality_pairs.csv
+2026-03-15 19:25:58,631 WARNING - [analyze] baseline_vs_models mixes model primary eval (eval_tsplib_optimized.json) with baseline summary settings; compare decode settings before ranking.
+2026-03-15 19:25:58,633 INFO - [analyze] wrote runs\analysis\fair_optimized\baseline_vs_models.csv
+2026-03-15 19:25:58,671 INFO - [analyze] wrote runs\analysis\fair_baseline\experiments_summary.csv
+2026-03-15 19:25:58,672 INFO - [analyze] wrote runs\analysis\fair_baseline\eval_summary_long.csv
+2026-03-15 19:25:58,679 INFO - [analyze] wrote runs\analysis\fair_baseline\instance_gap_matrix.csv
+2026-03-15 19:25:58,679 INFO - [analyze] wrote runs\analysis\fair_baseline\model_ranking.csv
+2026-03-15 19:25:58,680 INFO - [analyze] wrote runs\analysis\fair_baseline\train_group_summary.csv
+2026-03-15 19:25:58,681 INFO - [analyze] wrote runs\analysis\fair_baseline\data_quality_pairs.csv
+2026-03-15 19:25:58,683 INFO - [analyze] wrote runs\analysis\fair_baseline\baseline_vs_models.csv
+2026-03-15 19:25:58,985 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\primary_gap_ranking.png
+2026-03-15 19:25:59,022 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\primary_gap_ranking.png
+2026-03-15 19:25:59,297 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\baseline_vs_models.png
+2026-03-15 19:25:59,341 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\baseline_vs_models.png
+2026-03-15 19:25:59,716 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\instance_gap_heatmap_top_models.png
+2026-03-15 19:25:59,787 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\instance_gap_heatmap_top_models.png
+2026-03-15 19:25:59,881 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\best_model_history.png
+2026-03-15 19:25:59,938 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\best_model_history.png
+2026-03-15 19:27:55,736 INFO - [analyze] matched experiments: 18
+2026-03-15 19:27:55,754 INFO - [analyze] matched experiments: 18
+2026-03-15 19:27:55,805 INFO - [analyze] wrote runs\analysis\fair_optimized\experiments_summary.csv
+2026-03-15 19:27:55,805 INFO - [analyze] wrote runs\analysis\fair_optimized\eval_summary_long.csv
+2026-03-15 19:27:55,810 INFO - [analyze] wrote runs\analysis\fair_optimized\instance_gap_matrix.csv
+2026-03-15 19:27:55,811 INFO - [analyze] wrote runs\analysis\fair_optimized\model_ranking.csv
+2026-03-15 19:27:55,812 INFO - [analyze] wrote runs\analysis\fair_optimized\train_group_summary.csv
+2026-03-15 19:27:55,813 INFO - [analyze] wrote runs\analysis\fair_optimized\data_quality_pairs.csv
+2026-03-15 19:27:55,814 INFO - [analyze] wrote runs\analysis\fair_optimized\baseline_vs_models.csv
+2026-03-15 19:27:55,823 INFO - [analyze] wrote runs\analysis\fair_baseline\experiments_summary.csv
+2026-03-15 19:27:55,824 INFO - [analyze] wrote runs\analysis\fair_baseline\eval_summary_long.csv
+2026-03-15 19:27:55,828 INFO - [analyze] wrote runs\analysis\fair_baseline\instance_gap_matrix.csv
+2026-03-15 19:27:55,829 INFO - [analyze] wrote runs\analysis\fair_baseline\model_ranking.csv
+2026-03-15 19:27:55,830 INFO - [analyze] wrote runs\analysis\fair_baseline\train_group_summary.csv
+2026-03-15 19:27:55,831 INFO - [analyze] wrote runs\analysis\fair_baseline\data_quality_pairs.csv
+2026-03-15 19:27:55,832 INFO - [analyze] wrote runs\analysis\fair_baseline\baseline_vs_models.csv
+2026-03-15 19:27:56,092 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\primary_gap_ranking.png
+2026-03-15 19:27:56,117 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\primary_gap_ranking.png
+2026-03-15 19:27:56,363 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\baseline_vs_models.png
+2026-03-15 19:27:56,393 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\baseline_vs_models.png
+2026-03-15 19:27:56,716 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\instance_gap_heatmap_top_models.png
+2026-03-15 19:27:56,745 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\instance_gap_heatmap_top_models.png
+2026-03-15 19:27:56,861 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\best_model_history.png
+2026-03-15 19:27:56,893 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\best_model_history.png
+2026-03-15 21:18:58,104 INFO - [analyze] matched experiments: 18
+2026-03-15 21:18:58,139 INFO - [analyze] matched experiments: 18
+2026-03-15 21:18:58,352 INFO - [analyze] wrote runs\analysis\fair_optimized\experiments_summary.csv
+2026-03-15 21:18:58,355 INFO - [analyze] wrote runs\analysis\fair_optimized\eval_summary_long.csv
+2026-03-15 21:18:58,376 INFO - [analyze] wrote runs\analysis\fair_optimized\instance_gap_matrix.csv
+2026-03-15 21:18:58,380 INFO - [analyze] wrote runs\analysis\fair_optimized\model_ranking.csv
+2026-03-15 21:18:58,384 INFO - [analyze] wrote runs\analysis\fair_optimized\train_group_summary.csv
+2026-03-15 21:18:58,386 INFO - [analyze] wrote runs\analysis\fair_optimized\data_quality_pairs.csv
+2026-03-15 21:18:58,389 INFO - [analyze] wrote runs\analysis\fair_optimized\baseline_vs_models.csv
+2026-03-15 21:18:58,390 INFO - [analyze] wrote runs\analysis\fair_baseline\experiments_summary.csv
+2026-03-15 21:18:58,395 INFO - [analyze] wrote runs\analysis\fair_baseline\eval_summary_long.csv
+2026-03-15 21:18:58,419 INFO - [analyze] wrote runs\analysis\fair_baseline\instance_gap_matrix.csv
+2026-03-15 21:18:58,421 INFO - [analyze] wrote runs\analysis\fair_baseline\model_ranking.csv
+2026-03-15 21:18:58,424 INFO - [analyze] wrote runs\analysis\fair_baseline\train_group_summary.csv
+2026-03-15 21:18:58,425 INFO - [analyze] wrote runs\analysis\fair_baseline\data_quality_pairs.csv
+2026-03-15 21:18:58,429 INFO - [analyze] wrote runs\analysis\fair_baseline\baseline_vs_models.csv
+2026-03-15 21:18:59,497 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\primary_gap_ranking.png
+2026-03-15 21:18:59,669 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\primary_gap_ranking.png
+2026-03-15 21:19:00,750 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\baseline_vs_models.png
+2026-03-15 21:19:00,964 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\baseline_vs_models.png
+2026-03-15 21:19:02,937 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\instance_gap_heatmap_top_models.png
+2026-03-15 21:19:03,179 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\instance_gap_heatmap_top_models.png
+2026-03-15 21:19:03,883 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\best_model_history.png
+2026-03-15 21:19:03,968 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\best_model_history.png
+2026-03-15 21:19:48,342 INFO - [analyze] matched experiments: 18
+2026-03-15 21:19:48,396 INFO - [analyze] matched experiments: 18
+2026-03-15 21:19:48,469 INFO - [analyze] wrote runs\analysis\fair_baseline\experiments_summary.csv
+2026-03-15 21:19:48,471 INFO - [analyze] wrote runs\analysis\fair_baseline\eval_summary_long.csv
+2026-03-15 21:19:48,479 INFO - [analyze] wrote runs\analysis\fair_baseline\instance_gap_matrix.csv
+2026-03-15 21:19:48,479 INFO - [analyze] wrote runs\analysis\fair_baseline\model_ranking.csv
+2026-03-15 21:19:48,482 INFO - [analyze] wrote runs\analysis\fair_baseline\train_group_summary.csv
+2026-03-15 21:19:48,484 INFO - [analyze] wrote runs\analysis\fair_baseline\data_quality_pairs.csv
+2026-03-15 21:19:48,486 INFO - [analyze] wrote runs\analysis\fair_baseline\baseline_vs_models.csv
+2026-03-15 21:19:48,514 INFO - [analyze] wrote runs\analysis\fair_optimized\experiments_summary.csv
+2026-03-15 21:19:48,516 INFO - [analyze] wrote runs\analysis\fair_optimized\eval_summary_long.csv
+2026-03-15 21:19:48,526 INFO - [analyze] wrote runs\analysis\fair_optimized\instance_gap_matrix.csv
+2026-03-15 21:19:48,528 INFO - [analyze] wrote runs\analysis\fair_optimized\model_ranking.csv
+2026-03-15 21:19:48,530 INFO - [analyze] wrote runs\analysis\fair_optimized\train_group_summary.csv
+2026-03-15 21:19:48,531 INFO - [analyze] wrote runs\analysis\fair_optimized\data_quality_pairs.csv
+2026-03-15 21:19:48,534 INFO - [analyze] wrote runs\analysis\fair_optimized\baseline_vs_models.csv
+2026-03-15 21:19:49,054 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\primary_gap_ranking.png
+2026-03-15 21:19:49,057 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\primary_gap_ranking.png
+2026-03-15 21:19:49,519 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\baseline_vs_models.png
+2026-03-15 21:19:49,521 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\baseline_vs_models.png
+2026-03-15 21:19:50,334 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\instance_gap_heatmap_top_models.png
+2026-03-15 21:19:50,366 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\instance_gap_heatmap_top_models.png
+2026-03-15 21:19:50,667 INFO - [analyze] wrote runs\analysis\fair_optimized\plots\best_model_history.png
+2026-03-15 21:19:50,684 INFO - [analyze] wrote runs\analysis\fair_baseline\plots\best_model_history.png

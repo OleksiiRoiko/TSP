@@ -1,0 +1,10 @@
+2026-02-10 12:57:05,018 INFO - Device: cuda
+2026-02-10 12:57:07,199 INFO - Train graphs: 45000 | Val graphs: 9000 | workers: 8
+2026-02-10 12:57:07,311 INFO - Model: edge_res_mlp | Params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.05, 'depth': 4}
+2026-02-10 12:57:09,359 INFO - Optimizer: AdamW(fused=True)
+2026-02-10 18:09:11,301 INFO - Device: cuda
+2026-02-10 18:09:13,299 INFO - Train graphs: 45000 | Val graphs: 9000 | workers: 8
+2026-02-10 18:09:13,410 INFO - Model: edge_res_mlp | Params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.05, 'depth': 4}
+2026-02-10 18:09:15,241 INFO - Optimizer: AdamW(fused=True)
+2026-02-10 18:55:44,657 INFO - Best Val 0.012134 @ epoch 9
+Saved: runs\experiments\exp_edge_res_h128_d4\20260210-180915\best.pt

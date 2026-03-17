@@ -1,0 +1,7 @@
+2026-02-11 22:39:50,194 INFO - Device: cuda
+2026-02-11 22:39:52,239 INFO - Train graphs: 45000 | Val graphs: 9000 | workers: 4
+2026-02-11 22:39:52,381 INFO - Model: edge_transformer | Params: {'model_name': 'edge_transformer', 'in_dim': 10, 'hidden': 256, 'dropout': 0.12, 'depth': 5, 'n_heads': 8, 'ff_mult': 3, 'edge_feat_mode': 'relative_sincos'}
+2026-02-11 22:39:53,413 INFO - Optimizer: AdamW(fused=True)
+2026-02-11 23:20:42,394 INFO - Early stop at epoch 4 (no improvement for 2 validation checks).
+2026-02-11 23:20:42,394 INFO - Best Val 0.006852 @ epoch 2
+Saved: runs/experiments/exp_edge_tf_h256_d5_relsc_ccv1/20260211-223953/best.pt

@@ -1,0 +1,25 @@
+train:
+  exp_id: exp_edge_tf_h256_d5_relsc_ccv1
+  model_name: edge_transformer
+  batch_size: 64
+  hidden: 256
+  n_heads: 8
+  ff_mult: 3
+  edge_feat_mode: relative_sincos
+  dropout: 0.12
+  depth: 5
+  lr: 0.00035
+  weight_decay: 0.0001
+  train_root: runs/data/synthetic_concorde_v1/train
+  val_root: runs/data/synthetic_concorde_v1/val
+eval:
+  device: cuda
+  model_path: runs/experiments/exp_edge_tf_h256_d5_relsc_ccv1/latest.json
+  data_roots:
+  - runs/data/tsplib/processed
+visualize:
+  model: runs/experiments/exp_edge_tf_h256_d5_relsc_ccv1/latest.json
+  targets:
+  - npz_dir: runs/data/tsplib/processed
+    limit: 0
+  out_dir: auto

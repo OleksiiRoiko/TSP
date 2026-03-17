@@ -1,0 +1,7 @@
+2026-02-10 19:13:16,748 INFO - Device: cuda
+2026-02-10 19:13:20,669 INFO - Train graphs: 45000 | Val graphs: 9000 | workers: 8
+2026-02-10 19:13:20,778 INFO - Model: edge_res_mlp | Params: {'model_name': 'edge_res_mlp', 'in_dim': 10, 'hidden': 128, 'dropout': 0.05, 'depth': 4}
+2026-02-10 19:13:22,572 INFO - Optimizer: AdamW(fused=True)
+2026-02-10 19:56:37,712 INFO - Early stop at epoch 9 (no improvement for 2 validation checks).
+2026-02-10 19:56:37,723 INFO - Best Val 0.011285 @ epoch 7
+Saved: runs\experiments\exp_edge_res_h128_d4_ccv1\20260210-191322\best.pt

@@ -391,11 +391,19 @@ def _build_instance_matrix(rows: list[dict[str, Any]], primary_eval: str) -> tup
             continue
         pairs.sort(key=lambda x: x[1])
         best_gap = pairs[0][1]
-        for idx, (exp, gap) in enumerate(pairs, start=1):
-            rank_sum[exp] += float(idx)
-            rank_cnt[exp] += 1
-            if abs(float(gap) - float(best_gap)) <= 1e-12:
-                win_cnt[exp] += 1
+        pos = 0
+        while pos < len(pairs):
+            end = pos
+            while end + 1 < len(pairs) and abs(float(pairs[end + 1][1]) - float(pairs[pos][1])) <= 1e-12:
+                end += 1
+            avg_rank = (float(pos + 1) + float(end + 1)) / 2.0
+            for i in range(pos, end + 1):
+                exp, gap = pairs[i]
+                rank_sum[exp] += avg_rank
+                rank_cnt[exp] += 1
+                if abs(float(gap) - float(best_gap)) <= 1e-12:
+                    win_cnt[exp] += 1
+            pos = end + 1
 
     ranking_rows: list[dict[str, Any]] = []
     for exp in exps:
