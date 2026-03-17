@@ -1,0 +1,72 @@
+% residual_block.tex
+% Detailná štruktúra jedného reziduálneho bloku modelu EdgeResMLP
+% Použitie: \resizebox{0.55\textwidth}{!}{\input{figures/tikz/residual_block}}
+\begin{tikzpicture}[
+    font=\small,
+    layer/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=3.2cm, minimum height=0.68cm,
+        inner sep=3pt, fill=green!8, draw=green!50
+    },
+    io/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=3.2cm, minimum height=0.65cm,
+        inner sep=3pt, fill=gray!12, draw=gray!50
+    },
+    sumnode/.style={
+        circle, draw=blue!50, fill=blue!6,
+        minimum size=0.55cm, inner sep=1pt,
+        font=\normalsize\bfseries
+    },
+    arrow/.style={-{Latex[length=2mm]}, semithick},
+    resarrow/.style={-{Latex[length=2mm]}, semithick, draw=green!60!black, thick},
+    node distance=0.52cm
+]
+
+%% ── Vstup ────────────────────────────────────────────────────────
+\node[io]    (inp)    at (1.8, 0)    {\(h_{ij}^{(\ell)}\) (vstup bloku)};
+
+%% ── Priama cesta (hlavná vetva) ──────────────────────────────────
+\node[layer] (ln)     at (1.8, -1.10) {LayerNorm};
+\node[layer] (lin1)   at (1.8, -2.10) {Linear \(\to d_h\)};
+\node[layer] (gelu)   at (1.8, -3.10) {GELU};
+\node[layer] (drop)   at (1.8, -4.10) {Dropout(\(p\))};
+\node[layer] (lin2)   at (1.8, -5.10) {Linear \(\to d_h\)};
+
+%% ── Sčítanie (reziduálna skratka + výstup transformácie) ─────────
+\node[sumnode] (plus) at (1.8, -6.30) {\(+\)};
+
+%% ── Výstup ───────────────────────────────────────────────────────
+\node[io]    (out)    at (1.8, -7.30) {\(h_{ij}^{(\ell+1)}\) (výstup bloku)};
+
+%% ── Šípky hlavnej vetvy ──────────────────────────────────────────
+\draw[arrow] (inp)  -- (ln);
+\draw[arrow] (ln)   -- (lin1);
+\draw[arrow] (lin1) -- (gelu);
+\draw[arrow] (gelu) -- (drop);
+\draw[arrow] (drop) -- (lin2);
+\draw[arrow] (lin2) -- (plus);
+\draw[arrow] (plus) -- (out);
+
+%% ── Reziduálna skratka (vpravo) ──────────────────────────────────
+%% Vetva z inp.east → zakrivenie dole → plus.east
+\draw[resarrow]
+    (inp.east) -- ++(1.1, 0)
+               -- ++(0, -6.30)
+               -- (plus.east);
+
+%% Popis skratky
+\node[font=\scriptsize, green!60!black, rotate=90, anchor=south]
+    at (3.35, -3.15) {reziduálna skratka};
+
+%% ── Popis blokovej štruktúry ─────────────────────────────────────
+\node[font=\scriptsize, gray, align=center] at (1.8, -8.10)
+    {\(F_\ell(x) = \operatorname{Dropout}(W_2 \cdot \operatorname{GELU}(\operatorname{Dropout}(W_1 x)))\)};
+
+%% Orámovanie celého bloku
+\draw[draw=green!40, rounded corners=8pt, dashed]
+    (-0.05, 0.40) rectangle (3.65, -5.55);
+\node[font=\scriptsize\itshape, green!60!black] at (1.8, 0.55)
+    {Reziduálny blok \(\ell\)};
+
+\end{tikzpicture}

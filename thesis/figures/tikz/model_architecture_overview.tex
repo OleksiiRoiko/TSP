@@ -1,0 +1,134 @@
+% model_architecture_overview.tex
+% Porovnanie troch rodín modelov: hranový MLP, reziduálny MLP, transformerový model
+% Použitie: \resizebox{0.96\textwidth}{!}{\input{figures/tikz/model_architecture_overview}}
+\begin{tikzpicture}[
+    font=\small,
+    %% Štýl pre "vrstvy" (modré obdĺžniky)
+    layer/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=2.4cm, minimum height=0.72cm,
+        inner sep=3pt, fill=blue!8, draw=blue!40
+    },
+    %% Štýl pre vstupy/výstupy (sivé)
+    io/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=2.4cm, minimum height=0.65cm,
+        inner sep=3pt, fill=gray!12, draw=gray!50
+    },
+    %% Reziduálna skratka (zelená)
+    res/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=2.4cm, minimum height=0.72cm,
+        inner sep=3pt, fill=green!8, draw=green!50
+    },
+    %% Transformerové bloky (oranžové)
+    tblock/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=2.4cm, minimum height=0.72cm,
+        inner sep=3pt, fill=orange!10, draw=orange!50
+    },
+    %% Orámovanie celého modelu
+    modelbox/.style={
+        draw, rounded corners=6pt,
+        inner xsep=10pt, inner ysep=8pt,
+        fill=gray!4
+    },
+    arrow/.style={-{Latex[length=2mm]}, semithick},
+    resarrow/.style={-{Latex[length=2mm]}, semithick, draw=green!60!black},
+    dasharrow/.style={-{Latex[length=2mm]}, dashed, gray},
+    node distance=0.55cm
+]
+
+%% ══════════════════════════════════════════════════════════════════
+%% STĹPEC 1 — Hranový MLP
+%% ══════════════════════════════════════════════════════════════════
+\begin{scope}[xshift=0cm]
+    \node[font=\bfseries\small] (mlp_title) at (1.4, 0.3) {Hranový MLP};
+
+    \node[io]    (mlp_in)   at (1.4, -0.6)  {\(\phi_{ij}\in\mathbb{R}^{10}\)};
+    \node[layer] (mlp_l1)   at (1.4, -1.55) {Linear + ReLU};
+    \node[layer] (mlp_l2)   at (1.4, -2.50) {Linear + ReLU};
+    \node[layer] (mlp_lout) at (1.4, -3.45) {Linear};
+    \node[io]    (mlp_out)  at (1.4, -4.35) {\(s_{ij}\in\mathbb{R}\)};
+
+    \draw[arrow] (mlp_in)   -- (mlp_l1);
+    \draw[arrow] (mlp_l1)   -- (mlp_l2);
+    \draw[arrow] (mlp_l2)   -- (mlp_lout);
+    \draw[arrow] (mlp_lout) -- (mlp_out);
+
+    % Orámovanie
+    \node[modelbox, fit=(mlp_title)(mlp_in)(mlp_l1)(mlp_l2)(mlp_lout)(mlp_out)] {};
+\end{scope}
+
+%% ══════════════════════════════════════════════════════════════════
+%% STĹPEC 2 — Reziduálny MLP
+%% ══════════════════════════════════════════════════════════════════
+\begin{scope}[xshift=4.4cm]
+    \node[font=\bfseries\small] (res_title) at (1.4, 0.3) {Reziduálny MLP};
+
+    \node[io]    (res_in)    at (1.4, -0.6)  {\(\phi_{ij}\in\mathbb{R}^{10}\)};
+    \node[layer] (res_proj)  at (1.4, -1.55) {Linear + GELU};
+
+    % Reziduálny blok 1
+    \node[res]   (res_b1_ln) at (1.4, -2.65) {LayerNorm};
+    \node[res]   (res_b1_f)  at (1.4, -3.55) {Linear·GELU·Linear};
+
+    % Reziduálny blok 2 (skrátene)
+    \node[res]   (res_b2)    at (1.4, -4.65) {\(\cdots\) \(\times D\) blokov};
+
+    \node[layer] (res_ln2)   at (1.4, -5.60) {LayerNorm + Linear};
+    \node[io]    (res_out)   at (1.4, -6.50) {\(s_{ij}\in\mathbb{R}\)};
+
+    \draw[arrow] (res_in)    -- (res_proj);
+    \draw[arrow] (res_proj)  -- (res_b1_ln);
+    \draw[arrow] (res_b1_ln) -- (res_b1_f);
+    \draw[arrow] (res_b1_f)  -- (res_b2);
+    \draw[arrow] (res_b2)    -- (res_ln2);
+    \draw[arrow] (res_ln2)   -- (res_out);
+
+    % Reziduálna skratka — zaoblená šípka obídením bloku
+    \draw[resarrow] (res_proj.east) -- ++(0.6,0) |- (res_b2.east);
+
+    \node[modelbox, fit=(res_title)(res_in)(res_proj)(res_b1_ln)(res_b1_f)(res_b2)(res_ln2)(res_out)] {};
+\end{scope}
+
+%% ══════════════════════════════════════════════════════════════════
+%% STĹPEC 3 — Transformerový model
+%% ══════════════════════════════════════════════════════════════════
+\begin{scope}[xshift=9.8cm]
+    \node[font=\bfseries\small] (tf_title) at (2.0, 0.3) {Transformer};
+
+    %% Fáza 1: kódovanie vrcholov
+    \node[font=\itshape\scriptsize, gray] (tf_phase1) at (2.0, -0.45) {Fáza 1 — kódovanie vrcholov};
+    \node[io]     (tf_coords)  at (2.0, -1.10) {\(x_i = (u_i,v_i)\) pre všetky \(i\)};
+    \node[tblock] (tf_embed)   at (2.0, -2.00) {Linear \(\to z_i^{(0)}\)};
+    \node[tblock] (tf_attn)    at (2.0, -3.00) {Self-Attention \(\times L\)};
+    \node[tblock] (tf_ctx)     at (2.0, -3.90) {\(z_i^{(L)}\) pre všetky \(i\)};
+
+    %% Fáza 2: skórovanie hrán
+    \node[font=\itshape\scriptsize, gray] (tf_phase2) at (2.0, -4.65) {Fáza 2 — skórovanie hrán};
+    \node[io]     (tf_phi)     at (0.75, -5.35) {\(\tilde{\phi}_{ij}\)};
+    \node[io]     (tf_zi)      at (2.0,  -5.35) {\(z_i^{(L)},z_j^{(L)}\)};
+    \node[layer]  (tf_concat)  at (2.0,  -6.25) {Konkatenácia \(q_{ij}\)};
+    \node[layer]  (tf_head)    at (2.0,  -7.15) {Linear·GELU·Linear};
+    \node[io]     (tf_out)     at (2.0,  -8.00) {\(s_{ij}\in\mathbb{R}\)};
+
+    \draw[arrow] (tf_coords) -- (tf_embed);
+    \draw[arrow] (tf_embed)  -- (tf_attn);
+    \draw[arrow] (tf_attn)   -- (tf_ctx);
+    \draw[arrow] (tf_ctx.south) -- ++(0,-0.35) -- (tf_zi.north);
+    \draw[arrow] (tf_phi)    -- (tf_concat);
+    \draw[arrow] (tf_zi)     -- (tf_concat);
+    \draw[arrow] (tf_concat) -- (tf_head);
+    \draw[arrow] (tf_head)   -- (tf_out);
+
+    \node[modelbox, fit=(tf_title)(tf_coords)(tf_embed)(tf_attn)(tf_ctx)(tf_phi)(tf_zi)(tf_concat)(tf_head)(tf_out)] {};
+\end{scope}
+
+%% ══════════════════════════════════════════════════════════════════
+%% SPOLOČNÝ VSTUP — šipka naznačujúca rovnaký φ_{ij} pre MLP/ResMLP
+%% ══════════════════════════════════════════════════════════════════
+\node[font=\scriptsize, gray, align=center] at (4.2, -5.4)
+    {Reziduálna\\skratka};
+
+\end{tikzpicture}

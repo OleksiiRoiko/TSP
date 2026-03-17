@@ -1,0 +1,60 @@
+% edge_label_derivation.tex
+% Odvodenie binárnych štítkov hrán z referenčnej trasy
+% Použitie: \resizebox{0.72\textwidth}{!}{\input{figures/tikz/edge_label_derivation}}
+\begin{tikzpicture}[
+    font=\small,
+    %% Štýl pre vrcholy
+    vtx/.style={
+        circle, draw, fill=white,
+        minimum size=0.55cm, inner sep=1pt,
+        font=\small\bfseries
+    },
+    %% Hrana patriaca do trasy (y=1)
+    touredge/.style={draw=blue!70, very thick},
+    %% Hrana nepatriaca do trasy (y=0)
+    nonedge/.style={draw=gray!35, dashed, thin},
+    %% Štítok na hrane
+    lbl1/.style={font=\scriptsize, blue!80, fill=white, inner sep=1pt},
+    lbl0/.style={font=\scriptsize, gray!65, fill=white, inner sep=1pt}
+]
+
+%% ── Vrcholy rozmiestnené do nepravidelného polygónu ──────────────
+%% 5 vrcholov; referenčná trasa: 1→2→4→5→3→1
+\coordinate (v1) at (0.0,  1.8);
+\coordinate (v2) at (2.2,  3.0);
+\coordinate (v3) at (4.4,  1.8);
+\coordinate (v4) at (3.5, -0.2);
+\coordinate (v5) at (0.9, -0.2);
+
+%% ── Všetky non-tour hrany (y = 0) — nakreslíme ako prvé (pod turom) ──
+\draw[nonedge] (v1) -- (v3) node[midway, lbl0] {\(y{=}0\)};
+\draw[nonedge] (v1) -- (v4) node[midway, lbl0] {\(y{=}0\)};
+\draw[nonedge] (v2) -- (v4) node[midway, lbl0, xshift=4pt] {\(y{=}0\)};
+\draw[nonedge] (v2) -- (v5) node[midway, lbl0] {\(y{=}0\)};
+\draw[nonedge] (v3) -- (v5) node[midway, lbl0] {\(y{=}0\)};
+
+%% ── Tour hrany (y = 1) ────────────────────────────────────────────
+\draw[touredge] (v1) -- (v2) node[midway, lbl1] {\(y{=}1\)};
+\draw[touredge] (v2) -- (v4) node[midway, lbl1, xshift=-5pt, yshift=-2pt] {\(y{=}1\)};
+\draw[touredge] (v4) -- (v5) node[midway, lbl1, yshift=-8pt] {\(y{=}1\)};
+\draw[touredge] (v5) -- (v3) node[midway, lbl1, yshift=6pt] {\(y{=}1\)};
+\draw[touredge] (v3) -- (v1) node[midway, lbl1] {\(y{=}1\)};
+
+%% ── Vrcholy (nakreslíme navrch) ──────────────────────────────────
+\node[vtx] at (v1) {1};
+\node[vtx] at (v2) {2};
+\node[vtx] at (v3) {3};
+\node[vtx] at (v4) {4};
+\node[vtx] at (v5) {5};
+
+%% ── Legenda ──────────────────────────────────────────────────────
+\node[align=left, font=\scriptsize] at (5.8, 1.5) {%
+    \textcolor{blue!70}{\rule{0.8cm}{1.5pt}} hrana v trase (\(y_{ij}=1\))\\[3pt]
+    \textcolor{gray!55}{\leaders\hbox{\hbox to 3.5pt{\hss-\hss}}\hfill} \ nepatriaca hrana (\(y_{ij}=0\))
+};
+
+%% Celkový popis
+\node[font=\scriptsize, gray, align=center] at (2.2, -1.25)
+    {Úplný graf \(K_5\): \(m{=}10\) hrán,\ \(n{=}5\) tour hrán,\ ostatných \(5\) je negatívnych};
+
+\end{tikzpicture}

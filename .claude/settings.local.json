@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(biber main:*)",
+      "Bash(biber build/main)",
+      "Bash(latexmk -xelatex main.tex)",
+      "Bash(grep -n \"\\\\\\\\argmin\" \"c:/Users/ralex/TSP/thesis/chapters/03_ciel_metodika.tex\")"
+    ]
+  }
+}
