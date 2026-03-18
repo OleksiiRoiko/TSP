@@ -34,6 +34,8 @@
 \usepackage{amsmath,amssymb}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{array}
+\newcolumntype{R}[1]{>{\raggedright\arraybackslash}p{#1}}
 \usepackage{csquotes}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric}
@@ -45,6 +47,9 @@
     style=apa,
     sorting=nyt
 ]{biblatex}
+\usepackage{caption}
+\captionsetup[table]{skip=6pt}
+\captionsetup[figure]{skip=6pt}
 \addbibresource{references.bib}
 
 % Formátovanie nadpisov podľa odporúčania v smernici:
