@@ -3,20 +3,32 @@
 %% ═══════════════════════════════════════════════════════════════════════════
 %% 3.1  CIEĽ PRÁCE
 %% ═══════════════════════════════════════════════════════════════════════════
+
 \section{Cieľ práce}
 \label{sec:ciel}
 
-\indent \AssignmentGoalSK
+\indent Z prehľadu súčasného stavu vyplynulo, že neurónovým prístupom
+k problému obchodného cestujúceho chýba spoločný metodický základ:
+práce sa líšia formuláciou úlohy, kvalitou referenčných riešení aj
+spôsobom hodnotenia, čo znemožňuje priame porovnanie architektúr.
+Práve táto medzera motivovala zvolený prístup — grafovú formuláciu
+postavenou na predikcii hrán s jednotným hodnotením na štandardných
+inštanciách TSPLIB
+\parencite{joshi2022generalization,bengio2021mlco,reinelt1991tsplib}.
 
-\indent Na dosiahnutie uvedeného hlavného cieľa sme stanovili nasledujúce
-čiastkové ciele:
+\AssignmentGoalSK
+
+\indent Tretiu zo stanovených úloh sme v rámci práce rozvinuli do
+piatich merateľných čiastkových cieľov, ktoré pokrývajú celý postup
+od prípravy údajov až po záverečnú interpretáciu výsledkov:
+
 \begin{enumerate}
-    \item Pripraviť syntetické tréningové a validačné údaje s dvoma úrovňami
-          kvality referenčných riešení a spracovať štandardné testovacie
-          inštancie z knižnice TSPLIB.
-    \item Navrhnúť a implementovať tri rodiny modelov založených na predikcii
-          hrán v úplnom grafe, od jednoduchého hranového perceptrónu cez
-          reziduálny variant až po kontextový transformer.
+    \item Pripraviť syntetické tréningové a validačné údaje s dvoma
+          úrovňami kvality referenčných riešení a spracovať štandardné
+          testovacie inštancie z knižnice TSPLIB.
+    \item Navrhnúť a implementovať tri rodiny modelov založených na
+          predikcii hrán v úplnom grafe, od jednoduchého hranového
+          perceptrónu cez reziduálny variant až po kontextový transformer.
     \item Vytvoriť jednotný hodnotiaci rámec, v ktorom sa modely aj
           heuristické bázy porovnávajú na rovnakých štrnástich inštanciách
           TSPLIB za rovnakých dekódovacích podmienok.
@@ -34,65 +46,31 @@
 \section{Prehľad experimentálneho postupu}
 \label{sec:prehlad_postupu}
 
-\indent V tejto časti práce sa podrobne rozoberá spôsob realizácie praktickej
-časti výskumu. Postup je predstavený postupne, od prípravy údajov, cez návrh
-a trénovanie modelov, až po ich hodnotenie a analýzu dosiahnutých výsledkov.
-Zámerom tejto kapitoly je vytvoriť zrozumiteľný a reprodukovateľný experimentálny
-rámec, ktorý umožní objektívne posúdiť, do akej miery sú vybrané neurónové
-modely schopné prispieť k riešeniu symetrického problému obchodného
-cestujúceho. Keďže pri dátovo riadených prístupoch nemožno oddeliť model od
-spôsobu prípravy dát, tvorby referenčných riešení a hodnotiaceho postupu,
-metodická časť je koncipovaná ako opis uceleného experimentálneho procesu
-\parencite{bengio2021mlco,joshi2022generalization}.
+\indent Praktická časť práce bola realizovaná ako ucelený experimentálny
+postup, v ktorom jednotlivé kroky priamo nadväzujú jeden na druhý. Keďže
+pri dátovo riadených prístupoch ku kombinatorickej optimalizácii nemožno
+oddeliť model od spôsobu prípravy dát, kvality referenčných riešení
+a následného spracovania výstupu, metodická časť je koncipovaná ako opis
+tohto celku, nie len jeho modelovej zložky
+\parencite{bengio2021mlco,joshi2022generalization,cappart2023gnnco}.
 
-\indent Praktická časť práce bola navrhnutá ako ucelený experimentálny postup,
-v ktorom na seba jednotlivé kroky priamo nadväzujú. Celý proces sa začínal
-prípravou údajov, pokračoval tvorbou referenčných riešení a cieľových štítkov,
-následne trénovaním modelov, dekódovaním výslednej trasy a lokálnym zlepšovaním
-riešenia, a napokon sa uzatváral nezávislým hodnotením a analýzou výsledkov.
-Takéto usporiadanie je dôležité preto, že pri dátovo riadených prístupoch ku
-kombinatorickej optimalizácii kvalita výsledku nezávisí iba od modelu, ale aj
-od spôsobu prípravy dát, od kvality referenčných riešení a od následného
-spracovania modelového výstupu \parencite{bengio2021mlco,joshi2022generalization,
-cappart2023gnnco}.
+\indent Z hľadiska údajov bol postup rozdelený na dve vzájomne prepojené
+vetvy. Prvú tvorili synteticky generované euklidovské inštancie, nad
+ktorými prebiehalo trénovanie a validácia modelov, pričom referenčné
+riešenia sa pripravili v dvoch variantoch kvality: heuristickom
+a presnom pomocou riešiča Concorde \parencite{concorde2003solver}. Druhú
+vetvu tvorili štandardné inštancie z knižnice TSPLIB, ktoré slúžili
+výhradne na nezávislé záverečné hodnotenie a neboli súčasťou trénovacej
+množiny \parencite{reinelt1991tsplib}. Toto oddelenie umožnilo sledovať,
+do akej miery sa naučené vzory prenášajú na úlohy odlišné od synteticky
+generovaných príkladov.
 
-\indent Z hľadiska dátovej časti bol experimentálny postup rozdelený na dve
-vzájomne prepojené vetvy. Prvú vetvu tvorili synteticky generované euklidovské
-inštancie, ktoré slúžili ako základ pre trénovanie a validáciu modelov. V rámci
-tejto vetvy boli pripravené dva varianty referenčných riešení. Prvý variant
-vychádzal z heuristicky vytvorených trás, ktoré bolo možné generovať vo väčšom
-objeme a s nižšími výpočtovými nárokmi. Druhý variant bol založený na riešeniach
-získaných pomocou nástroja Concorde, ktorý sa v praxi používa ako referenčný
-presný riešič pre symetrický problém obchodného cestujúceho
-\parencite{concorde2003solver}. Zaradenie oboch variantov do experimentu malo
-praktický aj metodologický význam. Umožnilo porovnať situáciu, keď sa model učí
-na kvalitných, ale približných riešeniach, so situáciou, keď sú cieľové štítky
-odvodené z riešení reprezentujúcich optimálny alebo takmer optimálny etalón.
-
-\indent Druhú vetvu tvorili referenčné inštancie z knižnice TSPLIB, ktoré sa
-nepoužívali
-na trénovanie, ale výhradne na nezávislé overenie modelov. Takéto oddelenie
-tréningovej a porovnávacej časti bolo dôležité preto, aby sa výsledky nehodnotili
-iba na údajoch podobných tréningovým príkladom, ale aj na štandardných úlohách
-používaných v odbornej literatúre \parencite{reinelt1991tsplib,
-joshi2022generalization,alanzi2025mltsp_review}. Táto vetva tak tvorila
-spoločný referenčný rámec pre porovnanie navrhnutých modelov a zároveň umožnila
-sledovať, do akej miery sa získané poznatky prenášajú mimo synteticky pripravenej
-trénovacej množiny.
-
-\indent Po príprave údajov nasledovala spoločná modelová časť experimentu.
-Všetky inštancie boli reprezentované ako úplný graf a učenie modelov bolo
-postavené na predikcii hrán, nie na priamom generovaní celej postupnosti vrcholov.
-Takáto formulácia umožnila udržať jednotné experimentálne nastavenie pre viacero
-architektúr a zároveň lepšie previazať modelovú časť s následným dekódovaním
-výslednej trasy. Tento spôsob uvažovania je v súlade s grafovo orientovanou líniou
-výskumu v oblasti TSP, no zároveň sa odlišuje od skorších sekvenčných prístupov,
-ktoré pristupovali k riešeniu skôr ako ku generovaniu poradia navštívených miest.
-Práve tento posun od sekvenčného k štruktúrnemu spracovaniu úlohy dobre ilustrujú
-základné neurónové práce o TSP, od skorých sekvenčných architektúr až po modely
-založené na mechanizme pozornosti a na učení posilňovaním
-\parencite{vinyals2015pointer,kool2019attention,kwon2020pomo,joshi2019gcn,
-sui2025dltsp_survey}.
+\indent Nad oboma vetvami sa uplatnila jednotná modelová časť: všetky
+inštancie sa previedli na grafovú reprezentáciu a modely sa učili
+predikovať príslušnosť hrán k výslednej trase. Takáto formulácia
+udržiava rovnaké experimentálne podmienky pre všetky tri porovnávané
+rodiny architektúr a priamo previazuje modelový výstup s následným
+dekódovaním trasy. Celkový návrh zachytáva obrázok~\ref{fig:method_overview}.
 
 \begin{figure}[H]
     \centering
@@ -103,16 +81,12 @@ sui2025dltsp_survey}.
     \label{fig:method_overview}
 \end{figure}
 
-\indent Implementácia praktickej časti bola založená na jazyku Python.
-Numerické výpočty a prácu s poľami zabezpečovala knižnica NumPy, modelová časť
-bola realizovaná v prostredí PyTorch a vizualizačná časť využívala Matplotlib.
-Konfigurácia jednotlivých behov bola riadená pomocou súborov YAML a priebežné
-výstupy sa ukladali vo formátoch \texttt{npz}, \texttt{JSON} a \texttt{CSV}.
-Takéto usporiadanie je dôležité aj z metodického hľadiska, pretože uľahčuje
-opakovateľnosť experimentov. Každý krok má vlastný konfiguračný vstup a
-vlastný súbor výsledkov, čo obmedzuje priestor pre skryté manuálne zásahy.
-
-
+\indent Implementácia bola postavená na jazyku Python s knižnicami NumPy,
+PyTorch a Matplotlib. Konfigurácia každého experimentu sa riadila
+súbormi YAML a výstupy sa ukladali vo formátoch \texttt{npz},
+\texttt{JSON} a \texttt{CSV}. Každý krok má vlastný konfiguračný vstup
+a vlastný súbor výsledkov, čo zaručuje opakovateľnosť a vylučuje
+skryté manuálne zásahy medzi fázami.
 %% ═══════════════════════════════════════════════════════════════════════════
 %% 3.3  PRÍPRAVA ÚDAJOV
 %% ═══════════════════════════════════════════════════════════════════════════
