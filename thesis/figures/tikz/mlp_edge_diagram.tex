@@ -1,0 +1,75 @@
+% mlp_edge_diagram.tex
+% Schéma hranového MLP modelu (EdgeMLP)
+% Vektor príznakov hrany prechádza sekvenciou lineárnych vrstiev s aktiváciou ReLU
+% Použitie: \resizebox{0.72\textwidth}{!}{\input{figures/tikz/mlp_edge_diagram}}
+\begin{tikzpicture}[
+    font=\small,
+    box/.style={
+        draw, rounded corners=5pt, align=center,
+        minimum width=3.4cm, minimum height=0.82cm,
+        inner sep=4pt
+    },
+    inputbox/.style={box, fill=gray!10, draw=gray!50},
+    layerbox/.style={box, fill=blue!8, draw=blue!40},
+    outbox/.style={box, fill=green!8, draw=green!50},
+    labelbox/.style={font=\scriptsize\itshape, text=gray!60, align=left,
+                     text width=4.0cm},
+    arrow/.style={-{Latex[length=2.5mm]}, thick}
+]
+
+%% ── Vstup ────────────────────────────────────────────────────────
+\node[inputbox] (phi) at (0, 0)
+    {\(\phi_{ij} \in \mathbb{R}^{10}\)\\[-2pt]
+     \scriptsize vektor príznakov hrany};
+
+%% ── Skryté vrstvy ────────────────────────────────────────────────
+\node[layerbox] (h1) at (0, -1.55)
+    {Lineárna vrstva\\[-2pt]
+     \scriptsize + aktivácia ReLU};
+
+\node[layerbox] (hdots) at (0, -3.10)
+    {\(\cdots\)\\[-2pt]
+     \scriptsize (opakuje sa \(D\)-krát)};
+
+\node[layerbox] (hD) at (0, -4.65)
+    {Lineárna vrstva\\[-2pt]
+     \scriptsize + aktivácia ReLU};
+
+%% ── Záverečná projekcia a výstup ─────────────────────────────────
+\node[outbox] (out) at (0, -6.15)
+    {Záverečná projekcia\\[-2pt]
+     \scriptsize logit \(s_{ij} \in \mathbb{R}\)};
+
+%% Šípky
+\draw[arrow] (phi)   -- (h1);
+\draw[arrow] (h1)    -- (hdots);
+\draw[arrow] (hdots) -- (hD);
+\draw[arrow] (hD)    -- (out);
+
+%% ── Vysvetlivky vpravo ───────────────────────────────────────────
+\node[labelbox, anchor=north west] at (2.5, -0.25)
+    {\textbf{Vstup:} 10-rozmerný vektor
+     obsahujúci polohu oboch vrcholov,
+     vzdialenosť, relatívnu geometriu
+     a uhol hrany.};
+
+\node[labelbox, anchor=north west] at (2.5, -2.00)
+    {\textbf{Skryté vrstvy:} každá vrstva
+     lineárne transformuje vstup
+     a aplikuje ReLU nelinearitu.};
+
+\node[labelbox, anchor=north west] at (2.5, -5.25)
+    {\textbf{Výstup:} jediné číslo
+     (logit) vyjadrujúce
+     odhadovanú príslušnosť
+     hrany k optimálnej trase.};
+
+%% ── Poznámka o lokálnom spracovaní ──────────────────────────────
+\node[draw=gray!35, rounded corners=4pt, fill=gray!5,
+      font=\scriptsize, align=center, text width=6.5cm,
+      inner sep=5pt] at (0, -7.55)
+    {Každá hrana \(\{i,j\}\) sa spracováva \textbf{nezávisle} —
+     model pri hodnotení hrany nemá prístup k informácii
+     o ostatných hranách ani vrcholoch inštancie.};
+
+\end{tikzpicture}

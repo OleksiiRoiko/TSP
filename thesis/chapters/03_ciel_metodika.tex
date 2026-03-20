@@ -81,7 +81,7 @@ dekódovaním trasy. Celkový návrh zachytáva obrázok~\ref{fig:method_overvie
 \end{figure}
 
 \indent Implementácia bola postavená na jazyku Python s knižnicami NumPy,
-PyTorch a Matplotlib. Konfigurácia každého experimentu sa riadila
+PyTorch a Mat\-plot\-lib. Konfigurácia každého experimentu sa riadila
 súbormi YAML a výstupy sa ukladali vo formátoch \texttt{npz},
 \texttt{JSON} a \texttt{CSV}. Každý krok má vlastný konfiguračný vstup
 a vlastný súbor výsledkov, čo zaručuje opakovateľnosť a vylučuje
@@ -434,7 +434,7 @@ d_{ij} &= \lVert x_j - x_i \rVert_2,
     \symbolitem{\(\phi_{ij}\)}{označuje výsledný desaťrozmerný vektor príznakov hrany \(\{i,j\}\).}
 \end{symboltable}
 
-\indent Štruktúra vektora \(\phi_{ij}\) kombinuje dve skupiny informácií.
+\indent Štruktúra vektora \(\phi_{ij}\) kombinuje dve skupiny in\-for\-má\-cií.
 Prvé štyri zložky \((u_i, v_i, u_j, v_j)\) zachytávajú \emph{absolútnu
 polohu} oboch vrcholov. Stredná skupina \((d_{ij}, \Delta x_{ij},
 \Delta y_{ij}, \alpha_{ij})\) popisuje \emph{relatívnu geometriu}
@@ -482,7 +482,7 @@ odhadovať príslušnosť každého spojenia k výslednému cyklu.
 \indent Keďže Hamiltonovský cyklus obsahuje presne \(n\) hrán a úplný
 graf ich má \(m = n(n-1)/2\), pozitívnych štítkov je výrazne menej ako
 negatívnych. Tento nepomer priamo motivuje použitie váženej straty pri
-trénovaní, čo je opísané v sekcii~\ref{sec:trenovanie}. Štítky sa
+trénovaní modelov. Štítky sa
 nevytvárali vopred, ale až pri načítaní inštancie do dátového radu —
 deterministicky z uloženej permutácie vrcholov.
 
@@ -496,3 +496,167 @@ deterministicky z uloženej permutácie vrcholov.
              realizovateľná Hamiltonovská trasa.}
     \label{fig:edge_pipeline}
 \end{figure}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%% 3.5  MODELOVÉ ARCHITEKTÚRY
+%% ═══════════════════════════════════════════════════════════════════════════
+\section{Modelové architektúry}
+\label{sec:modelove_architektury}
+
+\indent V tejto práci boli navrhnuté a porovnané tri rodiny neurónových
+modelov. Všetky plnia rovnakú úlohu: na základe vektora geometrických
+príznakov hrany \(\phi_{ij}\) odhadnúť skóre \(s_{ij}\), ktoré vyjadruje,
+nakoľko pravdepodobne daná hrana patrí do výslednej trasy. Rodiny sa líšia
+tým, \emph{koľko kontextu} o celej inštancii môže každý model pri tomto
+odhade využiť.
+
+%% ─── 3.5.1  Základné princípy neurónových sietí ─────────────────────────
+\subsection{Základné princípy neurónových sietí}
+\label{sec:nn_zaklady}
+
+\indent Neurónové siete sú trieda modelov strojového učenia inšpirovaná
+spôsobom, akým biologické neuróny spracovávajú a prenášajú signály.
+Základnou stavebnou jednotkou je \emph{umelý neurón} — funkcia, ktorá
+prijíma niekoľko vstupných hodnôt, vypočíta ich váženú sumu a výsledok
+transformuje nelineárnou \emph{aktivačnou funkciou}. Tá je kľúčová:
+bez nej by sieť akejkoľvek hĺbky zostávala ekvivalentná jednej lineárnej
+transformácii a nebola by schopná zachytiť zložité vzory v dátach.
+V tejto práci sa používajú dve aktivačné funkcie: \textbf{ReLU},
+ktorá záporné hodnoty nahradí nulou, a \textbf{GELU}, jej hladká
+aproximácia s lepšími vlastnosťami pri trénovaní hlbokých sietí.
+
+\indent Neuróny sa usporadúvajú do \emph{vrstiev}. Každá vrstva prijíma
+výstupy predchádzajúcej vrstvy, transformuje ich a odovzdáva ďalej. Sieť
+zložená z viacerých vrstiev za sebou sa nazýva \emph{viacvrstvový
+perceptrón} (MLP). Čím viac vrstiev, tým abstraktnejšie vzory môže model
+zachytiť — nižšie vrstvy sa učia jednoduché lokálne vlastnosti, vyššie
+ich kombinujú do zložitejších konceptov.
+
+\indent Váhy siete sa nastavujú počas \emph{trénovania}: model opakuje
+predikcie nad trénovacími príkladmi, meria odchýlku od správnych hodnôt
+pomocou \emph{stratovej funkcie} a algoritmom \emph{spätného šírenia}
+(backpropagation) posúva váhy smerom, ktorý chybu znižuje. Tento cyklus
+pokračuje, kým sa strata stabilizuje.
+
+\indent Pri hlbokých sieťach sa bežne používajú dve ďalšie techniky.
+\textbf{Vrstvová normalizácia} (LayerNorm) priebežne upravuje rozsah
+aktivácií — bez nej by hodnoty v hlbokých sieťach mohli exponenciálne
+rásť alebo klesať, čo by znemožnilo efektívne učenie.
+\textbf{Náhodné vypúšťanie} (Dropout) počas trénovania náhodne deaktivuje
+časť neurónov, čím núti sieť učiť sa redundantné reprezentácie
+a tým znižuje riziko preučenia na trénovacej množine.
+
+\indent V kontexte tejto práce prijíma každý model vektor príznakov
+hrany \(\phi_{ij}\) a vydáva jedno číslo — skóre \(s_{ij}\). Trénovacím
+signálom je binárny štítok \(y_{ij} \in \{0, 1\}\) odvodený
+z referenčnej trasy. Tri porovnávané rodiny modelov sa líšia
+predovšetkým tým, či pri hodnotení hrany uvažujú len o nej samotnej,
+alebo zohľadňujú aj informáciu z okolia či z celej inštancie.
+
+%% ─── 3.5.2  Viacvrstvový perceptrón nad hranami ─────────────────────────
+\subsection{Viacvrstvový perceptrón nad hranami}
+\label{sec:edge_mlp}
+
+\indent Najjednoduchšiu rodinu tvoril hranový MLP, v ktorom sa každá
+hrana spracovávala úplne nezávisle od všetkých ostatných. Vektor
+príznakov hrany \(\phi_{ij}\) postupne prešiel niekoľkými vrstvami
+lineárnych transformácií s aktiváciou ReLU. Každá vrstva kombinuje
+vstupné hodnoty, aplikuje nelinearitu a odovzdáva výsledok ďalšej.
+Po poslednej skrytej vrstve záverečná lineárna projekcia vyprodukovala
+skalárne skóre hrany \(s_{ij}\).
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.72\textwidth}{!}{\input{figures/tikz/mlp_edge_diagram}}
+    \caption{Schéma hranového MLP modelu. Vektor príznakov hrany
+             \(\phi_{ij}\) prechádza sekvenciou lineárnych vrstiev
+             s aktiváciou ReLU. Každá hrana sa spracováva nezávisle
+             — model nemá informáciu o zvyšku grafu.}
+    \label{fig:mlp_edge_diagram}
+\end{figure}
+
+\indent Výhodou tohto prístupu bola výpočtová jednoduchosť: celú
+inštanciu bolo možné spracovať ako jednu dávku vektorov naraz, bez
+akéhokoľvek sekvenčného algoritmu. Nevýhodou bolo, že model pri
+hodnotení každej hrany nemal prístup k žiadnej informácii o zvyšku
+grafu. Napríklad to, že susedné hrany daného vrcholu majú nízke skóre,
+nemohlo žiadnym spôsobom ovplyvniť hodnotenie konkrétnej hrany.
+V experimentoch sa testovali dve varianty tejto rodiny — plytší model
+s dvoma vrstvami a hlbší model s tromi vrstvami a väčšou kapacitou.
+
+%% ─── 3.5.3  Reziduálny MLP model ────────────────────────────────────────
+\subsection{Reziduálny MLP model}
+\label{sec:edge_res_mlp}
+
+\indent Druhú rodinu tvoril reziduálny MLP, ktorý rozšíril základný
+prístup o dve dôležité vylepšenia. Namiesto jednoduchej sekvencie vrstiev
+sieť pracovala s \emph{reziduálnymi blokmi}: každý blok sa neučil celé
+zobrazenie vstupu na výstup, ale iba \emph{korekciu} voči tomu, čo
+sa na vstup bloku priviedlo. Výstup bloku bol teda súčtom jeho vstupu
+a naučenej korekcie — odtiaľ názov reziduálna (zvyšková) sieť
+\parencite{he2016resnet}. Vnútri každého bloku sa navyše uplatnila
+vrstvová normalizácia pred transformáciou a náhodné vypúšťanie za ňou.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.80\textwidth}{!}{\input{figures/tikz/res_mlp_diagram}}
+    \caption{Schéma reziduálneho MLP modelu. Vstup prechádza vstupnou
+             projekciou a následne sekvenciou reziduálnych blokov.
+             Každý blok aplikuje vrstvovú normalizáciu, dve lineárne
+             transformácie s aktiváciou GELU a náhodné vypúšťanie.
+             Reziduálna skratka sčíta vstup bloku s jeho výstupom.}
+    \label{fig:res_mlp_diagram}
+\end{figure}
+
+\indent Reziduálne zapojenie prináša dva praktické prínosy. Po prvé,
+gradient môže prúdiť reziduálnymi skratkami priamo naprieč celou
+hĺbkou siete bez toho, aby sa rozptýlil alebo explodoval — to umožňuje
+stabilné trénovanie aj pri väčšom počte blokov. Po druhé, vrstvová
+normalizácia udržiava aktivácie v zdravom rozsahu a znižuje citlivosť
+na počiatočné hodnoty váh. Rovnako ako základný MLP, aj tento model
+zostával \emph{lokálnym}: každá hrana sa spracovávala nezávisle
+a model nemal priamy prístup ku kontextu zvyšku grafu.
+
+%% ─── 3.5.4  Transformerový model s hranovým výstupom ────────────────────
+\subsection{Transformerový model s hranovým výstupom}
+\label{sec:edge_transformer}
+
+\indent Tretiu a najzložitejšiu rodinu tvoril kontextový transformerový
+model, ktorý ako jediný pracoval s \emph{globálnym kontextom} celej
+inštancie. Namiesto toho, aby hodnotil každú hranu izolovane, model
+najprv zostavil reprezentácie všetkých vrcholov s ohľadom na ich
+vzájomné vzťahy — a až potom ohodnotil každú hranu.
+
+\indent Model pracoval v dvoch fázach. V prvej fáze sa zo súradníc
+každého mesta zostavila jeho vnútorná reprezentácia, ktorá sa následne
+opakovane aktualizovala \emph{mechanizmom vlastnej pozornosti}
+(self-attention). Tento mechanizmus umožňuje každému vrcholu
+„zobrať do úvahy" všetky ostatné vrcholy inštancie a podľa toho
+upraviť svoju vlastnú reprezentáciu. Inšpiruje sa návrhom
+transformerovej architektúry \parencite{vaswani2017attention}.
+Výsledkom je, že každý vrchol nesie \emph{kontextovú reprezentáciu}
+zakódovávajúcu nielen jeho vlastnú polohu, ale aj jeho vzťah
+ku všetkým ostatným mestám. V druhej fáze sa pre každú hranu zlúčili
+kontextové reprezentácie oboch jej krajných vrcholov spolu
+s pôvodnými geometrickými príznakmi hrany. Toto zlúčenie vstúpilo
+do výstupnej siete, ktorá vyprodukovala skóre hrany \(s_{ij}\).
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.92\textwidth}{!}{\input{figures/tikz/transformer_diagram}}
+    \caption{Schéma transformerového modelu s hranovým výstupom.
+             Fáza~1 zostrojí kontextové reprezentácie vrcholov
+             pomocou mechanizmu vlastnej pozornosti.
+             Fáza~2 zlúči tieto reprezentácie s hranovými príznakmi
+             a výstupnou sieťou vyprodukuje skóre hrany.}
+    \label{fig:transformer_diagram}
+\end{figure}
+
+\indent Kľúčovou výhodou tohto prístupu je, že pri rozhodovaní o každej
+hrane model zohľadňuje celú štruktúru inštancie — nie len samotnú hranu.
+Napríklad hrana spájajúca vrchol v okrajovej oblasti grafu
+s vrcholom v husté osídlenej oblasti môže byť ohodnotená inak ako hrana
+rovnakej dĺžky medzi dvoma vrcholmi v podobnom prostredí.
+Nevýhodou je vyššia výpočtová náročnosť: mechanizmus vlastnej pozornosti
+porovnáva každý vrchol s každým iným, čo si vyžaduje viac výpočtov
+ako jednoduché lokálne spracovanie hrán.

@@ -1,0 +1,107 @@
+% transformer_diagram.tex
+% Diagram transformerového modelu — dve fázy, konceptuálny
+% Použitie: \resizebox{0.88\textwidth}{!}{\input{figures/tikz/transformer_diagram}}
+\begin{tikzpicture}[
+    font=\small,
+    box/.style={
+        draw, rounded corners=5pt, align=center,
+        minimum width=3.6cm, minimum height=0.85cm,
+        inner sep=5pt
+    },
+    inputbox/.style={box, fill=gray!10, draw=gray!50},
+    attnbox/.style={box, fill=orange!10, draw=orange!50},
+    mergebox/.style={box, fill=purple!8, draw=purple!40},
+    outbox/.style={box, fill=green!8, draw=green!50},
+    labelbox/.style={font=\scriptsize\itshape, text=gray!65, align=left,
+                     text width=5.0cm},
+    arrow/.style={-{Latex[length=2.5mm]}, thick},
+    dasharrow/.style={-{Latex[length=2mm]}, dashed, gray!60}
+]
+
+%% ══════════════════════════════════════════════════════════════════
+%% FÁZA 1 — Kódovanie vrcholov
+%% ══════════════════════════════════════════════════════════════════
+\node[font=\bfseries\small, text=orange!70!black]
+    at (0, 0.55) {Fáza 1 — kódovanie vrcholov};
+
+\node[inputbox] (coords) at (0, -0.45)
+    {Súradnice miest \((u_i, v_i)\)\\[-2pt]
+     \scriptsize pre všetky vrcholy inštancie};
+
+\node[attnbox] (embed) at (0, -2.00)
+    {Lineárna projekcia\\[-2pt]
+     \scriptsize súradnice → vnútorná reprezentácia};
+
+\node[attnbox] (attn) at (0, -3.55)
+    {Mechanizmus vlastnej pozornosti\\[-2pt]
+     \scriptsize každý vrchol "sleduje" všetky ostatné};
+
+\node[attnbox] (repeat) at (0, -5.10)
+    {\(\cdots\) opakuje sa \(L\)-krát};
+
+\node[outbox] (ctx) at (0, -6.55)
+    {Kontextové reprezentácie \(z_i\)\\[-2pt]
+     \scriptsize vrchol = poloha + vzťah k ostatným};
+
+\draw[arrow] (coords) -- (embed);
+\draw[arrow] (embed)  -- (attn);
+\draw[arrow] (attn)   -- (repeat);
+\draw[arrow] (repeat) -- (ctx);
+
+%% Ohraničenie fázy 1
+\draw[draw=orange!35, rounded corners=6pt, dashed]
+    (-2.5, 0.20) rectangle (2.5, -7.20);
+
+%% ══════════════════════════════════════════════════════════════════
+%% FÁZA 2 — Skórovanie hrán
+%% ══════════════════════════════════════════════════════════════════
+\node[font=\bfseries\small, text=purple!70!black]
+    at (7.0, 0.55) {Fáza 2 — skórovanie hrán};
+
+%% Vstupné zdroje pre hranu {i,j}
+\node[outbox] (zi) at (5.5, -0.45)
+    {\(z_i\) — kontext vrcholu \(i\)};
+\node[outbox] (zj) at (8.5, -0.45)
+    {\(z_j\) — kontext vrcholu \(j\)};
+\node[inputbox] (phi) at (7.0, -2.00)
+    {\(\phi_{ij}\) — príznaky hrany};
+
+%% Spojenie
+\node[mergebox] (merge) at (7.0, -3.55)
+    {Zlúčenie informácií\\[-2pt]
+     \scriptsize kontext + príznaky hrany};
+
+\node[mergebox] (head) at (7.0, -5.10)
+    {Výstupná sieť\\[-2pt]
+     \scriptsize (dve lineárne vrstvy + GELU)};
+
+\node[outbox] (score) at (7.0, -6.55)
+    {Skóre hrany \(s_{ij} \in \mathbb{R}\)\\[-2pt]
+     \scriptsize miera príslušnosti k trase};
+
+\draw[arrow] (zi)    |- (merge);
+\draw[arrow] (zj)    |- (merge);
+\draw[arrow] (phi)   -- (merge);
+\draw[arrow] (merge) -- (head);
+\draw[arrow] (head)  -- (score);
+
+%% Prepojenie fázy 1 → fáza 2
+\draw[arrow, draw=orange!60] (ctx.east) -- ++(1.0,0)
+    |- node[midway, above, font=\scriptsize, text=orange!70]
+       {pre každú hranu} (zi.west);
+\draw[arrow, draw=orange!60] (ctx.east) -- ++(1.0,0)
+    |- (zj.west);
+
+%% Ohraničenie fázy 2
+\draw[draw=purple!30, rounded corners=6pt, dashed]
+    (4.2, 0.20) rectangle (9.8, -7.20);
+
+%% ── Vysvetlivka dole ─────────────────────────────────────────────
+\node[font=\scriptsize, text=gray!65, align=center, text width=13cm]
+    at (3.5, -8.10)
+    {Kľúčový rozdiel oproti MLP: transformer najprv zostaví
+     \emph{globálny kontext} celej inštancie (Fáza 1) a až potom
+     hodnotí každú hranu — s vedomosťou o jej vzťahu ku všetkým
+     ostatným vrcholom (Fáza 2).};
+
+\end{tikzpicture}

@@ -1,71 +1,142 @@
+% method_overview.tex
+% Celkový návrh experimentálneho postupu
+% Ľavá vetva: trénovanie na syntetických dátach (heuristické + Concorde riešenia)
+% Pravá vetva: hodnotenie na TSPLIB inštanciách
+% Spodok: spoločná záverečná analýza a porovnanie
+% Použitie: \resizebox{0.96\textwidth}{!}{\input{figures/tikz/method_overview}}
 \begin{tikzpicture}[
     font=\small,
-    box/.style={
-        draw, rounded corners=4pt, align=center,
-        text width=2.75cm, minimum height=1.15cm,
-        inner sep=4pt, fill=white
+    train/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=3.4cm, minimum height=0.78cm,
+        inner sep=4pt, fill=blue!8, draw=blue!45
     },
-    widebox/.style={
-        draw, rounded corners=4pt, align=center,
-        text width=3.05cm, minimum height=1.15cm,
-        inner sep=4pt, fill=white
+    refbox/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=2.8cm, minimum height=0.78cm,
+        inner sep=4pt, fill=orange!10, draw=orange!50
     },
-    arrow/.style={-{Latex[length=2.2mm]}, semithick},
-    group/.style={
-        draw, rounded corners=7pt,
-        inner xsep=14pt, inner ysep=10pt,
-        fill=gray!7
-    }
+    evalbox/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=3.4cm, minimum height=0.78cm,
+        inner sep=4pt, fill=green!8, draw=green!50
+    },
+    finalbox/.style={
+        draw, rounded corners=3pt, align=center,
+        minimum width=9.0cm, minimum height=0.90cm,
+        inner sep=4pt, fill=gray!12, draw=gray!55
+    },
+    %% Štandardná šípka — rovnaký hrúbka a štýl vo celom diagrame
+    arrow/.style={-{Latex[length=2.5mm, width=1.8mm]}, thick},
+    %% Prerušovaná šípka pre zdieľané modely
+    darrow/.style={-{Latex[length=2.5mm, width=1.8mm]}, thick, dashed, draw=gray!55}
 ]
 
-%% ── TRAINING NODES ───────────────────────────────
-\node[font=\bfseries]  (Thead)     at (3.0,  0.80) {Tréningová vetva};
-\node[box]             (synthetic) at (3.0, -0.55) {Synteticky\\generované\\inštancie};
-\node[box]             (heuristic) at (0.7, -3.15) {Približné\\referenčné\\trasy};
-\node[box]             (concorde)  at (5.3, -3.15) {Presné\\referenčné\\trasy};
-\node[box]             (labels)    at (3.0, -5.55) {Tvorba cieľových\\štítkov};
-\node[box]             (train)     at (3.0, -7.65) {Tréning\\a validácia\\modelov};
+%% ══════════════════════════════════════════════════════════════
+%% ĽAVÁ VETVA — tréningová  (stĺpec x = 0)
+%% ══════════════════════════════════════════════════════════════
 
-%% ── SHARED / MIDDLE BLOCK ────────────────────────
-\node[widebox]         (predict)   at (7.8, -7.65) {Predikcia hrán,\\dekódovanie\\a lokálne\\zlepšenie};
+\node[train] (synth) at (0, 0)
+    {Syntetické inštancie\\ \(n \in \{20,30,\ldots,100\}\)};
 
-%% ── BENCHMARK NODES ──────────────────────────────
-\node[font=\bfseries]  (Bhead)     at (12.5,  0.80) {Vetva TSPLIB};
-\node[box]             (tsplib)    at (12.5, -0.55) {Referenčné\\inštancie\\TSPLIB};
-\node[widebox]         (eval)      at (12.5, -5.15) {Hodnotenie na\\inštanciách\\TSPLIB};
+\node[train] (ref) at (0, -1.60)
+    {Referenčné riešenia};
 
-%% ── BOTTOM BLOCK ─────────────────────────────────
-\node[widebox]         (analysis)  at (10.4,-10.55) {Analýza výsledkov\\a interpretácia};
+%% Dve úrovne kvality — symetricky okolo x=0
+\node[refbox] (heur) at (-2.0, -3.20)
+    {Heuristické\\ (NN + 2-opt)};
 
-%% ── GROUP FRAMES (background, fit over header+nodes) ──
-\begin{scope}[on background layer]
-    \node[group, fit=(Thead)(synthetic)(heuristic)(concorde)(labels)(train)] {};
-    \node[group, fit=(Bhead)(tsplib)(eval)] {};
-\end{scope}
+\node[refbox] (conc) at (2.0, -3.20)
+    {Presné\\ (Concorde)};
 
-%% ── ARROWS ───────────────────────────────────────
-% Synthetic → Heuristic / Concorde
-\draw[arrow] (synthetic.south) -- ++(0,-0.35) -| (heuristic.north);
-\draw[arrow] (synthetic.south) -- ++(0,-0.35) -| (concorde.north);
+\node[train] (trainmod) at (0, -4.80)
+    {Trénovanie modelov\\ (MLP, ResMLP, Transformer)};
 
-% Heuristic / Concorde → Labels
-\draw[arrow] (heuristic.south) |- (labels.west);
-\draw[arrow] (concorde.south)  |- (labels.east);
+%% ══════════════════════════════════════════════════════════════
+%% PRAVÁ VETVA — hodnotiaca  (stĺpec x = 8.0)
+%% Uzly na rovnakých y-úrovniach ako ľavá vetva
+%% ══════════════════════════════════════════════════════════════
 
-% Labels → Train → Predict
-\draw[arrow] (labels.south) -- (train.north);
-\draw[arrow] (train.east)   -- (predict.west);
+\node[evalbox] (tsplib) at (8.0, 0)
+    {TSPLIB inštancie\\ (14 štandardných)};
 
-% TSPLIB → Eval
-\draw[arrow] (tsplib.south) -- (eval.north);
+\node[evalbox] (norm) at (8.0, -1.60)
+    {Normalizácia\\ súradníc};
 
-% Predict → Eval
-\coordinate (pred_eval_turn) at ($(predict.east)+(0.75,0)$);
-\coordinate (eval_entry) at ([xshift=-0.35cm]eval.west);
-\draw[arrow] (predict.east) -- (pred_eval_turn) |- (eval_entry) -- (eval.west);
+\node[evalbox] (feats) at (8.0, -3.20)
+    {Grafová reprezentácia\\ + príznaky hrán};
 
-% Predict / Eval → Analysis
-\draw[arrow] (predict.south) -- ++(0,-0.55) |- (analysis.west);
-\draw[arrow] (eval.south)    -- ++(0,-0.65) |- (analysis.east);
+\node[evalbox] (modapp) at (8.0, -4.80)
+    {Natrénované modely\\ + heuristické bázy};
+
+%% ══════════════════════════════════════════════════════════════
+%% SPOLOČNÁ DOLNÁ ČASŤ  (centrované na x = 4.0)
+%% ══════════════════════════════════════════════════════════════
+
+\node[train] (decode) at (4.0, -7.00)
+    {Dekódovanie + lokálne\\ zlepšenie (2-opt)};
+
+\node[finalbox] (anal) at (4.0, -8.50)
+    {Záverečná analýza a porovnanie výsledkov};
+
+%% ══════════════════════════════════════════════════════════════
+%% ŠÍPKY — ľavá vetva
+%% ══════════════════════════════════════════════════════════════
+
+\draw[arrow] (synth) -- (ref);
+\draw[arrow] (ref)   -- (heur.north);
+\draw[arrow] (ref)   -- (conc.north);
+
+%% heur/conc → trainmod: T-spoj (symetrický)
+%% Oba uzly idú nadol na y=-4.16, tam sa spoja horizontálnou čiarou,
+%% z ktorej stredový bod smeruje šípkou na trainmod.north
+\coordinate (lhj) at (-2.0, -4.16);
+\coordinate (rhj) at ( 2.0, -4.16);
+\draw[thick] (heur.south) -- (lhj);
+\draw[thick] (conc.south) -- (rhj);
+\draw[thick] (lhj)        -- (rhj);
+\draw[arrow] (0, -4.16)   -- (trainmod.north);
+
+%% ══════════════════════════════════════════════════════════════
+%% ŠÍPKY — pravá vetva
+%% ══════════════════════════════════════════════════════════════
+
+\draw[arrow] (tsplib) -- (norm);
+\draw[arrow] (norm)   -- (feats);
+\draw[arrow] (feats)  -- (modapp);
+
+%% ══════════════════════════════════════════════════════════════
+%% ŠÍPKA — zdieľané modely (ľavá → pravá, prerušovaná)
+%% ══════════════════════════════════════════════════════════════
+
+\draw[darrow] (trainmod.east) --
+    node[above, font=\scriptsize, yshift=1pt] {zdieľané}
+    (modapp.west);
+
+%% ══════════════════════════════════════════════════════════════
+%% KONVERGENCIA — T-spoj do decode
+%% trainmod a modapp idú nadol na y=-5.80, spoja sa horizontálne,
+%% stredový bod → šípka na decode.north
+%% ══════════════════════════════════════════════════════════════
+
+\coordinate (lj) at (0,   -5.80);
+\coordinate (rj) at (8.0, -5.80);
+\draw[thick] (trainmod.south) -- (lj);
+\draw[thick] (modapp.south)   -- (rj);
+\draw[thick] (lj)             -- (rj);
+\draw[arrow] (4.0, -5.80)     -- (decode.north);
+
+%% ══════════════════════════════════════════════════════════════
+%% ŠÍPKA — decode → záverečná analýza
+%% ══════════════════════════════════════════════════════════════
+
+\draw[arrow] (decode) -- (anal);
+
+%% ══════════════════════════════════════════════════════════════
+%% HLAVIČKY VETIEV
+%% ══════════════════════════════════════════════════════════════
+
+\node[font=\footnotesize\bfseries, text=blue!65]          at (0,   0.70) {Tréningová vetva};
+\node[font=\footnotesize\bfseries, text=green!60!black]   at (8.0, 0.70) {Hodnotiaca vetva};
 
 \end{tikzpicture}
