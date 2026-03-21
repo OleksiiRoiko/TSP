@@ -38,7 +38,6 @@ od prípravy údajov až po záverečnú interpretáciu výsledkov:
           v ktorých sú jednotlivé prístupy najefektívnejšie.
 \end{enumerate}
 
-
 %% ═══════════════════════════════════════════════════════════════════════════
 %% 3.2  PREHĽAD EXPERIMENTÁLNEHO POSTUPU
 %% ═══════════════════════════════════════════════════════════════════════════
@@ -81,12 +80,11 @@ dekódovaním trasy. Celkový návrh zachytáva obrázok~\ref{fig:method_overvie
 \end{figure}
 
 \indent Implementácia bola postavená na jazyku Python s knižnicami NumPy,
-PyTorch a Mat\-plot\-lib. Konfigurácia každého experimentu sa riadila
+PyTorch a Matplotlib. Konfigurácia každého experimentu sa riadila
 súbormi YAML a výstupy sa ukladali vo formátoch \texttt{npz},
 \texttt{JSON} a \texttt{CSV}. Každý krok má vlastný konfiguračný vstup
 a vlastný súbor výsledkov, čo zaručuje opakovateľnosť a vylučuje
 skryté manuálne zásahy medzi fázami.
-
 
 %% ═══════════════════════════════════════════════════════════════════════════
 %% 3.3  PRÍPRAVA ÚDAJOV
@@ -104,55 +102,13 @@ inštancie z knižnice TSPLIB.
 \label{sec:synteticke_udaje}
 
 \indent Syntetická tréningová množina pozostávala z náhodne generovaných
-euklidovských inštancií. Každá inštancia predstavovala množinu \(n\)
-bodov, ktorých súradnice boli nezávisle vzorkované z rovnomerného
-rozdelenia na jednotkovom štvorci \([0,1]^2\). Počet miest \(n\) sa
-medzi inštanciami menil a bol vzorkovaný z deviatich vopred určených
-veľkostných kategórií \(n \in \{20, 30, \ldots, 100\}\), čím model
-počas trénovania dostával inštancie rôzneho rozsahu, nie iba jednu
-pevnú veľkosť
-\parencite{joshi2019gcn,joshi2022generalization}.
+euklidovských inštancií. Pre každú veľkosť \(n \in \{20, 30, 40, 50, 60,
+70, 80, 90, 100\}\) sa vygenerovali tréningová, validačná a testovacia
+podmnožina v pomere \(45\,000 : 9\,000 : 9\,000\) inštancií. Súradnice
+miest každej inštancie sa vzorkovali nezávisle z rovnomerného rozdelenia
+\(\mathcal{U}([0,1]^2)\).
 
-\indent Okrem veľkosti sa inštancie líšili aj geometrickým charakterom.
-Body sa negenerovali jedným spôsobom, ale ako zmes štyroch priestorových
-usporiadaní: rovnomerného, zhlukového, prstencového a takmer mriežkového.
-Takáto rôznorodosť zabraňuje tomu, aby sa model naučil vzory špecifické
-pre jediný typ geometrie.
-
-\begin{figure}[H]
-    \centering
-    \resizebox{0.62\textwidth}{!}{\input{figures/tikz/synthetic_distributions}}
-    \caption{Schematické príklady štyroch typov priestorového rozloženia
-             bodov používaných pri generovaní syntetických inštancií:
-             rovnomerné, zhlukové, prstencové a takmer mriežkové.}
-    \label{fig:synthetic_distributions}
-\end{figure}
-
-\indent Celkový objem a rozdelenie množín sú uvedené
-v tabuľke~\ref{tab:data_splits}. Každá z dvoch referenčných vetiev
-pokrývala rovnaké veľkostné kategórie a bola rozdelená na trénovaciu,
-validačnú a testovaciu časť v pomere 5\,:\,1\,:\,1.
-
-\begin{table}[H]
-    \centering
-    \small
-    \caption{Rozsah syntetických údajových množín použitých v experimentoch.}
-    \label{tab:data_splits}
-    \begin{tabular}{|p{4.2cm}|p{3.0cm}|p{1.4cm}|p{1.6cm}|p{1.2cm}|}
-        \hline
-        Vetva referenčných riešení & Veľkosti \(n\) & Tréning & Validácia & Test \\
-        \hline
-        Približná (heuristická) & 20, 30, \dots, 100 & 45\,000 & 9\,000 & 9\,000 \\
-        \hline
-        Presná (Concorde) & 20, 30, \dots, 100 & 45\,000 & 9\,000 & 9\,000 \\
-        \hline
-    \end{tabular}
-    \normalsize
-\end{table}
-
-\indent Ku každej inštancii bolo potrebné zostrojiť referenčnú
-Hamiltonovskú trasu, ktorá neskôr poslúži ako zdroj binárnych štítkov
-hrán. Keďže syntetická množina vyžadovala generovanie vo veľkom objeme,
+\indent Keďže syntetická množina vyžadovala generovanie vo veľkom objeme,
 bolo potrebné vyvážiť kvalitu referenčných riešení a výpočtovú náročnosť
 ich prípravy. Z tohto dôvodu sa použili dve úrovne kvality.
 
@@ -180,11 +136,7 @@ d_{ab} + d_{cd} > d_{ac} + d_{bd},
 \label{eq:two_opt_condition}
 \end{equation}
 a ak je splnená, príslušný úsek trasy sa obráti. Postup sa opakuje,
-kým v okolí aktuálneho riešenia existujú zlepšujúce výmeny. Pri časti
-inštancií bola referenčná trasa ďalej zlepšená heuristikou
-Lin--Kernighan \parencite{lin1973lk,helsgaun2000lkh}; ak takéto
-riešenie nebolo k dispozícii, zostala referenčná permutácia z postupu
-najbližšieho suseda s 2-opt.
+kým v okolí aktuálneho riešenia existujú zlepšujúce výmeny.
 
 \Needspace{8\baselineskip}
 \indent V rovniciach~\eqref{eq:nearest_neighbor}
@@ -210,8 +162,7 @@ a vzdialenosti sa počítali ako
 \label{eq:tsplib_distance}
 \end{equation}
 čo zodpovedá diskrétnej metrike \texttt{EUC\_2D} používanej
-v knižnici TSPLIB \parencite{reinelt1991tsplib}. Po nájdení riešenia
-sa permutácia preniesla späť na normalizovanú inštanciu. Do presnej
+v knižnici TSPLIB \parencite{reinelt1991tsplib}. Do presnej
 vetvy sa zaradili iba prípady, pri ktorých Concorde potvrdil
 optimálnosť nájdeného riešenia.
 
@@ -229,8 +180,7 @@ optimálnosť nájdeného riešenia.
 referenčná trasa, jej dĺžka a sprievodné metadáta o pôvode riešenia.
 Binárne štítky hrán sa nevytvárali v tejto fáze, ale až pri načítaní
 inštancie do trénovacieho dátového radu — deterministicky z uloženej
-permutácie. Tento postup znižuje nároky na ukladanie a zachováva
-flexibilitu pri prípadnej zmene definície vstupných príznakov.
+permutácie.
 
 %% ─── 3.3.2 TSPLIB ──────────────────────────────────────────────────────
 \subsection{Štandardné testovacie inštancie TSPLIB}
@@ -246,9 +196,7 @@ synteticky generovaných príkladov.
 
 \indent Súbor bol zostavený tak, aby pokrýval rôzne veľkosti
 a geometrické štruktúry, a vyhol sa tak hodnoteniu naviazanému na
-jeden úzky typ problému. Obsahoval menšie inštancie vhodné na rýchle
-porovnanie správania modelov, ale aj väčšie úlohy, pri ktorých sa
-výraznejšie prejavuje schopnosť modelu pracovať s globálnym kontextom.
+jeden úzky typ problému.
 
 \begin{table}[H]
     \centering
@@ -259,19 +207,19 @@ výraznejšie prejavuje schopnosť modelu pracovať s globálnym kontextom.
         \hline
         Inštancia & \(n\) & Inštancia & \(n\) \\
         \hline
-        \texttt{ulysses16} & 16 & \texttt{eil76} & 76 \\
+        \texttt{ulysses16} & 16 & \texttt{eil76}   & 76  \\
         \hline
-        \texttt{ulysses22} & 22 & \texttt{pr76} & 76 \\
+        \texttt{ulysses22} & 22 & \texttt{pr76}    & 76  \\
         \hline
-        \texttt{att48} & 48 & \texttt{gr96} & 96 \\
+        \texttt{att48}     & 48 & \texttt{gr96}    & 96  \\
         \hline
-        \texttt{eil51} & 51 & \texttt{kroA100} & 100 \\
+        \texttt{eil51}     & 51 & \texttt{kroA100} & 100 \\
         \hline
-        \texttt{berlin52} & 52 & \texttt{kroC100} & 100 \\
+        \texttt{berlin52}  & 52 & \texttt{kroC100} & 100 \\
         \hline
-        \texttt{st70} & 70 & \texttt{kroD100} & 100 \\
+        \texttt{st70}      & 70 & \texttt{kroD100} & 100 \\
         \hline
-        \texttt{rd100} & 100 & \texttt{lin105} & 105 \\
+        \texttt{rd100}     & 100 & \texttt{lin105} & 105 \\
         \hline
     \end{tabular}
     \normalsize
@@ -308,90 +256,39 @@ normalizovaného obdĺžnika so stranami v intervale \([0,1]\).
 \indent Pôvodné súradnice sa pri spracovaní neodhadzovali — uchovávali
 sa spolu s informáciou o metrike danej inštancie. Vďaka tomu bolo
 možné pri záverečnom hodnotení počítať dĺžku trasy v pôvodnej
-diskrétnej metrike TSPLIB, nie iba v normalizovanom priestore, čo je
-nevyhnutné pre korektné porovnanie s referenčnými hodnotami
-z literatúry.
-
-\indent Referenčná trasa sa získavala prednostne zo súboru
-\texttt{.opt.tour}. Ak takýto súbor chýbal alebo obsahoval neplatnú
-permutáciu, použila sa náhradná heuristická trasa. Každá referencia
-bola overená podmienkou
-\begin{equation}
-\operatorname{sort}(\pi) = (0, 1, \dots, n-1),
-\label{eq:tsplib_tour_validity}
-\end{equation}
-ktorá zaručuje, že permutácia obsahuje každý vrchol práve raz.
-Neplatné trasy sa do spracovaného súboru neukladali.
-
-\Needspace{6\baselineskip}
-\indent V rovnici~\eqref{eq:tsplib_tour_validity} platí:
-\begin{symboltable}
-    \symbolitem{\(\pi\)}{označuje referenčnú trasu zapísanú ako permutáciu vrcholov.}
-    \symbolitem{\(\operatorname{sort}(\pi)\)}{označuje zoradenie vrcholov permutácie podľa hodnoty.}
-    \symbolitem{\((0,1,\dots,n-1)\)}{označuje úplný zoznam všetkých vrcholov danej inštancie.}
-\end{symboltable}
+diskrétnej metrike TSPLIB. Referenčná trasa sa získavala prednostne
+zo súboru \texttt{.opt.tour}; ak takýto súbor chýbal, použila sa
+náhradná heuristická trasa.
 
 \indent Ku každej spracovanej inštancii vznikol súbor \texttt{.npz}
 obsahujúci normalizované aj pôvodné súradnice, referenčnú trasu, jej
-dĺžku v oboch metrikách, typ metriky a parametre normalizácie. Takáto
-štruktúra umožnila hodnotiť modely z pohľadu modelu (normalizovaný
-priestor) aj z pohľadu finálneho hodnotenia (pôvodná metrika TSPLIB).
+dĺžku v oboch metrikách, typ metriky a parametre normalizácie.
 
 %% ═══════════════════════════════════════════════════════════════════════════
-%% 3.4  GRAFOVÁ REPREZENTÁCIA A VSTUPNÉ PRÍZNAKY
+%% 3.4  GRAFOVÁ REPREZENTÁCIA
 %% ═══════════════════════════════════════════════════════════════════════════
-\section{Grafová reprezentácia a vstupné príznaky}
+\section{Grafová reprezentácia}
 \label{sec:grafova_reprezentacia}
 
-\indent Z pripravených inštancií bolo potrebné zostaviť vstup pre neurónový
-model. Tento proces pozostával z troch krokov: prevodu množiny miest na grafovú
-reprezentáciu, zostrojenia vektora vstupných príznakov pre každú hranu
-a odvodenia binárnych cieľových štítkov z referenčnej trasy.
+\indent Každá inštancia TSP s \(n\) mestami sa modelovala ako \emph{úplný
+neorientovaný graf} \(G = (V, E)\), kde \(V = \{1, \ldots, n\}\) je množina
+vrcholov (miest) a \(E = \{\{i,j\} \mid i < j\}\) je množina všetkých
+\(m = n(n-1)/2\) hrán. Cieľom modelu nebolo vytvoriť trasu priamo, ale
+priradiť každej hrane \emph{skóre} vyjadrujúce pravdepodobnosť jej
+príslušnosti k optimálnemu Hamiltonovskému cyklu. Tento prístup prekladá
+kombinatorický problém na problém binárnej klasifikácie nad hranami
+a umožňuje vektorizované spracovanie celej inštancie v jednej dávke.
 
-%% ─── 3.4.1  Úplný graf ako základ reprezentácie ─────────────────────────
-\subsection{Úplný graf ako základ reprezentácie}
-\label{sec:uplny_graf}
+\indent Niektoré prístupy k dátovo riadeným metódam pre TSP pracujú
+s riedkou grafovou reprezentáciou — zahŕňajú iba \(k\) najbližších susedov
+každého vrcholu a tým znižujú počet hrán z \(\mathcal{O}(n^2)\) na
+\(\mathcal{O}(kn)\) \parencite{joshi2022generalization}. V tejto
+práci sa zachoval plný kandidátny priestor pre všetky porovnávané
+architektúry aj heuristické bázy, pretože pre maximálnu veľkosť
+inštancií (\(n = 105\)) je \(m_{\max} = 5\,460\), čo je počet hrán
+zvládnuteľný v jednej dávke bez agresívneho orezávania.
 
-\indent Mestá inštancie TSP zodpovedajú vrcholom grafu a každá dvojica miest
-tvorí potenciálnu hranu. Ak má inštancia \(n\) miest, jej reprezentácia
-ako úplného neorientovaného grafu má tvar
-\begin{equation}
-G = (V,\, E),
-\qquad
-V = \{1, 2, \dots, n\},
-\qquad
-E = \bigl\{\{i,j\} \;\big|\; 1 \leq i < j \leq n \bigr\},
-\label{eq:complete_graph}
-\end{equation}
-pričom počet neorientovaných hrán je
-\begin{equation}
-m = |E| = \frac{n(n-1)}{2}.
-\label{eq:edge_count}
-\end{equation}
-
-\begin{symboltable}
-    \symbolitem{\(V\)}{označuje množinu vrcholov reprezentujúcich mestá.}
-    \symbolitem{\(E\)}{označuje množinu všetkých neorientovaných hrán úplného grafu.}
-    \symbolitem{\(n\)}{označuje počet miest v inštancii.}
-    \symbolitem{\(m\)}{označuje celkový počet kandidátnych hrán.}
-\end{symboltable}
-
-\indent Voľba úplného grafu je principiálna. Pri TSP nevieme vopred určiť
-malú podmnožinu hrán, ktorá by s istotou obsahovala všetky hrany optimálneho
-riešenia. Orezanie grafu na najbližších \(k\) susedov by znížilo počet
-kandidátnych hrán, no zároveň by vnieslo externú heuristickú predprípravu
-a výsledky by nebolo možné pripisovať výlučne schopnosti modelu
-\parencite{joshi2019gcn,joshi2022generalization}. Z tohto dôvodu sa v tejto
-práci zachoval plný kandidátny priestor pre všetky porovnávané architektúry
-aj heuristické bázy.
-
-\indent Pre najväčšie hodnotené inštancie (\(n = 105\)) platí
-\(m_{\max} = 105 \cdot 104 / 2 = 5\,460\), čo je počet hrán zvládnuteľný
-v jednej dávke bez agresívneho orezávania. Zvolená horná hranica veľkosti
-inštancií tak nebola len technickým obmedzením, ale aj premyslenou voľbou
-na udržanie metodicky čistého experimentálneho rámca.
-
-%% ─── 3.4.2  Vektory vstupných príznakov hrán ────────────────────────────
+%% ─── 3.4.1  Vektory vstupných príznakov hrán ────────────────────────────
 \subsection{Vektory vstupných príznakov hrán}
 \label{sec:hranove_priznaky}
 
@@ -434,17 +331,15 @@ d_{ij} &= \lVert x_j - x_i \rVert_2,
     \symbolitem{\(\phi_{ij}\)}{označuje výsledný desaťrozmerný vektor príznakov hrany \(\{i,j\}\).}
 \end{symboltable}
 
-\indent Štruktúra vektora \(\phi_{ij}\) kombinuje dve skupiny in\-for\-má\-cií.
-Prvé štyri zložky \((u_i, v_i, u_j, v_j)\) zachytávajú \emph{absolútnu
-polohu} oboch vrcholov. Stredná skupina \((d_{ij}, \Delta x_{ij},
-\Delta y_{ij}, \alpha_{ij})\) popisuje \emph{relatívnu geometriu}
-spojenia, a posledné dve zložky zdôrazňujú kvadratickú škálu
-horizontálnych a vertikálnych zmien. Všetky tri porovnávané rodiny
-modelov dostávali rovnaký vektor \(\phi_{ij}\), čím sa zabezpečilo, že
-rozdiely vo výkone odrážajú schopnosť architektúry spracovať informáciu,
-nie jej odlišný objem.
+\indent Štruktúra vektora \(\phi_{ij}\) kombinuje dve skupiny informácií.
+Prvé štyri zložky zachytávajú \emph{absolútnu polohu} oboch vrcholov,
+stredná skupina popisuje \emph{relatívnu geometriu} spojenia a posledné
+dve zložky zdôrazňujú kvadratickú škálu horizontálnych a vertikálnych
+zmien. Všetky tri porovnávané rodiny modelov dostávali rovnaký vektor
+\(\phi_{ij}\), čím sa zabezpečilo, že rozdiely vo výkone odrážajú
+schopnosť architektúry spracovať informáciu, nie jej odlišný objem.
 
-%% ─── 3.4.3  Odvodenie cieľových štítkov ─────────────────────────────────
+%% ─── 3.4.2  Odvodenie cieľových štítkov ─────────────────────────────────
 \subsection{Odvodenie binárnych cieľových štítkov}
 \label{sec:cielove_stitky}
 
@@ -482,20 +377,7 @@ odhadovať príslušnosť každého spojenia k výslednému cyklu.
 \indent Keďže Hamiltonovský cyklus obsahuje presne \(n\) hrán a úplný
 graf ich má \(m = n(n-1)/2\), pozitívnych štítkov je výrazne menej ako
 negatívnych. Tento nepomer priamo motivuje použitie váženej straty pri
-trénovaní modelov. Štítky sa
-nevytvárali vopred, ale až pri načítaní inštancie do dátového radu —
-deterministicky z uloženej permutácie vrcholov.
-
-\begin{figure}[H]
-    \centering
-    \resizebox{0.96\textwidth}{!}{\input{figures/tikz/edge_pipeline}}
-    \caption{Celkový tok spracovania od grafovej reprezentácie po finálnu
-             trasu: vstupná inštancia sa premení na úplný graf, ku každej
-             hrane sa zostrojí vektor príznakov \(\phi_{ij}\), neurónový
-             model vypočíta skóre hrán, z ktorých sa dekóduje
-             realizovateľná Hamiltonovská trasa.}
-    \label{fig:edge_pipeline}
-\end{figure}
+trénovaní modelov, opísanej v sekcii~\ref{sec:trenovanie}.
 
 %% ═══════════════════════════════════════════════════════════════════════════
 %% 3.5  MODELOVÉ ARCHITEKTÚRY
@@ -509,10 +391,6 @@ príznakov hrany \(\phi_{ij}\) odhadnúť skóre \(s_{ij}\), ktoré vyjadruje,
 nakoľko pravdepodobne daná hrana patrí do výslednej trasy. Rodiny sa líšia
 tým, \emph{koľko kontextu} o celej inštancii môže každý model pri tomto
 odhade využiť.
-
-%% ─── 3.5.1  Základné princípy neurónových sietí ─────────────────────────
-\subsection{Základné princípy neurónových sietí}
-\label{sec:nn_zaklady}
 
 \indent Neurónové siete sú trieda modelov strojového učenia inšpirovaná
 spôsobom, akým biologické neuróny spracovávajú a prenášajú signály.
@@ -535,25 +413,37 @@ ich kombinujú do zložitejších konceptov.
 \indent Váhy siete sa nastavujú počas \emph{trénovania}: model opakuje
 predikcie nad trénovacími príkladmi, meria odchýlku od správnych hodnôt
 pomocou \emph{stratovej funkcie} a algoritmom \emph{spätného šírenia}
-(backpropagation) posúva váhy smerom, ktorý chybu znižuje. Tento cyklus
-pokračuje, kým sa strata stabilizuje.
-
-\indent Pri hlbokých sieťach sa bežne používajú dve ďalšie techniky.
+posúva váhy smerom, ktorý chybu znižuje.
 \textbf{Vrstvová normalizácia} (LayerNorm) priebežne upravuje rozsah
-aktivácií — bez nej by hodnoty v hlbokých sieťach mohli exponenciálne
-rásť alebo klesať, čo by znemožnilo efektívne učenie.
-\textbf{Náhodné vypúšťanie} (Dropout) počas trénovania náhodne deaktivuje
-časť neurónov, čím núti sieť učiť sa redundantné reprezentácie
-a tým znižuje riziko preučenia na trénovacej množine.
+aktivácií v hlbokých sieťach a \textbf{Dropout} počas trénovania
+náhodne deaktivuje časť neurónov, čím znižuje riziko preučenia.
 
 \indent V kontexte tejto práce prijíma každý model vektor príznakov
-hrany \(\phi_{ij}\) a vydáva jedno číslo — skóre \(s_{ij}\). Trénovacím
-signálom je binárny štítok \(y_{ij} \in \{0, 1\}\) odvodený
-z referenčnej trasy. Tri porovnávané rodiny modelov sa líšia
-predovšetkým tým, či pri hodnotení hrany uvažujú len o nej samotnej,
-alebo zohľadňujú aj informáciu z okolia či z celej inštancie.
+hrany \(\phi_{ij}\) a vydáva jedno číslo — skóre \(s_{ij}\). Tri
+porovnávané rodiny sa líšia predovšetkým tým, či pri hodnotení hrany
+uvažujú len o nej samotnej, alebo zohľadňujú aj informáciu z celej
+inštancie. Tabuľka~\ref{tab:arch_porovnanie} sumarizuje kľúčové
+vlastnosti každej z nich.
 
-%% ─── 3.5.2  Viacvrstvový perceptrón nad hranami ─────────────────────────
+\begin{table}[H]
+\centering
+\caption{Porovnanie troch porovnávaných architektúr neurónových modelov.}
+\label{tab:arch_porovnanie}
+\begin{tabular}{lp{2.6cm}p{2.6cm}p{3.2cm}}
+\hline
+\textbf{Vlastnosť}       & \textbf{EdgeMLP}               & \textbf{EdgeResMLP}            & \textbf{EdgeTransformer}         \\ \hline
+Vstup                    & \(\phi_{ij}\in\mathbb{R}^{10}\) & \(\phi_{ij}\in\mathbb{R}^{10}\) & \(\phi_{ij}\in\mathbb{R}^{10}\)  \\
+Spracovanie hrany        & lokálne, nezávislé             & lokálne, nezávislé             & globálne + lokálne               \\
+Kontext inštancie        & žiadny                         & žiadny                         & celá inštancia                   \\
+Aktivácia                & ReLU                           & GELU                           & GELU                             \\
+Reziduálne spojenia      & nie                            & áno                            & áno (attn + FFN)                 \\
+Hĺbka (vrstvy / bloky)  & 2 alebo 3                      & 4                              & 3                                \\
+Skryté dimenzie          & 128 alebo 256                  & 128                            & 128                              \\
+Hlavy pozornosti         & —                              & —                              & 4                                \\ \hline
+\end{tabular}
+\end{table}
+
+%% ─── 3.5.1  Viacvrstvový perceptrón nad hranami ──────────────────────────
 \subsection{Viacvrstvový perceptrón nad hranami}
 \label{sec:edge_mlp}
 
@@ -579,12 +469,12 @@ skalárne skóre hrany \(s_{ij}\).
 inštanciu bolo možné spracovať ako jednu dávku vektorov naraz, bez
 akéhokoľvek sekvenčného algoritmu. Nevýhodou bolo, že model pri
 hodnotení každej hrany nemal prístup k žiadnej informácii o zvyšku
-grafu. Napríklad to, že susedné hrany daného vrcholu majú nízke skóre,
-nemohlo žiadnym spôsobom ovplyvniť hodnotenie konkrétnej hrany.
-V experimentoch sa testovali dve varianty tejto rodiny — plytší model
-s dvoma vrstvami a hlbší model s tromi vrstvami a väčšou kapacitou.
+grafu. V experimentoch sa testovali dve varianty tejto rodiny —
+plytší model s dvoma skrytými vrstvami (\texttt{edge\_mlp},
+\(d_h = 128\)) a hlbší model s tromi vrstvami a väčšou kapacitou
+(\texttt{edge\_mlp\_deep}, \(d_h = 256\)).
 
-%% ─── 3.5.3  Reziduálny MLP model ────────────────────────────────────────
+%% ─── 3.5.2  Reziduálny MLP model ─────────────────────────────────────────
 \subsection{Reziduálny MLP model}
 \label{sec:edge_res_mlp}
 
@@ -612,12 +502,13 @@ vrstvová normalizácia pred transformáciou a náhodné vypúšťanie za ňou.
 gradient môže prúdiť reziduálnymi skratkami priamo naprieč celou
 hĺbkou siete bez toho, aby sa rozptýlil alebo explodoval — to umožňuje
 stabilné trénovanie aj pri väčšom počte blokov. Po druhé, vrstvová
-normalizácia udržiava aktivácie v zdravom rozsahu a znižuje citlivosť
-na počiatočné hodnoty váh. Rovnako ako základný MLP, aj tento model
-zostával \emph{lokálnym}: každá hrana sa spracovávala nezávisle
-a model nemal priamy prístup ku kontextu zvyšku grafu.
+normalizácia udržiava aktivácie v zdravom rozsahu. Rovnako ako základný
+MLP, aj tento model zostával \emph{lokálnym}: každá hrana sa
+spracovávala nezávisle a model nemal priamy prístup ku kontextu zvyšku
+grafu. Model bol konfigurovaný so štyrmi reziduálnymi blokmi
+a skrytou dimenziou \(d_h = 128\).
 
-%% ─── 3.5.4  Transformerový model s hranovým výstupom ────────────────────
+%% ─── 3.5.3  Transformerový model s hranovým výstupom ────────────────────
 \subsection{Transformerový model s hranovým výstupom}
 \label{sec:edge_transformer}
 
@@ -632,8 +523,8 @@ každého mesta zostavila jeho vnútorná reprezentácia, ktorá sa následne
 opakovane aktualizovala \emph{mechanizmom vlastnej pozornosti}
 (self-attention). Tento mechanizmus umožňuje každému vrcholu
 „zobrať do úvahy" všetky ostatné vrcholy inštancie a podľa toho
-upraviť svoju vlastnú reprezentáciu. Inšpiruje sa návrhom
-transformerovej architektúry \parencite{vaswani2017attention}.
+upraviť svoju vlastnú reprezentáciu, inšpirujúc sa transformerovou
+architektúrou \parencite{vaswani2017attention}.
 Výsledkom je, že každý vrchol nesie \emph{kontextovú reprezentáciu}
 zakódovávajúcu nielen jeho vlastnú polohu, ale aj jeho vzťah
 ku všetkým ostatným mestám. V druhej fáze sa pre každú hranu zlúčili
@@ -643,7 +534,7 @@ do výstupnej siete, ktorá vyprodukovala skóre hrany \(s_{ij}\).
 
 \begin{figure}[H]
     \centering
-    \resizebox{0.92\textwidth}{!}{\input{figures/tikz/transformer_diagram}}
+    \resizebox{0.95\textwidth}{!}{\input{figures/tikz/transformer_diagram}}
     \caption{Schéma transformerového modelu s hranovým výstupom.
              Fáza~1 zostrojí kontextové reprezentácie vrcholov
              pomocou mechanizmu vlastnej pozornosti.
@@ -654,9 +545,159 @@ do výstupnej siete, ktorá vyprodukovala skóre hrany \(s_{ij}\).
 
 \indent Kľúčovou výhodou tohto prístupu je, že pri rozhodovaní o každej
 hrane model zohľadňuje celú štruktúru inštancie — nie len samotnú hranu.
-Napríklad hrana spájajúca vrchol v okrajovej oblasti grafu
-s vrcholom v husté osídlenej oblasti môže byť ohodnotená inak ako hrana
-rovnakej dĺžky medzi dvoma vrcholmi v podobnom prostredí.
 Nevýhodou je vyššia výpočtová náročnosť: mechanizmus vlastnej pozornosti
-porovnáva každý vrchol s každým iným, čo si vyžaduje viac výpočtov
-ako jednoduché lokálne spracovanie hrán.
+porovnáva každý vrchol s každým iným (\(\mathcal{O}(n^2)\)), čo si
+vyžaduje viac výpočtov ako jednoduché lokálne spracovanie hrán.
+Model bol konfigurovaný s tromi transformerovými vrstvami,
+\(d_h = 128\) a štyrmi hlavami pozornosti.
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%% 3.6  TRÉNOVANIE
+%% ═══════════════════════════════════════════════════════════════════════════
+\section{Trénovanie}
+\label{sec:trenovanie}
+
+\indent Trénovací postup bol navrhnutý tak, aby bol reprodukovateľný
+a konzistentný naprieč všetkými porovnávanými konfiguráciami. Každý model
+sa trénoval z náhodne inicializovaných váh pomocou optimalizátora
+Adam s počiatočnou mierou učenia \(10^{-3}\). Tréning prebiehal po
+epochách, pričom po každej epoche sa validačná strata vyhodnotila na
+vyhradenú validačnú množinu.
+
+\indent Výber stratovej funkcie bol priamo motivovaný štruktúrou problému.
+Keďže Hamiltonovský cyklus obsahuje presne \(n\) hrán z \(m = n(n-1)/2\)
+celkových, je počet pozitívnych štítkov rádovo menší ako počet negatívnych
+— tento nepomer narastá kvadraticky s veľkosťou inštancie. Bežná binárna
+krížová entropia by preto model nevyhnutne tlačila k predpovedaniu samých
+negatívnych štítkov. Z toho dôvodu bola použitá \emph{vážená binárna
+krížová entropia} s triedami dynamicky vyváženými podľa skutočného pomeru
+pozitívnych a negatívnych hrán v každej trénovacej dávke:
+
+\begin{equation}
+\mathcal{L} = -\frac{1}{|E|}
+\sum_{\{i,j\} \in E}
+\Bigl[
+    w_+ \cdot y_{ij} \log \sigma(s_{ij})
+    +
+    w_- \cdot (1 - y_{ij}) \log \bigl(1 - \sigma(s_{ij})\bigr)
+\Bigr],
+\label{eq:bce_balanced}
+\end{equation}
+
+\noindent kde \(\sigma(\cdot)\) označuje sigmoidu, \(s_{ij}\) je surový
+logit modelu a váhy \(w_+\), \(w_-\) sa vypočítajú z každej dávky ako
+
+\begin{equation}
+w_+ = \frac{|E^-|}{|E|}, \qquad w_- = \frac{|E^+|}{|E|},
+\label{eq:bce_weights}
+\end{equation}
+
+\noindent pričom \(|E^+|\) a \(|E^-|\) označujú počet pozitívnych,
+resp. negatívnych hrán v dávke a \(|E| = |E^+| + |E^-|\).
+
+\begin{symboltable}
+    \symbolitem{\(\mathcal{L}\)}{označuje hodnotu váženej binárnej krížovej entropie.}
+    \symbolitem{\(|E|\)}{označuje celkový počet hrán v trénovacej dávke.}
+    \symbolitem{\(w_+,\, w_-\)}{označujú váhy pozitívnej, resp. negatívnej triedy.}
+    \symbolitem{\(\sigma(s_{ij})\)}{označuje sigmoidálnu transformáciu logitu hrany \(\{i,j\}\).}
+\end{symboltable}
+
+\indent Miera učenia sa znižovala automaticky pomocou plánovača
+\textit{ReduceLROnPlateau}: ak sa validačná strata nezlepšila po dobu
+desiatich po sebe nasledujúcich overovacích kôl, miera učenia sa
+znásobila faktorom \(0{,}5\). Minimálna prípustná miera učenia bola
+nastavená na \(10^{-5}\). Predčasné zastavenie nastalo v prípade,
+že sa validačná strata nezlepšila ani po pätnástich overovacích kolách;
+v tom momente sa tréning ukončil a uložil sa najlepší kontrolný bod.
+Maximálny počet epoch bol nastavený na 80.
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%% 3.7  DEKÓDOVANIE
+%% ═══════════════════════════════════════════════════════════════════════════
+\section{Dekódovanie}
+\label{sec:dekodovanie}
+
+\indent Neurónový model po natrénovaní vyprodukuje pre každú hranu
+\(\{i,j\}\) surový logit \(s_{ij}\), no samotný logit nie je
+priamo použiteľnou trasou — je potrebný krok \emph{dekódovania},
+ktorý zo skóre hrán skonštruuje realizovateľný Hamiltonovský cyklus.
+
+\indent Greedy cyklový dekodér postupuje nasledovne: hrany sa zoradia
+zostupne podľa \(s_{ij}\) a prechádzajú sa v tomto poradí. Hrana
+\(\{i,j\}\) sa zaradí do trasy, ak sú splnené tri podmienky: (1) stupeň
+vrcholu \(i\) ani \(j\) ešte nedosiahol hodnotu 2; (2) zaradenie hrany
+nevytvorí predčasný cyklus skôr, ako je v trase \(n\) hrán; (3) výsledná
+podštruktúra ostáva Hamiltonovskou cestou. Podmienka (2) sa kontroluje
+pomocou dátovej štruktúry \textit{union-find}. Po zaradení \(n\) hrán
+vznikne Hamiltonovský cyklus prechádzajúci každým vrcholom práve raz.
+
+\indent Na zlepšenie kvality získaných trás bola aplikovaná lokálna
+optimalizácia \textbf{2-opt} \parencite{croes1958twoopt}. Táto procedúra
+iteratívne prehľadáva všetky dvojice hrán a overuje, či ich výmena
+skráti celkovú dĺžku trasy. Postup sa opakuje, kým sa nenájde žiadne
+zlepšenie alebo kým sa nedosiahne nastavený limit počtu priebehov.
+
+\indent Na posilnenie robustnosti dekódovania boli pre časť experimentov
+použité dva dodatočné mechanizmy. \textbf{Multistart dekódovanie}
+spúšťa greedy dekodér viackrát, pričom logity sa pred každým spustením
+mierne narušia prídavkom gaussovského šumu so smerodajnou odchýlkou
+\(\sigma_\text{noise}\). Z viacerých získaných trás sa vyberie
+najkratšia. Konfigurácia so základným profilom používala
+\(\text{multistart} = 1\) bez šumu, kým optimalizovaný profil
+nastavoval \(\text{multistart} = 8\) a \(\sigma_\text{noise} = 0{,}02\).
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%% 3.8  HODNOTENIE
+%% ═══════════════════════════════════════════════════════════════════════════
+\section{Hodnotenie}
+\label{sec:hodnotenie}
+
+\subsection{Metriky}
+\label{sec:metriky}
+
+\indent Primárnou metrikou hodnotenia kvality trás bola \emph{relatívna
+odchýlka od optima} (optimality gap), vyjadrená v percentách:
+
+\begin{equation}
+\Delta(\%) = \frac{L_\text{model} - L_\text{ref}}{L_\text{ref}} \times 100,
+\label{eq:gap}
+\end{equation}
+
+\noindent kde \(L_\text{model}\) je dĺžka trasy získanej modelom
+a \(L_\text{ref}\) je dĺžka referenčnej trasy pre danú inštanciu.
+Pre inštancie TSPLIB zodpovedá referenčná trasa optimálnemu riešeniu
+uvedenému v knižnici \parencite{reinelt1991tsplib}.
+
+\begin{symboltable}
+    \symbolitem{\(\Delta(\%)\)}{označuje relatívnu odchýlku trasy modelu od referenčného optima.}
+    \symbolitem{\(L_\text{model}\)}{označuje dĺžku trasy nájdenej modelom v pôvodnej metrike.}
+    \symbolitem{\(L_\text{ref}\)}{označuje dĺžku referenčnej optimálnej trasy.}
+\end{symboltable}
+
+\indent Táto metrika je nezávislá od veľkosti inštancie a umožňuje
+porovnanie naprieč rôznymi \(n\), čo bolo kľúčové pri vyhodnotení
+18 experimentálnych konfigurácií na 14 inštanciách TSPLIB. Okrem
+strednej hodnoty odchýlky sa sledovalo aj rozdelenie odchýlok naprieč
+inštanciami, čo umožnilo identifikovať prípady, pri ktorých modely
+systematicky zlyhávajú.
+
+\subsection{Kontrola kvality a analytika}
+\label{sec:qa_analytika}
+
+\indent Pred spustením akéhokoľvek tréningu prebehla automatická
+kontrola kvality (QA) nad všetkými vygenerovanými dátovými súbormi.
+Skript overoval: (1) platnosť Hamiltonovského cyklu pre každú
+referenčnú trasu; (2) zhodu dĺžky uloženého cyklu s dĺžkou
+prepočítanou zo súradníc; (3) neprítomnosť poškodených záznamov.
+Výsledky QA sú uložené v súboroch \texttt{runs/qa\_report.csv}
+a \texttt{runs/qa\_report\_concorde.csv}; oba reporty zachytávajú
+nula neplatných záznamov a nula neshôd v dĺžke.
+
+\indent Po dokončení všetkých experimentálnych behov sa spustila
+analytická fáza konsolidujúca výsledky zo 18 konfigurácií do súhrnných
+tabuliek. Hlavnými výstupmi boli: celkový rebríček modelov podľa
+strednej odchýlky (\texttt{model\_ranking.csv}); porovnanie základného
+a optimalizovaného dekódovacieho profilu
+(\texttt{eval\_profile\_compare.csv}); matica odchýlok na úrovni
+jednotlivých inštancií TSPLIB (\texttt{instance\_gap\_matrix.csv})
+a súhrnný prehľad priebehu tréningu (\texttt{experiments\_summary.csv}).

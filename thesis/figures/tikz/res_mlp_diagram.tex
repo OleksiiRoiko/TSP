@@ -10,7 +10,6 @@
     },
     inputbox/.style={box, fill=gray!10, draw=gray!50},
     projbox/.style={box, fill=blue!8, draw=blue!40},
-    resbox/.style={box, fill=green!8, draw=green!50},
     normbox/.style={box, fill=yellow!10, draw=yellow!60!black},
     dropbox/.style={box, fill=red!6, draw=red!30},
     outbox/.style={box, fill=green!8, draw=green!50},
@@ -20,17 +19,14 @@
     resarrow/.style={-{Latex[length=2.5mm]}, thick, draw=green!55!black}
 ]
 
-%% ── Vstup ────────────────────────────────────────────────────────
 \node[inputbox] (phi) at (0, 0)
     {\(\phi_{ij} \in \mathbb{R}^{10}\)\\[-2pt]
      \scriptsize vektor príznakov hrany};
 
-%% ── Vstupná projekcia ────────────────────────────────────────────
 \node[projbox] (proj) at (0, -1.55)
     {Vstupná projekcia\\[-2pt]
      \scriptsize + aktivácia GELU};
 
-%% ── Reziduálny blok (zopakovaný D-krát) ─────────────────────────
 \node[normbox] (ln1) at (0, -3.10)
     {Vrstvová normalizácia\\[-2pt]
      \scriptsize (LayerNorm)};
@@ -46,28 +42,23 @@
 \node[projbox] (fc2) at (0, -7.20)
     {Lineárna transformácia};
 
-%% Sčítanie (reziduálna skratka)
 \node[draw=green!55!black, fill=green!5, circle,
       minimum size=0.65cm, font=\bfseries\small] (plus) at (0, -8.55) {+};
 
-%% Označenie bloku
 \draw[draw=green!40, dashed, rounded corners=6pt]
     (-2.3, -2.55) rectangle (2.3, -7.85);
 \node[font=\scriptsize\itshape, text=green!60!black]
     at (0, -2.38) {reziduálny blok (opakuje sa \(D\)-krát)};
 
-%% Reziduálna skratka (obchádza blok)
 \draw[resarrow]
     (proj.east) -- ++(1.4, 0) -- ++(0, -7.0) -- (plus.east);
 \node[font=\scriptsize, text=green!60!black, rotate=90, anchor=south]
     at (3.0, -5.2) {reziduálna skratka};
 
-%% ── Výstup ───────────────────────────────────────────────────────
 \node[outbox] (out) at (0, -9.95)
     {Záverečná lineárna vrstva\\[-2pt]
      \scriptsize logit \(s_{ij} \in \mathbb{R}\)};
 
-%% Šípky hlavnej vetvy
 \draw[arrow] (phi)  -- (proj);
 \draw[arrow] (proj) -- (ln1);
 \draw[arrow] (ln1)  -- (fc1);
@@ -76,20 +67,18 @@
 \draw[arrow] (fc2)  -- (plus);
 \draw[arrow] (plus) -- (out);
 
-%% ── Vysvetlivky vpravo ───────────────────────────────────────────
-\node[labelbox, anchor=north west] at (3.5,  -3.25)
+\node[labelbox, anchor=north west] at (3.5, -3.25)
     {\textbf{LayerNorm:} normalizuje aktivácie
      v rámci jedného vzorku — stabilizuje tréning
      a urýchľuje konvergenciu.};
 
-\node[labelbox, anchor=north west] at (3.5, -5.95)
-    {\textbf{Dropout:} počas trénovania náhodne
-     vypína časť neurónov — znižuje preučenie
-     a núti sieť učiť sa robustnejšie vzory.};
+\node[labelbox, anchor=north west] at (3.5, -5.85)
+    {\textbf{Dropout:} náhodne deaktivuje
+     časť neurónov — zabraňuje preučeniu.};
 
-\node[labelbox, anchor=north west] at (3.5, -8.70)
-    {\textbf{Reziduálna skratka:} sčíta vstup
-     bloku s jeho výstupom — umožňuje hlboké
-     siete trénovať stabilnejšie.};
+\node[labelbox, anchor=north west] at (3.5, -8.55)
+    {\textbf{Reziduálna skratka:}
+     gradient prúdi priamo, bez
+     útlmu cez hlboké bloky.};
 
 \end{tikzpicture}
